@@ -574,8 +574,16 @@ export const digitalProducts: DigitalProduct[] = [
 ];
 
 // ── Site constants ───────────────────────────────────────────
-/** Canonical site origin — every public URL must start with this */
-export const SITE_ORIGIN = "https://www.dev-aditya.com";
+/**
+ * Canonical site origin — every public store URL must start with this.
+ *
+ * Aligned with SITE_URL in src/config/site.ts (https://dev-aditya.com) so that
+ * store canonicals / sitemap / OG URLs are consistent with the rest of the site.
+ *
+ * NOTE: This is a metadata-only canonical. It does NOT add an HTTP redirect and
+ * does NOT touch DNS. No host-to-host redirect logic is introduced.
+ */
+export const SITE_ORIGIN = "https://dev-aditya.com";
 
 /** Centralised support email — all mailto links import from here */
 export const SUPPORT_EMAIL = "work@dev-aditya.com";

@@ -7,12 +7,10 @@ import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Shield,
-  FileDown,
   CheckCircle2,
   Loader2,
   AlertCircle,
 } from "lucide-react";
-import { ZodError } from "zod";
 
 export default function CheckoutClient({ product }: { product: DigitalProduct }) {
   const accent = accentColors[product.accent];

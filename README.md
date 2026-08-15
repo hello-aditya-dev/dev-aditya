@@ -247,6 +247,143 @@ commit `.env.local`** — it is gitignored.
 
 ---
 
+## Digital Products Store
+
+A complete digital-product storefront lives at `/digital-products`, fully
+isolated from the normal portfolio experience. The store sells agency
+operating tools, bundles and website templates to freelance web designers
+and small agencies.
+
+### Routes
+
+| Route | Purpose | Indexable |
+|---|---|---|
+| `/digital-products` | Store home (hero, featured product, tools, bundles, templates, workflow, why, FAQ, CTA) | Yes |
+| `/digital-products/[slug]` | Product detail page (dynamic) | Active = yes; coming-soon = noindex |
+| `/digital-products/[slug]/checkout` | Checkout (Razorpay Standard Checkout) | noindex |
+| `/digital-products/success` | Post-purchase success / download page | noindex |
+| `/digital-products/delivery-policy` | Digital delivery / shipping policy | Yes |
+| `/digital-products/refund-policy` | Refund / cancellation policy | Yes |
+| `/digital-products/terms` | Store terms | Yes |
+| `/digital-products/privacy` | Store privacy (supplements `/privacy`) | Yes |
+| `POST /api/digital-products/orders` | Create Razorpay order (server-owned price) | — |
+| `POST /api/digital-products/verify` | Verify payment signature + fulfil | — |
+| `GET /api/digital-products/order-status` | Poll order status / get download URL | — |
+| `POST /api/digital-products/webhook/razorpay` | Signed Razorpay webhook (raw body) | — |
+| `GET /api/digital-products/download/[token]` | Signed-token secure download | — |
+
+### Product config (single source of truth)
+
+All product data lives in `src/config/digital-products.ts`. Secrets,
+private file paths and server-owned prices are **not** in this file —
+server-only modules in `src/lib/digital-products/` own those.
+
+To activate a product:
+
+1. Place the final product ZIP at `{PRODUCT_FILES_DIR}/{productId}.zip`.
+2. Confirm the package contents listed in the config match the real ZIP.
+3. Set the price in `currencyPrices`.
+4. Set `status: "active"`.
+5. Verify checkout + download + email in Razorpay **Test Mode**.
+6. The product is automatically added to the sitemap and becomes indexable.
+
+### Payment architecture
+
+```
+checkout form
+   → POST /api/digital-products/orders  (server validates, looks up server price,
+                                          creates local CREATED order, creates Razorpay order)
+   → Razorpay Standard Checkout opens (script loaded only on checkout route)
+   → handler callback
+   → POST /api/digital-products/verify  (verifies HMAC-SHA256 signature, timing-safe,
+                                          marks PAID, fulfils: token + email, idempotent)
+   → redirect to /digital-products/success?orderId=…
+   → success page polls /api/digital-products/order-status → download URL
+
+Razorpay webhook (signed, raw body, idempotent via payment_webhook_events)
+   → payment.captured → mark PAID + fulfil (idempotent)
+   → payment.failed   → mark FAILED
+   → refund.*         → mark REFUNDED
+```
+
+### Security
+
+- **Price tampering:** the client never sends an amount. The server looks up the
+  price from the server-only catalog (`src/lib/digital-products/server-catalog.ts`).
+- **Forged callback:** payment signature verified with HMAC-SHA256 + timing-safe
+  comparison before any fulfilment.
+- **Forged webhook:** raw body verified against `RAZORPAY_WEBHOOK_SECRET` before
+  JSON parsing; duplicate events deduped via `payment_webhook_events`.
+- **Public download:** paid ZIPs live outside `public/`; downloads require a
+  signed HMAC token (7-day TTL) bound to a PAID order + matching product.
+- **Duplicate fulfilment:** `fulfilmentSentAt` guard makes fulfilment idempotent.
+- **Secrets:** `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`,
+  `DOWNLOAD_TOKEN_SECRET` are server-only and never `NEXT_PUBLIC_`.
+
+### Store env vars
+
+| Variable | Required | Description |
+|---|---|---|
+| `RAZORPAY_KEY_ID` | **Yes** for checkout | Razorpay Key ID (safe for browser) |
+| `RAZORPAY_KEY_SECRET` | **Yes** for checkout | Razorpay Key Secret (server-only) |
+| `RAZORPAY_WEBHOOK_SECRET` | **Yes** for webhooks | Webhook signing secret (server-only) |
+| `STORE_CURRENCY` | No (default `INR`) | Order currency; must match merchant account |
+| `DOWNLOAD_TOKEN_SECRET` | **Yes** for downloads | HMAC secret for download tokens |
+| `DATABASE_URL` | **Yes** | Prisma datasource (SQLite dev / Postgres prod) |
+| `PRODUCT_FILES_DIR` | **Yes** for delivery | Private directory holding `{productId}.zip` |
+| `DIGITAL_PRODUCTS_FROM_EMAIL` | No | "From" for purchase email (defaults to `CONTACT_FROM_EMAIL`) |
+| `DIGITAL_PRODUCTS_SUPPORT_EMAIL` | No | Support inbox (defaults to `work@dev-aditya.com`) |
+
+### Razorpay setup (manual dashboard steps)
+
+1. Add/verify `dev-aditya.com` in Razorpay → Settings → Website.
+2. Complete the Website Review (policies, contact, pricing visible).
+3. Generate **Test** keys; set `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET`.
+4. Configure the Test webhook URL `https://<host>/api/digital-products/webhook/razorpay`
+   and copy the webhook secret into `RAZORPAY_WEBHOOK_SECRET`.
+5. Run the payment test matrix (success, fail, close, duplicate click,
+   tampered callback, invalid signature, duplicate webhook, page-close,
+   captured fulfilment, invalid/expired download token).
+6. Confirm the capture strategy (auto-capture recommended).
+7. Generate **Live** keys + Live webhook; update the env vars.
+8. Verify active payment methods; request international payments if needed.
+
+### Database
+
+Prisma schema in `prisma/schema.prisma` defines `DigitalProductOrder` and
+`PaymentWebhookEvent`. Run:
+
+```bash
+npm run db:generate   # generate the client
+npm run db:push       # create/apply the schema (SQLite dev)
+```
+
+For production use a durable Postgres (Neon / Vercel Postgres) by setting
+`DATABASE_URL` to a `postgresql://` URL.
+
+### SEO
+
+- Canonical origin: `https://dev-aditya.com` (aligned across portfolio + store;
+  metadata-only — **no host redirect, no DNS change**).
+- Per-product metadata, canonicals, OG/Twitter tags, `Product` + `BreadcrumbList`
+  JSON-LD. No fake ratings/reviews/stock.
+- Checkout + success pages are `noindex`. Active products are in the sitemap;
+  coming-soon products are `noindex` and excluded from the sitemap.
+
+### Manual go-live checklist
+
+- [ ] Refund policy approved by owner: **YES / NO** (production go-live requires YES)
+- [ ] Razorpay Live keys + Live webhook configured
+- [ ] `DOWNLOAD_TOKEN_SECRET` generated (`openssl rand -hex 32`)
+- [ ] `DATABASE_URL` points at durable Postgres (not SQLite) in production
+- [ ] Product ZIP placed at `{PRODUCT_FILES_DIR}/{productId}.zip`
+- [ ] Test-mode payment matrix passed
+- [ ] Sitemap + robots reachable after deploy
+- [ ] Search Console: submit `/sitemap.xml`, request indexing for
+      `/digital-products` and active product pages
+
+---
+
 ## Contact-form setup
 
 The contact form lives at `/contact` and posts to `/api/contact`.
