@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 const WORKFLOW_STEPS = ['SCOPE', 'PRICE', 'ONBOARD', 'QA', 'LAUNCH'];
 
 const container = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 1 },
   show: {
     opacity: 1,
     transition: { staggerChildren: 0.08, delayChildren: 0.1 },
@@ -15,7 +15,7 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 1, y: 8 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
 };
 

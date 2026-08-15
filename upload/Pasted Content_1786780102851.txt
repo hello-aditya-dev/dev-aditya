@@ -1,0 +1,2323 @@
+# MASTER PRODUCTION HARDENING + 9.5/10 QA PROMPT
+
+You are acting as the senior:
+
+* Next.js production engineer
+* ecommerce engineer
+* Razorpay integration engineer
+* product designer
+* conversion UX designer
+* visual QA engineer
+* frontend engineer
+* backend engineer
+* SEO engineer
+* accessibility engineer
+* performance engineer
+* security engineer
+* technical copy editor
+* digital-product merchandiser
+* release QA lead
+
+You are working on an EXISTING website and EXISTING ecommerce implementation.
+
+You are NOT being asked to redesign the site from scratch.
+
+Your job is to inspect the current production implementation, fix the defects listed below, integrate the now-completed products and bundles, verify the full purchase/download experience, and polish the system until it is genuinely production-grade.
+
+==================================================
+TARGET
+======
+
+Repository:
+
+`https://github.com/witejackel-eng/dev-aditya-paperfolio`
+
+Current public site:
+
+`https://www.dev-aditya.com/`
+
+Digital product store:
+
+`https://www.dev-aditya.com/digital-products`
+
+Primary active product:
+
+`https://www.dev-aditya.com/digital-products/web-project-pricing-os`
+
+Checkout:
+
+`https://www.dev-aditya.com/digital-products/web-project-pricing-os/checkout`
+
+The normal portfolio MUST remain separate from the digital-products store.
+
+==================================================
+CURRENT STATE
+=============
+
+The digital-products store has already been designed and implemented.
+
+The overall concept is good.
+
+DO NOT rebuild it.
+
+DO NOT replace the design system.
+
+DO NOT convert the site into a generic ecommerce theme.
+
+DO NOT add Digital Products to the normal portfolio navigation.
+
+DO NOT redesign the portfolio.
+
+DO NOT remove the existing paper-style identity.
+
+The current store already contains:
+
+* store homepage
+* Web Project Pricing OS product page
+* scope-creep calculator
+* product catalogue
+* bundle catalogue
+* template catalogue
+* store-specific navigation
+* FAQs
+* checkout
+* policy links
+* Razorpay checkout architecture
+* product config
+* SEO metadata architecture
+* ecommerce backend architecture
+
+The task now is:
+
+# HARDEN, CORRECT, POLISH, ACTIVATE, VERIFY.
+
+==================================================
+QUALITY TARGET
+==============
+
+The final result must score at least:
+
+* Visual design: 9.5/10
+* Brand consistency: 9.5/10
+* Product merchandising: 9.5/10
+* Conversion clarity: 9.5/10
+* Product-page UX: 9.5/10
+* Checkout UX: 9.5/10
+* Mobile UX: 9.5/10
+* Accessibility: 9.5/10
+* SEO implementation: 9.5/10
+* Social preview quality: 9.5/10
+* Performance: 9.5/10
+* Commerce reliability: 9.5/10
+* Payment security: 9.5/10
+* Digital delivery reliability: 9.5/10
+* Content accuracy: 9.5/10
+* Product/store trust: 9.5/10
+* Code maintainability: 9.5/10
+* Portfolio regression safety: 10/10
+
+These are acceptance thresholds, not decorative self-ratings.
+
+Do not simply claim 9.5/10.
+
+For each category:
+
+1. inspect;
+2. test;
+3. identify defects;
+4. fix them;
+5. test again;
+6. provide evidence;
+7. score only after verification.
+
+If any category remains below 9.5:
+
+continue fixing it.
+
+If something cannot reach that bar because of a missing external dependency, state the exact blocker instead of inventing completion.
+
+==================================================
+PHASE 1 — INSPECT BEFORE EDITING
+================================
+
+Before modifying anything:
+
+Inspect the current repository.
+
+Inspect:
+
+* package.json
+* root layout
+* page metadata
+* global CSS
+* fonts
+* favicon/icon setup
+* manifest
+* sitemap
+* robots
+* site config
+* store config
+* product config
+* store components
+* product page
+* checkout
+* success flow
+* order creation
+* Razorpay integration
+* webhook
+* verification
+* order storage
+* download delivery
+* email delivery
+* refund/delivery policy pages
+* terms
+* privacy
+* contact/support email configuration
+
+Then inspect the LIVE site.
+
+At minimum:
+
+`/`
+
+`/work`
+
+`/about`
+
+`/contact`
+
+`/digital-products`
+
+`/digital-products/web-project-pricing-os`
+
+`/digital-products/web-project-pricing-os/checkout`
+
+`/digital-products/refund-policy`
+
+`/digital-products/delivery-policy`
+
+`/robots.txt`
+
+`/sitemap.xml`
+
+Do not start editing before understanding why the current defects exist.
+
+==================================================
+PHASE 2 — REMOVE ALL Z.AI RESIDUE
+=================================
+
+This is a release-critical branding defect.
+
+The live implementation currently leaks scaffold metadata such as:
+
+`Z.ai Team`
+
+`Z.ai`
+
+`Z.ai Code Scaffold`
+
+`AI-powered development with modern React stack`
+
+generic scaffold keywords including:
+
+`Z.ai`
+
+`Next.js`
+
+`TypeScript`
+
+`Tailwind CSS`
+
+`shadcn/ui`
+
+`AI development`
+
+and a favicon sourced from a Z.ai CDN.
+
+NONE of this should appear on a professional customer-facing site.
+
+Search the ENTIRE repository for:
+
+* `Z.ai`
+* `Zai`
+* `z.ai`
+* `chat.z.ai`
+* `z-cdn`
+* `Code Scaffold`
+* `AI-powered development`
+* `Z.ai Team`
+
+Inspect:
+
+* metadata
+* JSON-LD
+* favicons
+* manifests
+* images
+* code comments that affect output
+* Open Graph
+* Twitter metadata
+* default titles
+* 404 metadata
+* error pages
+
+Remove every customer-visible Z.ai artifact.
+
+After fixes, searching the source should produce zero customer-facing matches except an internal comment only if absolutely necessary.
+
+==================================================
+ROOT SITE METADATA
+==================
+
+The root metadata should identify the actual site and creator.
+
+Use accurate values.
+
+Example direction:
+
+Author:
+
+`Aditya`
+
+Site name:
+
+`Aditya`
+
+Do NOT use developer-stack keywords such as:
+
+Next.js
+
+TypeScript
+
+Tailwind
+
+unless a specific technical article requires them.
+
+For the portfolio root, use its actual existing positioning.
+
+For the store, use buyer-language metadata.
+
+==================================================
+FAVICON
+=======
+
+Remove the Z.ai favicon.
+
+Use the existing legitimate dev-aditya brand asset.
+
+If a proper favicon set does not exist, create one from the approved existing monogram/identity.
+
+Support:
+
+* favicon.ico
+* SVG icon where appropriate
+* Apple touch icon
+* manifest icon if needed
+
+Keep it visually consistent with the portfolio.
+
+Do not use a generic shopping-bag icon.
+
+==================================================
+PHASE 3 — CANONICAL HOST
+========================
+
+There is currently a canonical-host inconsistency.
+
+The public routing currently prefers:
+
+`www.dev-aditya.com`
+
+while some metadata points to:
+
+`dev-aditya.com`
+
+Re-verify both origins.
+
+Check:
+
+`https://dev-aditya.com`
+
+and:
+
+`https://www.dev-aditya.com`
+
+Determine which one permanently redirects to the other.
+
+Use ONE canonical origin everywhere.
+
+Based on current production routing, the expected canonical is likely:
+
+`https://www.dev-aditya.com`
+
+but VERIFY it rather than blindly assuming.
+
+Then standardize:
+
+* site config
+* metadataBase
+* canonical URLs
+* OG URLs
+* Twitter URLs
+* JSON-LD
+* breadcrumbs
+* sitemap
+* robots sitemap URL
+* email links
+* purchase links
+* download links where applicable
+
+There must not be two indexable hosts.
+
+==================================================
+PHASE 4 — FIX SITEMAP
+=====================
+
+The live:
+
+`/sitemap.xml`
+
+currently does not function correctly.
+
+Fix this.
+
+It must return HTTP 200.
+
+Use Next.js's supported sitemap implementation.
+
+The sitemap must include:
+
+* normal indexable portfolio pages
+* `/digital-products`
+* every ACTIVE product
+* every ACTIVE bundle
+* every ACTIVE template page
+
+Do NOT include:
+
+* checkout
+* success
+* API routes
+* download routes
+* payment verification routes
+* webhook
+* order status
+* internal pages
+* noindex pages
+
+For any product still genuinely unavailable:
+
+do not index a thin placeholder page.
+
+After implementation:
+
+open the actual production-equivalent `/sitemap.xml`.
+
+Verify valid XML.
+
+Verify all URLs use the canonical host.
+
+==================================================
+PHASE 5 — ROBOTS + INDEXING
+===========================
+
+Verify:
+
+`/robots.txt`
+
+returns 200.
+
+Digital product catalogue pages must be crawlable.
+
+Active product pages:
+
+`index, follow`
+
+Checkout:
+
+`noindex, nofollow`
+
+Success:
+
+`noindex, nofollow`
+
+payment processing:
+
+`noindex, nofollow`
+
+download:
+
+not indexed
+
+Coming-soon pages with thin content:
+
+`noindex`
+
+Do not use robots.txt as a security control.
+
+==================================================
+PHASE 6 — SOCIAL METADATA
+=========================
+
+Current Twitter/social metadata is polluted by Z.ai scaffold values.
+
+Fix metadata for every relevant route.
+
+==================================================
+STORE HOMEPAGE
+==============
+
+Title:
+
+`Digital Products for Web Designers & Agencies | Aditya`
+
+Description:
+
+Use the existing strong description or improve slightly while remaining natural.
+
+Example:
+
+`Pricing systems, agency operations tools and website templates for web designers, developers and small studios.`
+
+Twitter:
+
+use the same store-specific identity.
+
+No scaffold content.
+
+==================================================
+WEB PROJECT PRICING OS
+======================
+
+Title:
+
+`Web Project Pricing OS — Website Pricing Calculator for Agencies`
+
+Description:
+
+`Scope website projects, estimate workload, calculate margins, model scope creep and build more defensible client quotes.`
+
+Use accurate human copy.
+
+==================================================
+BUNDLES
+=======
+
+Every ACTIVE bundle gets unique:
+
+* title
+* description
+* canonical
+* OG
+* Twitter
+* structured data
+
+==================================================
+PHASE 7 — PROFESSIONAL OG IMAGES
+================================
+
+Create proper Open Graph/social preview assets.
+
+Minimum size:
+
+1200 × 630.
+
+Do not use generic gradients.
+
+Do not use AI-image aesthetics.
+
+Use the existing visual system:
+
+* paper background
+* black ink
+* outlines
+* hard shadows
+* coral
+* blue
+* yellow
+* restrained typography
+
+==================================================
+STORE OG
+========
+
+Suggested composition:
+
+`ADITYA / DIGITAL PRODUCTS`
+
+Headline:
+
+`Tools and templates for people who build websites for clients.`
+
+Supporting graphic:
+
+small SCOPE / PRICE / ONBOARD / QA / LAUNCH cards.
+
+==================================================
+WEB PROJECT PRICING OS OG
+=========================
+
+Suggested composition:
+
+`WEB PROJECT PRICING OS`
+
+Headline:
+
+`Stop guessing what to charge for websites.`
+
+Secondary line:
+
+`Scope → Workload → Cost → Margin → Quote`
+
+If price is displayed:
+
+pull it from product configuration.
+
+Do not hard-code a stale price into an image unless generation is dynamic.
+
+==================================================
+BUNDLE OG
+=========
+
+Create bundle-specific preview images once bundles are activated.
+
+Use actual product names.
+
+No fake review count.
+
+No fake "best seller".
+
+==================================================
+PHASE 8 — PRODUCT CONTENT ACCURACY
+==================================
+
+There is currently at least one logic issue in the product-page merchandising.
+
+Feature labels and outcome descriptions are paired by array position.
+
+This causes incorrect relationships such as a Change Order feature being displayed beside an unrelated tier-comparison benefit.
+
+Fix the product data model.
+
+Do NOT use:
+
+`features[i] + outcomes[i]`
+
+unless they genuinely correspond.
+
+Instead create structured feature objects.
+
+Example:
+
+```ts
+{
+  name: "Scope Creep Modeller",
+  description:
+    "Add unplanned hours and see the effect on project margin and effective rate."
+}
+```
+
+Create accurate descriptions for every displayed feature.
+
+For Web Project Pricing OS, ensure these are accurately explained:
+
+* Scope Builder
+* Hours Engine
+* Cost Engine
+* Price Engine
+* Quote Builder
+* Essential / Recommended / Premium tiers
+* Scope Creep
+* Change Order Calculator
+* Project Actuals
+* Project Database
+* Dashboard
+
+Do not promise functionality the workbook does not contain.
+
+==================================================
+PHASE 9 — USE REAL PRODUCT SCREENSHOTS
+======================================
+
+The product has actual finished Excel files.
+
+Use REAL product proof.
+
+Do not use fake spreadsheet screenshots.
+
+Find the supplied final customer product or its approved QA renders.
+
+Show the strongest real views:
+
+1. Scope Builder
+2. Price Engine
+3. Scope Creep
+4. Dashboard
+
+If the available renders are poor:
+
+create new high-quality renders from the actual workbook if technically possible.
+
+Do not alter data to make it look more impressive.
+
+Demo data must remain explicitly fictional.
+
+==================================================
+PRODUCT PAGE VISUAL ORDER
+=========================
+
+The product page should clearly communicate:
+
+1. what it is
+2. what problem it solves
+3. price
+4. interactive demonstration
+5. actual workbook proof
+6. actual functionality
+7. package contents
+8. example workflow
+9. who it is for
+10. who it is not for
+11. licensing
+12. delivery/refund
+13. FAQ
+14. buy CTA
+
+Do not add filler sections.
+
+==================================================
+PHASE 10 — FIX STORE NAVIGATION
+===============================
+
+Current store navigation/footer contains an anchor mismatch.
+
+The Agency Tools section currently uses something like:
+
+`id="tools"`
+
+while a Products footer link points to:
+
+`#products`
+
+Fix all mismatched anchors.
+
+Use semantic links where possible.
+
+Preferred:
+
+`Agency Tools` → `#tools`
+
+`Bundles` → `#bundles`
+
+`Templates` → `#templates`
+
+Store nav items should be actual links/anchors rather than JavaScript-only buttons where practical.
+
+Benefits:
+
+* deep linking
+* accessibility
+* browser behavior
+* no-JS fallback
+
+==================================================
+PHASE 11 — COPYRIGHT
+====================
+
+The store currently displays:
+
+`© 2025 Aditya`
+
+The current year is 2026.
+
+Fix this.
+
+Prefer a safe dynamic current-year implementation if the rest of the portfolio follows the same convention.
+
+Do not cause hydration mismatch.
+
+==================================================
+PHASE 12 — SUPPORT EMAIL
+========================
+
+The checkout currently references:
+
+`support@dev-aditya.com`
+
+VERIFY this mailbox actually exists and is deliverable.
+
+Do not invent a support address.
+
+If this mailbox is not configured:
+
+use the real support/contact email already configured for the site.
+
+Centralize it in configuration.
+
+It must be identical across:
+
+* checkout
+* receipt email
+* refund page
+* delivery page
+* contact instructions
+* FAQ
+
+==================================================
+PHASE 13 — LICENSE COPY
+=======================
+
+The website currently shows license descriptions.
+
+Compare these against the ACTUAL license files inside each finished product/bundle.
+
+Do not invent:
+
+* single-user license
+* multi-user agency license
+* multi-client template rights
+
+unless the shipped license says so.
+
+Ensure:
+
+product page
+
+checkout
+
+FAQ
+
+receipt email
+
+and actual license file
+
+do not contradict one another.
+
+==================================================
+PHASE 14 — THE PRODUCTS ARE NOW FINISHED
+========================================
+
+The previously "Coming soon" bundles/products have now been completed.
+
+You must inspect the ACTUAL finished artifacts available in the current workspace/session.
+
+Expected products include:
+
+* Web Project Pricing OS
+* Web Project Scope & Proposal OS
+* Web Agency Client Onboarding OS
+* Website QA & Launch OS
+* Agency Profit & Capacity OS
+
+Expected bundles include:
+
+* Agency Starter Bundle
+* Agency Operations Bundle
+* Template + Delivery Bundle
+
+Expected template:
+
+* Accounting / Fractional CFO website template
+
+DO NOT activate a product based purely on this list.
+
+For every item:
+
+1. locate actual final artifact;
+2. inspect ZIP integrity;
+3. inspect filename;
+4. inspect manifest;
+5. confirm customer-facing contents;
+6. confirm license;
+7. confirm actual version;
+8. confirm price;
+9. configure secure storage/delivery;
+10. perform test checkout/download;
+11. only then set status ACTIVE.
+
+If an artifact is missing:
+
+leave that product unavailable.
+
+Do not fabricate fulfilment.
+
+==================================================
+PHASE 15 — APPROVED PRICING
+===========================
+
+Use the latest approved values from:
+
+1. final product configuration;
+2. final product audit;
+3. package manifest;
+4. explicit owner-approved values.
+
+Do not keep old placeholder prices if newer approved pricing exists.
+
+If no newer approved values exist, use this intended baseline:
+
+Web Project Pricing OS:
+
+Launch:
+$29
+
+Normal:
+$49
+
+Scope & Proposal OS:
+
+Launch:
+$29
+
+Normal:
+$39
+
+Client Onboarding OS:
+
+Launch:
+$29
+
+Normal:
+$39
+
+Website QA & Launch OS:
+
+Launch:
+$29
+
+Normal:
+$39
+
+Agency Profit & Capacity OS:
+
+Launch:
+$39
+
+Normal:
+$59
+
+Agency Starter Bundle:
+
+Launch:
+$69
+
+Normal:
+$99
+
+Agency Operations Bundle:
+
+Launch:
+$99
+
+Normal:
+$149
+
+Template + Delivery Bundle:
+
+Launch:
+$129
+
+Normal:
+$169
+
+Accounting / CFO Template:
+
+Use latest approved final price.
+
+Do not display fake savings.
+
+If bundle discount is shown:
+
+calculate it from real active individual prices.
+
+==================================================
+PHASE 16 — ACTIVE PRODUCT CARDS
+===============================
+
+Once activated:
+
+replace:
+
+`Coming soon`
+
+with correct purchase state.
+
+Display:
+
+* launch price
+* normal price where relevant
+* product format
+* clear CTA
+
+Example:
+
+`$29`
+
+`$49`
+
+`Launch price`
+
+CTA:
+
+`View product`
+
+or:
+
+`Get the bundle`
+
+Do not make every card aggressive.
+
+==================================================
+PHASE 17 — PRODUCT DETAIL PAGES
+===============================
+
+Every ACTIVE product/bundle should have a useful detail page.
+
+Do not create thin pages that simply repeat the store card.
+
+At minimum each active product page needs:
+
+* clear hero
+* price
+* who it is for
+* exact problem
+* actual functionality
+* actual package contents
+* real visuals
+* license summary
+* delivery information
+* FAQ
+* purchase CTA
+
+Bundles should clearly explain:
+
+* individual tools included
+* workflow
+* why they work together
+* pricing difference
+* who should buy individual vs bundle
+
+==================================================
+PHASE 18 — TEMPLATE PAGE
+========================
+
+If the Accounting / Fractional CFO template is truly complete:
+
+create a serious template product page.
+
+Show:
+
+* real homepage screenshots
+* desktop
+* mobile
+* important inner pages
+* CMS if applicable
+* service page
+* case studies
+* contact
+* customization examples
+
+Explain:
+
+* platform
+* page count
+* components
+* CMS
+* forms
+* licensing
+* client usage
+* customization
+* documentation
+
+Do NOT call it a Framer project unless it genuinely is one.
+
+==================================================
+PHASE 19 — RAZORPAY CURRENCY
+============================
+
+This is a critical production check.
+
+The website currently markets prices in USD.
+
+Verify the actual Razorpay account's enabled capabilities.
+
+Do NOT assume international card processing is enabled.
+
+Confirm whether the production account supports:
+
+* USD orders
+* international cards
+* relevant payment methods
+
+If USD is truly enabled and tested:
+
+keep USD.
+
+If not:
+
+do not create checkout orders in an unsupported currency.
+
+The exact price and currency shown immediately before payment must match the Razorpay order.
+
+Never display:
+
+`$29`
+
+and silently charge:
+
+`₹2499`
+
+without explicitly telling the buyer.
+
+If supporting both:
+
+implement a clear server-owned currency strategy.
+
+Do NOT use live FX conversion.
+
+Use explicitly configured prices.
+
+==================================================
+PHASE 20 — PAYMENT ARCHITECTURE AUDIT
+=====================================
+
+Do not assume the backend is correct because the checkout page loads.
+
+Audit:
+
+* order creation
+* server-owned price
+* Razorpay order
+* browser callback
+* server verification
+* signature validation
+* capture status
+* webhook
+* order storage
+* fulfilment
+* email
+* download token
+
+The browser must NOT determine:
+
+* product price
+* discount
+* fulfilment
+* paid status
+
+==================================================
+PRICE TAMPERING TEST
+====================
+
+Attempt to submit:
+
+* $1
+* zero
+* negative
+* another product's amount
+* manipulated launch price
+
+Expected:
+
+SERVER ignores browser price.
+
+Server loads price by product ID.
+
+==================================================
+PHASE 21 — DURABLE ORDER STORAGE
+================================
+
+Verify production orders are stored in a genuinely durable datastore.
+
+Do NOT use:
+
+* an in-memory Map
+* JSON file
+* local filesystem
+* Vercel temporary filesystem
+
+for production orders.
+
+The system must survive:
+
+* cold starts
+* separate server instances
+* redeployments
+
+Use the currently configured durable DB if present.
+
+Do not replatform working infrastructure unnecessarily.
+
+==================================================
+PHASE 22 — RAZORPAY TEST MODE
+=============================
+
+Before declaring ecommerce production-ready, perform a genuine Test Mode purchase.
+
+Do not use a real charge for QA.
+
+Test:
+
+1. valid purchase
+2. user closes checkout
+3. failed payment
+4. invalid signature
+5. wrong order ID
+6. amount mismatch
+7. duplicate callback
+8. duplicate webhook
+9. webhook before browser verification
+10. browser closes immediately after successful payment
+11. captured payment
+12. processing state
+13. paid order refresh
+14. duplicate fulfilment prevention
+
+Report the result of every test.
+
+==================================================
+PHASE 23 — WEBHOOK
+==================
+
+Verify current official Razorpay webhook implementation.
+
+Requirements:
+
+* raw request body used for HMAC
+* correct webhook secret
+* invalid signature rejected
+* valid signature accepted
+* duplicate event safe
+* webhook returns promptly
+* no duplicate email
+* no duplicate entitlement
+
+Persist event/idempotency data if the existing architecture supports it.
+
+==================================================
+PHASE 24 — SECURE DOWNLOAD
+==========================
+
+Paid files must not be publicly accessible.
+
+Verify no product ZIP exists under:
+
+`public/`
+
+or another permanent public URL.
+
+Test:
+
+* random URL
+* guessed filename
+* missing token
+* forged token
+* edited token
+* expired token
+* unpaid order
+* refunded order if relevant
+* valid paid order
+
+Only valid paid entitlement should download.
+
+==================================================
+PHASE 25 — DIGITAL DELIVERY
+===========================
+
+Complete one full test:
+
+Test purchase
+
+→ payment verified
+
+→ order marked paid
+
+→ success page
+
+→ download available
+
+→ email sent
+
+→ link works
+
+→ ZIP integrity passes
+
+→ second legitimate download behaves as designed
+
+The actual downloaded ZIP must be identical to the intended customer artifact.
+
+==================================================
+PHASE 26 — TRANSACTIONAL EMAIL
+==============================
+
+Verify actual email sending.
+
+Email should contain:
+
+* creator/site identity
+* product name
+* order reference
+* amount
+* currency
+* secure download CTA
+* what to open first
+* support email
+* refund/delivery links
+
+No Z.ai branding.
+
+No giant ZIP attachment.
+
+No sensitive payment data.
+
+No secret IDs.
+
+==================================================
+PHASE 27 — EMAIL FAILURE
+========================
+
+Simulate or handle email provider failure.
+
+If payment succeeds but email fails:
+
+buyer must still be able to download from success page.
+
+Purchase must not disappear.
+
+==================================================
+PHASE 28 — CHECKOUT UX
+======================
+
+The checkout design is already good.
+
+Polish rather than redesign.
+
+Ensure immediately visible:
+
+* product
+* price
+* exact contents
+* license
+* digital delivery
+* name
+* email
+* secure-payment CTA
+* policy links
+
+Use one dominant CTA.
+
+Avoid distractions.
+
+If coral is the established purchase-intent accent, consider using it strategically for the final action while preserving current brand consistency.
+
+Do not create visual noise.
+
+==================================================
+CHECKOUT METADATA
+=================
+
+Checkout:
+
+`noindex, nofollow`
+
+Remove inherited generic social metadata.
+
+It is acceptable to omit social preview metadata entirely from checkout.
+
+Do not use the store homepage canonical as if checkout were the store homepage.
+
+Either omit canonical on noindex checkout or set a semantically appropriate parent canonical.
+
+==================================================
+PHASE 29 — SUCCESS UX
+=====================
+
+After verified payment:
+
+Headline:
+
+`Payment successful.`
+
+Then:
+
+`[Product name] is yours.`
+
+Show:
+
+* safe order reference
+* purchase email
+* download CTA
+* what to open first
+
+Example:
+
+`Start with 01_START_HERE.pdf`
+
+No heavy upsell above the download.
+
+==================================================
+PHASE 30 — PRODUCT TRUST
+========================
+
+Strengthen trust using REAL evidence:
+
+* real domain
+* Aditya's portfolio
+* real screenshots
+* transparent pricing
+* clear package contents
+* version
+* real support email
+* policies
+* Razorpay
+* no subscription
+* license
+* demo clearly identified
+
+Do NOT add:
+
+* fake testimonials
+* fake stars
+* fake sales
+* fake urgency
+* fake visitor count
+* fake scarcity
+* invented client logos
+
+==================================================
+PHASE 31 — PORTFOLIO BOUNDARY
+=============================
+
+The main portfolio must remain a portfolio.
+
+Do NOT add Digital Products to:
+
+* primary header
+* homepage hero
+* main Work grid
+* About navigation
+* unrelated case studies
+
+unless already explicitly present and approved.
+
+Store can be reached directly and indexed.
+
+The normal portfolio should not suddenly feel like an ecommerce site.
+
+==================================================
+PHASE 32 — TYPOGRAPHY / DESIGN-SYSTEM CONSISTENCY
+=================================================
+
+Compare the store against the actual current portfolio.
+
+There appears to be potential scaffold/type-system drift.
+
+Do not assume the current store font is correct.
+
+Inspect:
+
+* portfolio font
+* heading weights
+* line-height
+* spacing
+* buttons
+* borders
+* shadows
+* radii
+* colours
+* background
+* grain
+* nav treatment
+
+Then ensure store uses the SAME identity.
+
+Do not create a separate Geist/scaffold identity if the portfolio uses a different approved typography system.
+
+The result should feel like:
+
+`dev-aditya.com`
+
+created the store.
+
+Not:
+
+another template was embedded inside it.
+
+==================================================
+PHASE 33 — NO-JS / HYDRATION SAFETY
+===================================
+
+Some animated hero content currently renders server-side with styles such as:
+
+`opacity: 0`
+
+until client animation executes.
+
+Audit this.
+
+Critical content must not permanently disappear if JavaScript fails or hydration is delayed.
+
+Ensure:
+
+* hero headline
+* primary CTA
+* product pricing
+* checkout content
+
+are fundamentally accessible.
+
+Animations must enhance content, not be required to reveal it.
+
+No hydration errors.
+
+No layout shift caused by animation initialization.
+
+==================================================
+PHASE 34 — RESPONSIVE QA
+========================
+
+Test the ACTUAL rendered experience at:
+
+1440px
+
+1280px
+
+1024px
+
+768px
+
+430px
+
+390px
+
+375px
+
+320px
+
+For:
+
+* store homepage
+* individual product
+* bundle product page
+* template page
+* checkout
+* success
+* policy pages
+
+Inspect:
+
+* horizontal overflow
+* headings
+* prices
+* badges
+* product cards
+* calculator
+* screenshots
+* sticky CTA
+* checkout summary
+* footer
+* navigation
+* FAQs
+* long bundle lifecycle labels
+
+Fix all defects.
+
+==================================================
+PHASE 35 — MOBILE CONVERSION
+============================
+
+On 375px and 390px specifically:
+
+A buyer should quickly see:
+
+* what product is
+* price
+* benefit
+* CTA
+
+without excessive scrolling.
+
+Consider a restrained sticky mobile purchase bar after the hero if it materially improves UX.
+
+Do not cover content.
+
+Respect safe-area insets.
+
+==================================================
+PHASE 36 — ACCESSIBILITY
+========================
+
+Audit with keyboard.
+
+Check:
+
+* store nav
+* anchors
+* product cards
+* calculator
+* accordion
+* checkout fields
+* error states
+* CTA
+* policy links
+
+Verify:
+
+* proper H1/H2 hierarchy
+* labelled fields
+* visible focus
+* sufficient contrast
+* touch targets
+* meaningful alt text
+* reduced motion
+* no color-only state
+* no inaccessible div buttons
+
+Target WCAG AA quality.
+
+If automated accessibility tooling is available:
+
+run it.
+
+Fix all serious findings.
+
+==================================================
+PHASE 37 — PERFORMANCE
+======================
+
+The digital store must not degrade the portfolio.
+
+Verify:
+
+* Razorpay script does not load on normal portfolio
+* no ecommerce backend JS on portfolio
+* screenshots optimized
+* Next/Image used appropriately
+* no giant uncompressed images
+* no unnecessary client component wrapping entire page
+* motion components limited
+* no huge dependency introduced
+* no layout shift
+
+Run Lighthouse or equivalent where available.
+
+Target for core public pages:
+
+Performance:
+95+
+
+Accessibility:
+95+
+
+Best Practices:
+95+
+
+SEO:
+95+
+
+Aim for 100 where realistic.
+
+Do not manipulate tests.
+
+==================================================
+PHASE 38 — SEO STRUCTURED DATA
+==============================
+
+Implement accurate structured data.
+
+Store:
+
+* CollectionPage and/or ItemList where appropriate
+* BreadcrumbList
+
+Product pages:
+
+* Product
+* Offer
+* BreadcrumbList
+
+Use actual:
+
+* name
+* URL
+* price
+* currency
+* availability
+* image
+* description
+
+Do NOT generate:
+
+* AggregateRating
+* Review
+* fake inventory
+
+Avoid duplicate Product schema.
+
+Validate JSON-LD.
+
+==================================================
+PHASE 39 — PAGE SEO
+===================
+
+Every ACTIVE product must have a unique:
+
+* title
+* meta description
+* canonical
+* OG title
+* OG description
+* OG image
+* Twitter metadata
+* structured data
+
+No Z.ai metadata inheritance.
+
+No duplicate homepage titles.
+
+No generic developer keywords.
+
+==================================================
+PHASE 40 — PRODUCT PAGE INTERNAL LINKS
+======================================
+
+Link intelligently between:
+
+* store
+* relevant individual tools
+* related bundles
+* portfolio
+
+Do not create spammy keyword links.
+
+Example:
+
+Pricing OS product page may naturally mention:
+
+Agency Starter Bundle
+
+if active.
+
+==================================================
+PHASE 41 — SEARCH CONSOLE READINESS
+===================================
+
+After SEO fixes:
+
+verify:
+
+`/robots.txt`
+
+`/sitemap.xml`
+
+active product HTML
+
+canonical
+
+OG
+
+JSON-LD.
+
+Provide the exact manual Google Search Console actions still required:
+
+1. verify property
+2. submit sitemap
+3. inspect `/digital-products`
+4. request indexing
+5. inspect active product URLs
+
+Do not claim Google has indexed the pages merely because they are ready.
+
+==================================================
+PHASE 42 — POLICY AUDIT
+=======================
+
+Read:
+
+* Terms
+* Privacy
+* Refund Policy
+* Delivery Policy
+* Contact
+
+Ensure they accurately reflect:
+
+* digital products
+* Razorpay
+* Resend
+* collected name/email
+* electronic delivery
+* license
+* refund mechanism
+
+Do not invent legal guarantees.
+
+Do not state card details are stored by us.
+
+==================================================
+PHASE 43 — CONTENT PROOFREADING
+===============================
+
+Proofread EVERY store-visible sentence.
+
+Check:
+
+* grammar
+* spelling
+* capitalization
+* punctuation
+* product naming
+* hyphenation
+* price consistency
+* terminology
+* licence/license consistency according to site style
+* dead copy
+* repetitive AI-like phrasing
+
+Keep copy:
+
+* simple
+* direct
+* professional
+* specific
+
+Avoid:
+
+* revolutionize
+* supercharge
+* ultimate
+* game-changing
+* unlock
+* 10x
+
+unless objectively warranted.
+
+==================================================
+PHASE 44 — PRODUCT FACT VALIDATION
+==================================
+
+Before publishing any statement such as:
+
+`14 sheets`
+
+`5 workbooks`
+
+`Framer project`
+
+`single-site license`
+
+`demo included`
+
+verify it against the actual shipped artifact.
+
+Never guess.
+
+==================================================
+PHASE 45 — PORTFOLIO REGRESSION
+===============================
+
+After all store changes, retest:
+
+`/`
+
+`/work`
+
+at least two case studies
+
+`/about`
+
+`/contact`
+
+`/terms`
+
+`/privacy`
+
+Verify:
+
+* same visual identity
+* same navigation
+* same content
+* no store link introduced unexpectedly
+* contact still works
+* no Razorpay script
+* no errors
+* no SEO regression
+* no favicon regression
+* no layout changes caused by ecommerce styles
+
+==================================================
+PHASE 46 — LINK AUDIT
+=====================
+
+Crawl internal links.
+
+Fix:
+
+* broken anchors
+* 404 links
+* wrong policy paths
+* wrong product slugs
+* dead checkout links
+* wrong portfolio link
+* wrong canonical links
+
+No customer-facing broken links.
+
+==================================================
+PHASE 47 — CONSOLE / NETWORK QA
+===============================
+
+Open pages with browser devtools or automated browser tooling.
+
+Check:
+
+* JavaScript errors
+* hydration warnings
+* failed fetches
+* 404 images
+* 500 API requests
+* CORS errors
+* Razorpay errors
+* CSP errors
+
+There should be zero unexplained errors.
+
+==================================================
+PHASE 48 — SECURITY REVIEW
+==========================
+
+Specifically audit for:
+
+* browser-controlled price
+* public ZIP
+* predictable download
+* exposed secret
+* open redirect
+* forged callback
+* unsigned webhook
+* duplicate fulfilment
+* persistent download after refund if policy blocks it
+* path traversal
+* PII in logs
+* secret environment variables exposed to client
+* debug endpoints
+
+Fix every material issue.
+
+==================================================
+PHASE 49 — ENVIRONMENT VARIABLES
+================================
+
+Review required environment variables.
+
+Remove unused scaffold variables if safe.
+
+Clearly document required production values.
+
+No secret may use:
+
+`NEXT_PUBLIC_`
+
+unless it is intentionally public.
+
+Expected categories:
+
+* site URL
+* Razorpay key ID
+* Razorpay secret
+* webhook secret
+* database
+* download secret
+* storage
+* Resend
+* support email
+
+Do not expose secrets in logs or final report.
+
+==================================================
+PHASE 50 — BUILD
+================
+
+Run all appropriate project checks.
+
+At minimum:
+
+* dependency install/check
+* typecheck
+* lint
+* tests
+* production build
+
+If the project has E2E tests:
+
+run them.
+
+If it does not:
+
+create focused smoke tests for the digital-products routes where reasonable.
+
+No TypeScript errors.
+
+No build warnings that indicate broken functionality.
+
+==================================================
+PHASE 51 — LIVE-LIKE TESTING
+============================
+
+Do not evaluate only localhost.
+
+If a preview environment is available:
+
+test the preview build.
+
+Verify:
+
+* server routes
+* order persistence
+* webhooks where possible
+* storage
+* download
+* Resend
+* metadata
+* sitemap
+* robots
+
+before considering production ready.
+
+==================================================
+PHASE 52 — SELF-AUDIT
+=====================
+
+After implementation, independently score the work.
+
+Use this table:
+
+VISUAL DESIGN
+__/10
+
+BRAND CONSISTENCY
+__/10
+
+INFORMATION ARCHITECTURE
+__/10
+
+PRODUCT MERCHANDISING
+__/10
+
+COPY
+__/10
+
+PRODUCT PAGE UX
+__/10
+
+CHECKOUT UX
+__/10
+
+MOBILE UX
+__/10
+
+ACCESSIBILITY
+__/10
+
+SEO
+__/10
+
+SOCIAL PREVIEW
+__/10
+
+PERFORMANCE
+__/10
+
+PAYMENT RELIABILITY
+__/10
+
+PAYMENT SECURITY
+__/10
+
+DOWNLOAD RELIABILITY
+__/10
+
+EMAIL RELIABILITY
+__/10
+
+CONTENT ACCURACY
+__/10
+
+TRUST
+__/10
+
+MAINTAINABILITY
+__/10
+
+PORTFOLIO REGRESSION SAFETY
+__/10
+
+OVERALL
+__/10
+
+No category may be marked 9.5+ without corresponding validation.
+
+If any score is below 9.5:
+
+fix the relevant weakness and run the audit again.
+
+==================================================
+PHASE 53 — FINAL BUYER TEST
+===========================
+
+Pretend you are a 3-person web agency owner receiving this link in a cold email.
+
+Open:
+
+`/digital-products/web-project-pricing-os`
+
+You must be able to answer within seconds:
+
+1. What is this?
+2. Why should I care?
+3. What does it do?
+4. What do I receive?
+5. Is it for someone like me?
+6. How much does it cost?
+7. Is this a subscription?
+8. Can I trust the seller?
+9. Is payment secure?
+10. What happens after I pay?
+
+If any answer is unclear:
+
+keep improving.
+
+==================================================
+PHASE 54 — BUNDLE BUYER TEST
+============================
+
+For each active bundle:
+
+A buyer should understand:
+
+* why this bundle exists
+* who it is for
+* which products are inside
+* individual price vs bundle price
+* workflow
+* license
+* whether buying the bundle is better for them than buying one tool
+
+Do not rely only on file count to show value.
+
+==================================================
+PHASE 55 — FINAL ACCEPTANCE
+===========================
+
+Do NOT call this complete until:
+
+* Z.ai branding is completely removed
+* correct favicon exists
+* root metadata is correct
+* Twitter metadata is correct
+* sitemap returns 200
+* robots returns 200
+* canonical host is consistent
+* OG images exist
+* structured data validates
+* anchor bugs are fixed
+* copyright year is correct
+* feature-description mappings are correct
+* support email is verified
+* finished products are correctly represented
+* all genuinely finished products intended for sale are securely configured
+* coming-soon states are removed only when fulfilment is ready
+* pricing is correct
+* Razorpay currency is valid
+* Test Mode purchase works
+* payment verification works
+* webhook works
+* durable order persistence works
+* secure download works
+* transactional email works
+* mobile works
+* accessibility passes
+* build passes
+* no console errors
+* portfolio remains unaffected
+* all audited quality categories score at least 9.5/10
+
+==================================================
+FINAL REPORT
+============
+
+When done, report:
+
+# 1. FIXES COMPLETED
+
+Exact issues fixed.
+
+# 2. PRODUCTS ACTIVATED
+
+For every product:
+
+ACTIVE / NOT ACTIVE
+
+and why.
+
+# 3. FINAL ROUTES
+
+List all active store/product URLs.
+
+# 4. PAYMENT TEST RESULTS
+
+Each test case and PASS/FAIL.
+
+# 5. DOWNLOAD TEST RESULTS
+
+Each test case and PASS/FAIL.
+
+# 6. EMAIL TEST RESULTS
+
+Actual delivery status.
+
+# 7. SEO RESULTS
+
+Report:
+
+* canonical host
+* sitemap status
+* robots status
+* titles
+* OG
+* Twitter
+* schema validation
+* noindex routes
+
+# 8. PERFORMANCE RESULTS
+
+Actual Lighthouse or equivalent metrics.
+
+# 9. ACCESSIBILITY RESULTS
+
+Actual tool/manual results.
+
+# 10. RESPONSIVE QA
+
+Breakpoints inspected and defects fixed.
+
+# 11. PORTFOLIO REGRESSION
+
+Routes tested.
+
+# 12. FILES CHANGED
+
+Exact list.
+
+# 13. REQUIRED MANUAL ACTIONS
+
+Only items Zai genuinely cannot do.
+
+# 14. REMAINING LIMITATIONS
+
+Be explicit.
+
+# 15. FINAL QUALITY SCORES
+
+Give the full 20-category scorecard.
+
+If anything is below 9.5/10:
+
+do NOT write "complete."
+
+Explain what still needs work.
+
+==================================================
+GIT / DEPLOYMENT SAFETY
+=======================
+
+Implement the changes directly in the current working tree.
+
+Do not reset unrelated user work.
+
+Do not overwrite unrelated files.
+
+Do not modify portfolio content unrelated to this task.
+
+Do not push, merge, change DNS, or deploy to production unless the current session has been separately authorized to perform those state-changing actions.
+
+A production-ready verified build is required regardless.
+
+==================================================
+MOST IMPORTANT PRINCIPLE
+========================
+
+DO NOT REDESIGN WHAT IS ALREADY WORKING.
+
+The store concept is already strong.
+
+This task is about:
+
+CORRECTNESS
+
+*
+
+TRUST
+
+*
+
+REAL PRODUCT PROOF
+
+*
+
+PAYMENT RELIABILITY
+
+*
+
+SECURE DELIVERY
+
+*
+
+SEO
+
+*
+
+POLISH.
+
+The final buyer journey should be:
+
+personalized outreach email
+
+→
+
+`www.dev-aditya.com/digital-products/...`
+
+→
+
+clear professional product page
+
+→
+
+real product proof
+
+→
+
+trusted checkout
+
+→
+
+verified Razorpay payment
+
+→
+
+secure download
+
+→
+
+professional email
+
+with no generic marketplace experience and no Z.ai/scaffold residue anywhere.
+
+Start by inspecting the current source and live implementation.
+
+Then fix every defect systematically.
+
+Do not return another plan.
+
+Implement and verify.

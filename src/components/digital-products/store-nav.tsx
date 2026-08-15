@@ -14,9 +14,9 @@ import {
 import { Button } from '@/components/ui/button';
 
 const NAV_LINKS = [
-  { label: 'Products', href: '#products' },
+  { label: 'Agency Tools', href: '#tools' },
   { label: 'Bundles', href: '#bundles' },
-  { label: 'Templates', href: '#workflow' },
+  { label: 'Templates', href: '#templates' },
 ];
 
 export function StoreNav() {
@@ -52,14 +52,18 @@ export function StoreNav() {
         {/* Desktop links */}
         <div className="hidden items-center gap-6 md:flex">
           {NAV_LINKS.map((link) => (
-            <button
+            <a
               key={link.href}
-              onClick={() => handleNav(link.href)}
+              href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNav(link.href);
+              }}
               className="text-sm font-medium transition-colors hover:underline"
               style={{ color: '#5E5E5F' }}
             >
               {link.label}
-            </button>
+            </a>
           ))}
         </div>
 
@@ -91,14 +95,18 @@ export function StoreNav() {
             </SheetHeader>
             <div className="flex flex-col gap-3 px-4 pt-2">
               {NAV_LINKS.map((link) => (
-                <button
+                <a
                   key={link.href}
-                  onClick={() => handleNav(link.href)}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNav(link.href);
+                  }}
                   className="py-2 text-left text-base font-medium transition-colors hover:underline"
                   style={{ color: '#0B0B0B' }}
                 >
                   {link.label}
-                </button>
+                </a>
               ))}
             </div>
           </SheetContent>

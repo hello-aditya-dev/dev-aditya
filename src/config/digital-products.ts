@@ -9,6 +9,11 @@ export type ProductStatus = "active" | "coming-soon" | "hidden" | "sold-out";
 export type ProductType = "tool" | "bundle" | "template";
 export type AccentColor = "coral" | "blue" | "yellow" | "violet";
 
+export interface ProductFeature {
+  name: string;
+  description: string;
+}
+
 export interface DigitalProduct {
   id: string;
   slug: string;
@@ -32,8 +37,8 @@ export interface DigitalProduct {
   version?: string;
   formats: string[];
   includes: string[];
-  outcomes: string[];
-  features: string[];
+  /** Structured features — each feature carries its own description */
+  features: ProductFeature[];
   bundleContents?: string[];
   bundleLifecycle?: string[];
   screenshots?: string[];
@@ -110,25 +115,51 @@ export const digitalProducts: DigitalProduct[] = [
       "Change-order guide",
       "License",
     ],
-    outcomes: [
-      "Estimate true project workload",
-      "Calculate delivery cost",
-      "Protect margin",
-      "Generate recommended project pricing",
-      "Compare Essential / Recommended / Premium tiers",
-      "Model scope creep",
-      "Calculate change orders",
-      "Compare estimated vs actual hours",
-      "Learn from completed projects",
-    ],
     features: [
-      "Scope Builder",
-      "Hours Engine",
-      "Price Engine",
-      "Scope Creep Modeller",
-      "Change Order Calculator",
-      "Project Actuals Tracker",
-      "Tier Comparison (Essential/Recommended/Premium)",
+      {
+        name: "Scope Builder",
+        description: "Select project deliverables and activities to define what the project includes and excludes.",
+      },
+      {
+        name: "Hours Engine",
+        description: "Assign estimated hours to each scope item so you can see total workload before you price.",
+      },
+      {
+        name: "Cost Engine",
+        description: "Calculate delivery cost from estimated hours and your team's cost rates.",
+      },
+      {
+        name: "Price Engine",
+        description: "Apply a margin target to delivery cost and generate the recommended project price.",
+      },
+      {
+        name: "Quote Builder",
+        description: "Assemble scope, pricing and terms into a client-ready project quote.",
+      },
+      {
+        name: "Essential / Recommended / Premium Tiers",
+        description: "Generate three pricing tiers for the same scope so the client can choose their level of investment.",
+      },
+      {
+        name: "Scope Creep Modeller",
+        description: "Add unplanned hours to a live project and see the impact on margin and effective rate.",
+      },
+      {
+        name: "Change Order Calculator",
+        description: "Quantify the cost of client-requested changes and produce a change-order amount to present.",
+      },
+      {
+        name: "Project Actuals",
+        description: "Record actual hours after delivery to compare your estimate against what really happened.",
+      },
+      {
+        name: "Project Database",
+        description: "Store completed project data so you can reference past projects when estimating new ones.",
+      },
+      {
+        name: "Dashboard",
+        description: "See summary metrics across projects — average margin, scope-creep frequency, and effective rate.",
+      },
     ],
     accent: "coral",
     whoItsFor:
@@ -154,23 +185,30 @@ export const digitalProducts: DigitalProduct[] = [
     shortDescription: "Turn discovery calls into structured scope and proposals.",
     description:
       "A scoping and proposal system that converts client discovery into structured project scope, deliverables, exclusions and a professional proposal document.",
-    regularPrice: 49,
-    currencyPrices: { USD: 49, INR: 2499 },
+    launchPrice: 29,
+    regularPrice: 39,
+    currencyPrices: { USD: 39, USDLaunch: 29, INR: 1999, INRLaunch: 1499 },
     status: "coming-soon",
     featured: false,
     formats: ["Excel workbook", "PDF documentation", "ZIP package"],
     includes: [],
-    outcomes: [
-      "Structure discovery findings",
-      "Define deliverables and exclusions",
-      "Generate proposal documents",
-      "Track proposal status",
-    ],
     features: [
-      "Discovery Questionnaire",
-      "Scope Builder",
-      "Proposal Generator",
-      "Exclusions Tracker",
+      {
+        name: "Discovery Questionnaire",
+        description: "Capture client goals, audience, technical requirements and brand direction in a structured format.",
+      },
+      {
+        name: "Scope Builder",
+        description: "Convert discovery answers into a list of deliverables, activities and explicit exclusions.",
+      },
+      {
+        name: "Proposal Generator",
+        description: "Assemble scope, timeline and pricing into a formatted proposal document ready to send.",
+      },
+      {
+        name: "Exclusions Tracker",
+        description: "Maintain a clear record of what is out of scope to protect against scope creep after sign-off.",
+      },
     ],
     accent: "blue",
     seo: {
@@ -191,23 +229,30 @@ export const digitalProducts: DigitalProduct[] = [
     shortDescription: "Onboard new clients without chaos.",
     description:
       "A client onboarding system that standardises how new projects start — from signed proposal to first deliverable review.",
+    launchPrice: 29,
     regularPrice: 39,
-    currencyPrices: { USD: 39, INR: 1999 },
+    currencyPrices: { USD: 39, USDLaunch: 29, INR: 1999, INRLaunch: 1499 },
     status: "coming-soon",
     featured: false,
     formats: ["Excel workbook", "PDF documentation", "ZIP package"],
     includes: [],
-    outcomes: [
-      "Collect client inputs systematically",
-      "Assign internal responsibilities",
-      "Track onboarding milestones",
-      "Reduce start-of-project friction",
-    ],
     features: [
-      "Client Intake Form",
-      "Onboarding Checklist",
-      "Milestone Tracker",
-      "Welcome Packet Generator",
+      {
+        name: "Client Intake Form",
+        description: "Collect logos, brand assets, access credentials and project preferences in one place.",
+      },
+      {
+        name: "Onboarding Checklist",
+        description: "Track every setup step — hosting, CMS, analytics, email — so nothing is missed.",
+      },
+      {
+        name: "Milestone Tracker",
+        description: "Define onboarding milestones and due dates to keep the project start on schedule.",
+      },
+      {
+        name: "Welcome Packet Generator",
+        description: "Produce a client-ready welcome document covering process, timelines and communication norms.",
+      },
     ],
     accent: "yellow",
     seo: {
@@ -228,23 +273,30 @@ export const digitalProducts: DigitalProduct[] = [
     shortDescription: "QA and launch websites without missing steps.",
     description:
       "A QA and launch checklist system that ensures every website goes live with consistent quality, not just hope.",
+    launchPrice: 29,
     regularPrice: 39,
-    currencyPrices: { USD: 39, INR: 1999 },
+    currencyPrices: { USD: 39, USDLaunch: 29, INR: 1999, INRLaunch: 1499 },
     status: "coming-soon",
     featured: false,
     formats: ["Excel workbook", "PDF documentation", "ZIP package"],
     includes: [],
-    outcomes: [
-      "Systematic pre-launch QA",
-      "Consistent launch checklist",
-      "Post-launch verification",
-      "Client handover documentation",
-    ],
     features: [
-      "Pre-Launch QA Checklist",
-      "Cross-Browser Testing Guide",
-      "Launch Sequence",
-      "Post-Launch Verification",
+      {
+        name: "Pre-Launch QA Checklist",
+        description: "Work through a structured checklist of functional, content and visual checks before going live.",
+      },
+      {
+        name: "Cross-Browser Testing Guide",
+        description: "Reference table of browsers, devices and breakpoints to test against before launch.",
+      },
+      {
+        name: "Launch Sequence",
+        description: "Step-by-step deployment checklist covering DNS, hosting, SSL, redirects and go-live verification.",
+      },
+      {
+        name: "Post-Launch Verification",
+        description: "Confirm forms, analytics, performance and client handover items after the site is live.",
+      },
     ],
     accent: "violet",
     seo: {
@@ -265,23 +317,30 @@ export const digitalProducts: DigitalProduct[] = [
     shortDescription: "Understand your actual profitability and capacity.",
     description:
       "A profit and capacity system that shows actual project profitability, overhead allocation, and how much work your agency can take on.",
-    regularPrice: 49,
-    currencyPrices: { USD: 49, INR: 2499 },
+    launchPrice: 39,
+    regularPrice: 59,
+    currencyPrices: { USD: 59, USDLaunch: 39, INR: 2999, INRLaunch: 1999 },
     status: "coming-soon",
     featured: false,
     formats: ["Excel workbook", "PDF documentation", "ZIP package"],
     includes: [],
-    outcomes: [
-      "Track real project profitability",
-      "Allocate overhead correctly",
-      "Model capacity scenarios",
-      "Plan hiring and growth",
-    ],
     features: [
-      "Profit Tracker",
-      "Overhead Allocator",
-      "Capacity Modeller",
-      "Growth Planner",
+      {
+        name: "Profit Tracker",
+        description: "Record revenue and true cost per project to see actual margin — not the margin you quoted.",
+      },
+      {
+        name: "Overhead Allocator",
+        description: "Distribute fixed overhead (software, rent, salaries) across active projects to understand real cost.",
+      },
+      {
+        name: "Capacity Modeller",
+        description: "Input team size, available hours and current commitments to see how much work you can take on.",
+      },
+      {
+        name: "Growth Planner",
+        description: "Model hiring scenarios and revenue targets to plan when and how to grow the team.",
+      },
     ],
     accent: "coral",
     seo: {
@@ -314,13 +373,24 @@ export const digitalProducts: DigitalProduct[] = [
     featured: false,
     formats: ["Excel workbooks", "PDF documentation", "ZIP packages"],
     includes: [],
-    outcomes: [
-      "Structured discovery process",
-      "Defensible pricing",
-      "Professional proposals",
-      "Consistent client onboarding",
+    features: [
+      {
+        name: "Structured discovery process",
+        description: "Use the Discovery Questionnaire to capture every client need before you scope.",
+      },
+      {
+        name: "Defensible pricing",
+        description: "Scope Builder → Hours Engine → Cost Engine → Price Engine gives you a quote backed by real numbers.",
+      },
+      {
+        name: "Professional proposals",
+        description: "Assemble scope and pricing into a client-ready proposal with clear exclusions.",
+      },
+      {
+        name: "Consistent client onboarding",
+        description: "Standardise how every new project starts with intake forms, checklists and milestones.",
+      },
     ],
-    features: [],
     bundleContents: [
       "Web Project Pricing OS",
       "Web Project Scope & Proposal OS",
@@ -359,13 +429,24 @@ export const digitalProducts: DigitalProduct[] = [
     featured: false,
     formats: ["Excel workbooks", "PDF documentation", "ZIP packages"],
     includes: [],
-    outcomes: [
-      "Complete project lifecycle system",
-      "Consistent delivery quality",
-      "Real profitability tracking",
-      "Capacity planning",
+    features: [
+      {
+        name: "Complete project lifecycle system",
+        description: "From discovery and scoping through delivery, QA, launch and post-project review.",
+      },
+      {
+        name: "Consistent delivery quality",
+        description: "Structured QA checklists and launch sequences for every project.",
+      },
+      {
+        name: "Real profitability tracking",
+        description: "See actual margin per project after overhead — not just the margin you quoted.",
+      },
+      {
+        name: "Capacity planning",
+        description: "Know how much work your team can take on before you commit to timelines.",
+      },
     ],
-    features: [],
     bundleContents: [
       "Everything in Agency Starter Bundle",
       "Website QA & Launch OS",
@@ -407,13 +488,24 @@ export const digitalProducts: DigitalProduct[] = [
     featured: false,
     formats: ["Framer project", "Excel workbooks", "PDF documentation", "ZIP packages"],
     includes: [],
-    outcomes: [
-      "Production-ready website starting point",
-      "Client pricing system",
-      "Onboarding workflow",
-      "QA and launch process",
+    features: [
+      {
+        name: "Production-ready website starting point",
+        description: "A fully structured Framer template with real pages, not a generic one-page demo.",
+      },
+      {
+        name: "Client pricing system",
+        description: "Scope, cost and price the template-customisation project using the Pricing OS workflow.",
+      },
+      {
+        name: "Onboarding workflow",
+        description: "Collect client assets and preferences systematically before you start customising.",
+      },
+      {
+        name: "QA and launch process",
+        description: "Structured checklists to QA and launch the customised site without missing steps.",
+      },
     ],
-    features: [],
     bundleContents: [
       "Accounting / Fractional CFO website template",
       "Web Project Pricing OS",
@@ -445,22 +537,30 @@ export const digitalProducts: DigitalProduct[] = [
     shortDescription: "A production-ready site for accounting and fractional CFO firms.",
     description:
       "A Framer website template built for accounting firms and fractional CFOs. Real structure, real pages, not a generic one-page demo.",
+    launchPrice: 49,
     regularPrice: 79,
-    currencyPrices: { USD: 79, INR: 3999 },
+    currencyPrices: { USD: 79, USDLaunch: 49, INR: 3999, INRLaunch: 2499 },
     status: "coming-soon",
     featured: false,
     formats: ["Framer project", "ZIP package"],
     includes: [],
-    outcomes: [
-      "Professional website for accounting/CFO firms",
-      "Real business structure and pages",
-      "Ready for client customisation",
-    ],
     features: [
-      "Multi-page structure",
-      "Service area sections",
-      "Team/profile layouts",
-      "Contact and intake forms",
+      {
+        name: "Multi-page structure",
+        description: "Home, services, about, team, contact and industry-specific pages — all pre-built.",
+      },
+      {
+        name: "Service area sections",
+        description: "Pre-designed sections for bookkeeping, tax, advisory and CFO service offerings.",
+      },
+      {
+        name: "Team / profile layouts",
+        description: "Professional layouts for team members, credentials and specialisations.",
+      },
+      {
+        name: "Contact and intake forms",
+        description: "Ready-made contact form and new-client intake form suited to financial services.",
+      },
     ],
     accent: "blue",
     whoItsFor: "Designers building sites for accounting firms, CFOs, or financial services clients.",
@@ -472,6 +572,13 @@ export const digitalProducts: DigitalProduct[] = [
     },
   },
 ];
+
+// ── Site constants ───────────────────────────────────────────
+/** Canonical site origin — every public URL must start with this */
+export const SITE_ORIGIN = "https://www.dev-aditya.com";
+
+/** Centralised support email — all mailto links import from here */
+export const SUPPORT_EMAIL = "work@dev-aditya.com";
 
 // ── Query helpers ───────────────────────────────────────────
 export function getProductBySlug(slug: string): DigitalProduct | undefined {

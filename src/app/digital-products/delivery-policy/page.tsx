@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { SUPPORT_EMAIL, SITE_ORIGIN } from "@/config/digital-products";
 
 export const metadata: Metadata = {
   title: "Digital Delivery / Shipping Policy | Aditya Digital Products",
   description: "Delivery policy for digital products purchased from Aditya.",
   alternates: {
-    canonical: "https://dev-aditya.com/digital-products/delivery-policy",
+    canonical: `${SITE_ORIGIN}/digital-products/delivery-policy`,
   },
 };
 
@@ -54,7 +55,7 @@ export default function DeliveryPolicyPage() {
             <ol className="list-decimal pl-6 space-y-1 mt-2">
               <li>Check your email inbox and spam folder for the download email.</li>
               <li>Return to the success page using your browser&apos;s back button.</li>
-              <li>Contact <a href="mailto:support@dev-aditya.com" className="underline" style={{ color: "#1C92FF" }}>support@dev-aditya.com</a> with your order reference for manual assistance.</li>
+              <li>Contact <a href={`mailto:${SUPPORT_EMAIL}`} className="underline" style={{ color: "#1C92FF" }}>{SUPPORT_EMAIL}</a> with your order reference for manual assistance.</li>
             </ol>
           </section>
 
@@ -65,7 +66,7 @@ export default function DeliveryPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold mb-3" style={{ color: "#0B0B0B" }}>Contact</h2>
-            <p>For delivery issues or questions, contact <a href="mailto:support@dev-aditya.com" className="underline" style={{ color: "#1C92FF" }}>support@dev-aditya.com</a>.</p>
+            <p>For delivery issues or questions, contact <a href={`mailto:${SUPPORT_EMAIL}`} className="underline" style={{ color: "#1C92FF" }}>{SUPPORT_EMAIL}</a>.</p>
           </section>
         </div>
       </div>

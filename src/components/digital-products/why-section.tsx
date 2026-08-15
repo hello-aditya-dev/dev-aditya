@@ -12,7 +12,7 @@ export function WhySection() {
         <div className="grid gap-10 md:grid-cols-2 md:gap-16">
           {/* Left: heading + body */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 1, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.4 }}
@@ -42,7 +42,7 @@ export function WhySection() {
 
           {/* Right: context card */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 1, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.4, delay: 0.1 }}

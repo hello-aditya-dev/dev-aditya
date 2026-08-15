@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SITE_ORIGIN } from "@/config/digital-products";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -14,24 +15,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Z.ai Code Scaffold - AI-Powered Development",
-  description: "Modern Next.js scaffold optimized for AI-powered development with Z.ai. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
-  keywords: ["Z.ai", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
-  authors: [{ name: "Z.ai Team" }],
+  metadataBase: new URL(SITE_ORIGIN),
+  title: "Aditya — Digital Products for Web Designers & Agencies",
+  description: "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
+  keywords: ["web design tools", "agency tools", "pricing calculator", "scope creep", "client onboarding", "digital products", "web designer resources"],
+  authors: [{ name: "Aditya" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/logo.svg",
   },
   openGraph: {
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
-    url: "https://chat.z.ai",
-    siteName: "Z.ai",
+    title: "Aditya — Digital Products for Web Designers & Agencies",
+    description: "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
+    url: SITE_ORIGIN,
+    siteName: "Aditya",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
+    title: "Aditya — Digital Products for Web Designers & Agencies",
+    description: "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
   },
 };
 

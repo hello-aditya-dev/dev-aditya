@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_ORIGIN } from "@/config/digital-products";
 import { StoreNav } from "@/components/digital-products/store-nav";
 import { StoreFooter } from "@/components/digital-products/store-footer";
 
@@ -10,12 +11,18 @@ export const metadata: Metadata = {
     title: "Digital Products for Web Designers & Agencies | Aditya",
     description:
       "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
-    url: "https://dev-aditya.com/digital-products",
+    url: `${SITE_ORIGIN}/digital-products`,
     siteName: "Aditya",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Digital Products for Web Designers & Agencies | Aditya",
+    description:
+      "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
+  },
   alternates: {
-    canonical: "https://dev-aditya.com/digital-products",
+    canonical: `${SITE_ORIGIN}/digital-products`,
   },
 };
 

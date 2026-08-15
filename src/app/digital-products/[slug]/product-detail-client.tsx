@@ -51,7 +51,7 @@ export default function ProductDetailClient({
                 Available
               </span>
             )}
-            {isComingSoon && (
+            {isComingSoon && !(product.launchPrice || product.regularPrice) && (
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border-2" style={{ borderColor: "#5E5E5F", color: "#5E5E5F" }}>
                 Coming soon
               </span>
@@ -162,8 +162,8 @@ export default function ProductDetailClient({
           <div className="grid md:grid-cols-2 gap-6">
             {product.features.map((feature, i) => (
               <motion.div
-                key={feature}
-                initial={{ opacity: 0, y: 20 }}
+                key={feature.name}
+                initial={{ opacity: 1, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
@@ -175,10 +175,8 @@ export default function ProductDetailClient({
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>
-                    <h3 className="font-semibold text-lg mb-1" style={{ color: "#0B0B0B" }}>{feature}</h3>
-                    {product.outcomes[i] && (
-                      <p className="text-sm" style={{ color: "#5E5E5F" }}>{product.outcomes[i]}</p>
-                    )}
+                    <h3 className="font-semibold text-lg mb-1" style={{ color: "#0B0B0B" }}>{feature.name}</h3>
+                    <p className="text-sm" style={{ color: "#5E5E5F" }}>{feature.description}</p>
                   </div>
                 </div>
               </motion.div>

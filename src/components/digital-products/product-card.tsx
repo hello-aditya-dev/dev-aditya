@@ -77,9 +77,9 @@ export function ProductCard({ product, index }: ProductCardProps) {
         </p>
 
         {/* Outcome */}
-        {product.outcomes.length > 0 && (
+        {product.features.length > 0 && product.features[0]?.description && (
           <p className="mb-4 text-sm font-medium" style={{ color: accent.text }}>
-            → {product.outcomes[0]}
+            → {product.features[0].description}
           </p>
         )}
 
@@ -131,7 +131,7 @@ export function ProductCard({ product, index }: ProductCardProps) {
             </>
           )}
 
-          {isComingSoon && (
+          {isComingSoon && !(product.launchPrice || product.regularPrice) && (
             <>
               <Badge
                 className="rounded-md border-2 text-[11px] font-semibold uppercase tracking-wider"
@@ -143,12 +143,35 @@ export function ProductCard({ product, index }: ProductCardProps) {
               >
                 Coming soon
               </Badge>
-              <span
-                className="text-xs font-medium"
-                style={{ color: '#5E5E5F' }}
+            </>
+          )}
+          {isComingSoon && (product.launchPrice || product.regularPrice) && (
+            <>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xl font-bold" style={{ color: '#0B0B0B' }}>
+                  ${displayPrice}
+                </span>
+                {product.launchPrice && (
+                  <span
+                    className="text-sm line-through"
+                    style={{ color: '#5E5E5F' }}
+                  >
+                    ${product.regularPrice}
+                  </span>
+                )}
+              </div>
+              <Link
+                href={`/digital-products/${product.slug}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border-2"
+                style={{
+                  background: '#FAF9F6',
+                  color: '#0B0B0B',
+                  borderColor: '#0B0B0B',
+                }}
               >
-                ${product.regularPrice}
-              </span>
+                View
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </>
           )}
         </div>

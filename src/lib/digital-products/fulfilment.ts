@@ -5,15 +5,15 @@
 // Email failure does NOT block fulfilment — errors are caught and logged.
 
 import { db } from "@/lib/db";
-import { getProductBySlug, getServerPrice } from "@/config/digital-products";
+import { getProductBySlug, getServerPrice, SUPPORT_EMAIL, SITE_ORIGIN } from "@/config/digital-products";
 import { generateDownloadToken } from "@/lib/digital-products/download-token";
 import { Resend } from "resend";
 
 // ── Environment ──────────────────────────────────────────────
 const RESEND_API_KEY = process.env.RESEND_API_KEY ?? "";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
-const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL ?? "support@example.com";
-const REFUND_POLICY_URL = `${SITE_URL}/refund-policy`;
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? SITE_ORIGIN;
+const SUPPORT_EMAIL_RESOLVED = process.env.SUPPORT_EMAIL ?? SUPPORT_EMAIL;
+const REFUND_POLICY_URL = `${SITE_URL}/digital-products/refund-policy`;
 
 // ── Types ────────────────────────────────────────────────────
 type DigitalProductOrder = {
@@ -87,7 +87,7 @@ export async function sendFulfilmentEmail(
       currency: order.currency,
       orderRef,
       downloadUrl,
-      supportEmail: SUPPORT_EMAIL,
+      supportEmail: SUPPORT_EMAIL_RESOLVED,
       refundPolicyUrl: REFUND_POLICY_URL,
     }),
   });

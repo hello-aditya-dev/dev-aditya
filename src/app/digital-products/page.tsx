@@ -53,9 +53,9 @@ export default function DigitalProductsPage() {
                   <h3 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "#5E5E5F" }}>What it does</h3>
                   <div className="space-y-2">
                     {featured.features.slice(0, 5).map((feature) => (
-                      <div key={feature} className="flex items-center gap-2">
+                      <div key={feature.name} className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentColors[featured.accent].bg }} />
-                        <span className="text-sm" style={{ color: "#0B0B0B" }}>{feature}</span>
+                        <span className="text-sm" style={{ color: "#0B0B0B" }}>{feature.name}</span>
                       </div>
                     ))}
                   </div>

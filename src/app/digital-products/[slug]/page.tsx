@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { digitalProducts, getProductBySlug, accentColors } from "@/config/digital-products";
+import { digitalProducts, getProductBySlug, accentColors, SITE_ORIGIN } from "@/config/digital-products";
 import type { Metadata } from "next";
 import ProductDetailClient from "./product-detail-client";
 
@@ -18,18 +18,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = getProductBySlug(slug);
   if (!product) return {};
 
+  const isActive = product.status === "active";
+  const url = `${SITE_ORIGIN}/digital-products/${product.slug}`;
+
   return {
     title: product.seo.title,
     description: product.seo.description,
-    openGraph: {
-      title: product.seo.title,
-      description: product.seo.description,
-      url: `https://dev-aditya.com/digital-products/${product.slug}`,
-      siteName: "Aditya",
-      type: "website",
-    },
+    robots: isActive
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
+    openGraph: isActive
+      ? {
+          title: product.seo.title,
+          description: product.seo.description,
+          url,
+          siteName: "Aditya",
+          type: "website",
+        }
+      : undefined,
+    twitter: isActive
+      ? {
+          card: "summary_large_image",
+          title: product.seo.title,
+          description: product.seo.description,
+        }
+      : undefined,
     alternates: {
-      canonical: `https://dev-aditya.com/digital-products/${product.slug}`,
+      canonical: url,
     },
   };
 }

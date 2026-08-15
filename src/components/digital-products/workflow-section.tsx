@@ -42,7 +42,7 @@ function buildStages() {
 }
 
 const container = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 1 },
   show: {
     opacity: 1,
     transition: { staggerChildren: 0.06, delayChildren: 0.15 },
@@ -50,7 +50,7 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 1, y: 8 },
   show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
 };
 
@@ -66,7 +66,7 @@ export function WorkflowSection() {
       <div className="mx-auto max-w-6xl px-6">
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 1, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.4 }}

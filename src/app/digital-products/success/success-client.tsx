@@ -11,6 +11,7 @@ import {
   AlertCircle,
   Mail,
 } from "lucide-react";
+import { SUPPORT_EMAIL } from "@/config/digital-products";
 
 export default function SuccessClient() {
   const searchParams = useSearchParams();
@@ -87,7 +88,7 @@ export default function SuccessClient() {
               </p>
               <div className="flex flex-col gap-3">
                 <a
-                  href="mailto:support@dev-aditya.com"
+                  href={`mailto:${SUPPORT_EMAIL}`}
                   className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm border-2"
                   style={{
                     backgroundColor: "#0B0B0B",
@@ -95,7 +96,7 @@ export default function SuccessClient() {
                     borderColor: "#0B0B0B",
                   }}
                 >
-                  Contact support
+                  Contact support ({SUPPORT_EMAIL})
                 </a>
                 <Link
                   href="/digital-products"

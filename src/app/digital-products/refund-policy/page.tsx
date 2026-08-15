@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { SUPPORT_EMAIL, SITE_ORIGIN } from "@/config/digital-products";
 
 export const metadata: Metadata = {
   title: "Refund / Cancellation Policy | Aditya Digital Products",
   description: "Refund and cancellation policy for digital products purchased from Aditya.",
   alternates: {
-    canonical: "https://dev-aditya.com/digital-products/refund-policy",
+    canonical: `${SITE_ORIGIN}/digital-products/refund-policy`,
   },
 };
 
@@ -45,7 +46,7 @@ export default function RefundPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold mb-3" style={{ color: "#0B0B0B" }}>Before download</h2>
-            <p>If you have not yet downloaded the product files, you may request a full refund within 24 hours of purchase. Contact <a href="mailto:support@dev-aditya.com" className="underline" style={{ color: "#1C92FF" }}>support@dev-aditya.com</a> with your order reference.</p>
+            <p>If you have not yet downloaded the product files, you may request a full refund within 24 hours of purchase. Contact <a href={`mailto:${SUPPORT_EMAIL}`} className="underline" style={{ color: "#1C92FF" }}>{SUPPORT_EMAIL}</a> with your order reference.</p>
           </section>
 
           <section>
@@ -60,7 +61,7 @@ export default function RefundPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold mb-3" style={{ color: "#0B0B0B" }}>How to request a refund</h2>
-            <p>Email <a href="mailto:support@dev-aditya.com" className="underline" style={{ color: "#1C92FF" }}>support@dev-aditya.com</a> with:</p>
+            <p>Email <a href={`mailto:${SUPPORT_EMAIL}`} className="underline" style={{ color: "#1C92FF" }}>{SUPPORT_EMAIL}</a> with:</p>
             <ol className="list-decimal pl-6 space-y-1 mt-2">
               <li>Your order reference number.</li>
               <li>The email address used for the purchase.</li>
@@ -76,7 +77,7 @@ export default function RefundPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold mb-3" style={{ color: "#0B0B0B" }}>Contact</h2>
-            <p>For refund questions or requests, contact <a href="mailto:support@dev-aditya.com" className="underline" style={{ color: "#1C92FF" }}>support@dev-aditya.com</a>.</p>
+            <p>For refund questions or requests, contact <a href={`mailto:${SUPPORT_EMAIL}`} className="underline" style={{ color: "#1C92FF" }}>{SUPPORT_EMAIL}</a>.</p>
           </section>
         </div>
       </div>

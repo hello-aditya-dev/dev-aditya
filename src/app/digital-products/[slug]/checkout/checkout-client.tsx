@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { type DigitalProduct, accentColors } from "@/config/digital-products";
+import { type DigitalProduct, accentColors, SUPPORT_EMAIL } from "@/config/digital-products";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -186,7 +186,7 @@ export default function CheckoutClient({ product }: { product: DigitalProduct })
             <div className="flex gap-4 text-sm" style={{ color: "#5E5E5F" }}>
               <Link href="/digital-products/refund-policy" className="underline hover:no-underline">Refund policy</Link>
               <Link href="/digital-products/delivery-policy" className="underline hover:no-underline">Delivery policy</Link>
-              <a href="mailto:support@dev-aditya.com" className="underline hover:no-underline">Contact support</a>
+              <a href={`mailto:${SUPPORT_EMAIL}`} className="underline hover:no-underline">Contact support</a>
             </div>
           </div>
 

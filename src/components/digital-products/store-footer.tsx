@@ -1,9 +1,7 @@
-'use client';
-
 import Link from 'next/link';
 
 const FOOTER_LINKS = [
-  { label: 'Products', href: '/digital-products#products' },
+  { label: 'Agency Tools', href: '/digital-products#tools' },
   { label: 'Bundles', href: '/digital-products#bundles' },
   { label: 'Delivery Policy', href: '/digital-products/delivery-policy' },
   { label: 'Refund Policy', href: '/digital-products/refund-policy' },
@@ -43,7 +41,7 @@ export function StoreFooter() {
             className="text-xs"
             style={{ color: '#A0A09F' }}
           >
-            &copy; 2025 Aditya
+            &copy; {new Date().getFullYear()} Aditya
           </span>
         </div>
       </div>
