@@ -770,3 +770,25 @@ New file at project root documenting all required env vars with comments and cat
 
 ### Verification
 - `bun run lint` passed with exit code 0
+
+---
+Task ID: redirect-fix
+Agent: main
+Task: Fix root domain redirect — remove / → /digital-products redirect, add host normalization middleware
+
+Work Log:
+- Identified exact redirect source: src/app/page.tsx line 4 had `redirect("/digital-products")`
+- Replaced page.tsx: removed redirect, created proper portfolio homepage with paper-themed design
+- Updated root layout metadata from store-focused to portfolio identity ("Aditya — Web Designer & Developer")
+- Created src/middleware.ts for host normalization: dev-aditya.com → www.dev-aditya.com (path-preserving 308 redirect)
+- Middleware only normalizes the host, does NOT redirect to a fixed path
+- Verified: GET / returns 200 (not 307), GET /digital-products returns 200, GET /digital-products/web-project-pricing-os returns 200
+- Lint passes clean
+- Pushed commits 2d8d8f2 + 61273e2 to GitHub
+
+Stage Summary:
+- Root (/) no longer redirects to /digital-products
+- Portfolio homepage renders at / with paper-themed design (nav, hero, work preview, CTA, footer)
+- Digital products store remains at /digital-products (untouched)
+- Host normalization middleware ensures dev-adity.com/* → www.dev-aditya.com/* (path-preserving)
+- All existing production hardening phases (2-49) remain intact
