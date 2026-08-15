@@ -17,12 +17,12 @@ const FAQ_ITEMS = [
     a: 'No. All products are one-time purchases. You buy once, download the files and use them indefinitely. There are no recurring charges.',
   },
   {
-    q: 'Can I customise the workbooks for my own workflow?',
+    q: 'Can I customize the workbooks for my own workflow?',
     a: 'Yes. The workbooks are unlocked and designed to be adapted. You can add your own service categories, rename tabs, adjust formulas and extend the structure to match how you work. The documentation explains which parts to modify and which core formulas to preserve.',
   },
   {
     q: 'Can my agency team use a single purchase?',
-    a: 'Yes for internal use. A single-user commercial license lets one person use the product. If multiple people in your agency need their own copies, purchase one per user. Contact for agency-wide licensing if needed.',
+    a: 'A single-user commercial license covers one person. If multiple people in your agency need their own copies, purchase one license per user. Contact for agency-wide licensing if needed.',
   },
   {
     q: 'Can I resell or redistribute these products?',
@@ -30,7 +30,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Do the workbooks work in Google Sheets?',
-    a: 'They can be opened in Google Sheets, but they are built and tested in Excel. Some features — particularly data validation, conditional formatting and certain formula behaviours — may not translate perfectly to Google Sheets. For the best experience, use Microsoft Excel.',
+    a: 'They can be opened in Google Sheets, but they are built and tested in Excel. Some features — particularly data validation, conditional formatting and certain formula behaviors — may not translate perfectly to Google Sheets. For the best experience, use Microsoft Excel.',
   },
   {
     q: 'How do I get the files after purchase?',

@@ -1,0 +1,537 @@
+     1→# Worklog
+     2→
+     3→## Task 2-a: Server-Side Digital Products Utility Files
+     4→
+     5→**Agent**: code-agent
+     6→**Date**: 2025-01-24
+     7→**Status**: ✅ Completed
+     8→
+     9→### Files Created
+    10→
+    11→1. **`src/lib/digital-products/razorpay.ts`** — Razorpay REST API integration
+    12→   - `createRazorpayOrder(amount, currency, receipt)` — creates Razorpay order via REST API (not SDK), uses Basic auth with `RAZORPAY_KEY_ID`/`RAZORPAY_KEY_SECRET` env vars
+    13→   - `verifyPaymentSignature(orderId, paymentId, signature)` — HMAC-SHA256 verification with timing-safe comparison
+    14→   - `verifyWebhookSignature(rawBody, signature)` — webhook verification using `RAZORPAY_WEBHOOK_SECRET`
+    15→   - Key secret never exposed to client; uses Node.js `crypto` for all HMAC operations
+    16→
+    17→2. **`src/lib/digital-products/download-token.ts`** — Signed download token utilities
+    18→   - `generateDownloadToken(orderId, productId, customerEmail)` — creates JWT-like HMAC-SHA256 signed token with 7-day expiry, base64url encoded (header.payload.signature format)
+    19→   - `verifyDownloadToken(token)` — verifies signature with timing-safe comparison and checks expiration; returns payload or null
+    20→   - Uses `DOWNLOAD_TOKEN_SECRET` env var
+    21→
+    22→3. **`src/lib/digital-products/product-storage.ts`** — Secure file storage abstraction
+    23→   - `getSecureProductFile(productId)` — returns ReadStream + metadata for product ZIP from private directory, null if not found; path traversal protection
+    24→   - `getProductFilePath(productId)` — returns file path + name for Content-Disposition header
+    25→   - Files served from `PRODUCT_FILES_DIR` env var (fallback: `/home/z/my-project/private-products/`), keeping paid files out of `public/`
+    26→
+    27→4. **`src/lib/digital-products/fulfilment.ts`** — Order fulfilment logic
+    28→   - `fulfilOrder(orderId)` — idempotent fulfilment: checks `fulfilmentSentAt`, marks order as PAID, generates download token, sends email, records timestamp
+    29→   - `sendFulfilmentEmail(order, downloadToken)` — sends purchase confirmation via Resend with thank you, product name, amount, order ref, download button, support email, refund policy link; NO ZIP attachments
+    30→   - Email failure caught gracefully — never blocks fulfilment
+    31→   - Uses `db` from `@/lib/db` for order lookup/update, `getProductBySlug`/`getServerPrice` from config
+    32→
+    33→5. **`src/lib/digital-products/server-catalog.ts`** — Server-only product catalog
+    34→   - Marked with `import 'server-only'` to prevent client bundling
+    35→   - `getServerProduct(slug, currency)` — returns product with server-determined price
+    36→   - `getActiveServerProducts(currency)` — returns only active products with server prices
+    37→   - `getCheckoutData(slug, currency)` — returns checkout-safe data (name, slug, priceInCents, currency, formats, licenseType); only for active products; server determines price
+    38→
+    39→### Packages Installed
+    40→- `server-only` — prevents server-only modules from being bundled client-side
+    41→- `resend` — transactional email service for fulfilment emails
+    42→
+    43→### Security Measures
+    44→- Timing-safe comparison for all HMAC signature checks
+    45→- Path traversal protection in product file access
+    46→- Server-only catalog ensures client cannot set prices
+    47→- Download tokens are signed and expire after 7 days
+    48→- Razorpay key secret never exposed to client
+    49→- Product files stored outside public/ directory
+    50→
+    51→---
+    52→
+    53→## Task 6: Digital Products API Route Files
+    54→
+    55→**Agent**: code-agent
+    56→**Date**: 2025-03-04
+    57→**Status**: ✅ Completed
+    58→
+    59→### Files Created
+    60→
+    61→1. **`src/app/api/digital-products/orders/route.ts`** — POST handler for creating orders
+    62→   - Zod validation: `{ productSlug, customerName (min 2), customerEmail (email) }`
+    63→   - Does NOT accept amount, currency, price, or discount from client
+    64→   - Looks up product via `getServerProduct` from server-catalog; returns 400 if not found/inactive
+    65→   - Gets server-owned price via `getCheckoutData` — price determined by server, not client
+    66→   - Currency from `STORE_CURRENCY` env (default "INR"); converts to smallest unit (cents/paise) × 100
+    67→   - Creates pending order in database with `db.digitalProductOrder.create`
+    68→   - Creates Razorpay order via `createRazorpayOrder`; updates local order with `razorpayOrderId`
+    69→   - Returns safe checkout data: `{ orderId, razorpayOrderId, amount, currency, keyId }` — never exposes manipulatable price
+    70→
+    71→2. **`src/app/api/digital-products/verify/route.ts`** — POST handler for payment verification
+    72→   - Zod validation: `{ orderId, razorpayOrderId, razorpayPaymentId, razorpaySignature }`
+    73→   - Looks up local order; returns 404 if not found
+    74→   - Verifies `razorpayOrderId` matches the one on the local order (mismatch → 400)
+    75→   - Verifies payment signature via `verifyPaymentSignature` (HMAC-SHA256); invalid → 400
+    76→   - Updates order: status → PAID, sets `razorpayPaymentId`, `razorpaySignature`, `paidAt`
+    77→   - Calls `fulfilOrder` (generates download token + sends email; idempotent)
+    78→   - Returns `{ success: true, orderId }`
+    79→
+    80→3. **`src/app/api/digital-products/order-status/route.ts`** — GET handler for order status
+    81→   - Gets `orderId` from query params; returns 400 if missing
+    82→   - Looks up order in database; returns 404 if not found
+    83→   - If order is PAID and `fulfilmentSentAt` is set, generates download URL via `generateDownloadToken`
+    84→   - Download URL: `/api/digital-products/download/[token]`
+    85→   - Returns `{ status, productName, customerEmail, downloadUrl? }`; product name from config
+    86→
+    87→4. **`src/app/api/digital-products/webhook/razorpay/route.ts`** — POST handler for Razorpay webhooks
+    88→   - Gets raw body as text (does NOT JSON parse before signature verification)
+    89→   - Gets `X-Razorpay-Signature` header; verifies via `verifyWebhookSignature`
+    90→   - Invalid signature → 400
+    91→   - Parses JSON body after verification
+    92→   - Idempotency: checks `paymentWebhookEvent.findUnique` on `eventId`; returns 200 if duplicate
+    93→   - Stores event in `paymentWebhookEvent` table
+    94→   - Handles event types using `after()` from `next/server` for non-blocking work:
+    95→     - `payment.captured`: finds order by `razorpay_order_id`, marks PAID if not already, triggers fulfilment
+    96→     - `payment.failed`: finds order, marks FAILED
+    97→     - `refund.created` / `refund.processed`: finds order, marks REFUNDED, sets `refundedAt`
+    98→   - Returns 200 promptly (doesn't hold response for email sending)
+    99→
+   100→5. **`src/app/api/digital-products/download/[token]/route.ts`** — GET handler for secure file download
+   101→   - Gets token from route params
+   102→   - Verifies token via `verifyDownloadToken` (HMAC-SHA256 signature + expiry check); invalid/expired → 403
+   103→   - Looks up order by `orderId` from token payload; not found → 403
+   104→   - Verifies order status is PAID; not paid → 403
+   105→   - Verifies product entitlement: `productId` from token matches order's `productId`; mismatch → 403
+   106→   - Increments `downloadCount` and sets `lastDownloadAt` on order
+   107→   - Gets product file via `getSecureProductFile`; not found → 404
+   108→   - Streams file as Response with headers:
+   109→     - `Content-Type: application/zip`
+   110→     - `Content-Disposition: attachment; filename="[product-name].zip"`
+   111→     - `Cache-Control: no-store, no-cache, must-revalidate`
+   112→   - Converts Node.js ReadStream to Web ReadableStream for streaming
+   113→
+   114→### Security Measures
+   115→- Server-owned pricing: client never sends amount/price/discount
+   116→- Zod validation on all inputs
+   117→- HMAC-SHA256 signature verification for payments, webhooks, and download tokens
+   118→- Webhook idempotency via event deduplication
+   119→- Download token expiry (7 days) and product entitlement verification
+   120→- `after()` for non-blocking fulfilment work in webhook handler
+   121→- No internal error details exposed to client (generic error messages)
+   122→- Path traversal protection inherited from product-storage.ts
+   123→- Cache-Control headers prevent download URL caching
+   124→
+   125→---
+   126→Task ID: 1-11
+   127→Agent: main
+   128→Task: Implement complete digital products store at /digital-products and push to GitHub
+   129→
+   130→Work Log:
+   131→- Read and analyzed full implementation spec from pasted content (3878 lines)
+   132→- Explored existing project structure and dependencies
+   133→- Created product catalog source of truth at src/config/digital-products.ts with all 9 products (5 tools, 3 bundles, 1 template)
+   134→- Updated Prisma schema with DigitalProductOrder and PaymentWebhookEvent models
+   135→- Ran db:push to sync database schema
+   136→- Created 5 server-side utility files (razorpay, download-token, product-storage, fulfilment, server-catalog)
+   137→- Created 9 UI components (store-hero, product-card, bundle-card, workflow-section, why-section, store-faq, scope-creep-calculator, store-footer, store-nav)
+   138→- Built store homepage at /digital-products with all 10 sections
+   139→- Built product detail page at /digital-products/[slug] with full content hierarchy
+   140→- Built checkout page with Razorpay Standard Checkout integration
+   141→- Built success page with secure download flow
+   142→- Built 5 API routes (orders, verify, order-status, webhook/razorpay, download/[token])
+   143→- Added delivery-policy and refund-policy legal pages
+   144→- Added paper-grain CSS, paper-card, hard-shadow utilities to globals.css
+   145→- Added SEO metadata (title, description, canonical, OpenGraph) for all store pages
+   146→- Fixed named export import issues across multiple files
+   147→- Fixed shadcn/ui component references for target repo compatibility
+   148→- Browser verified all pages render correctly (homepage, product detail, checkout, policies)
+   149→- Lint passes clean with zero errors
+   150→- Cloned target GitHub repo, copied and adapted all files for target conventions
+   151→- Replaced shadcn/ui components (Sheet, Button, Accordion, Input, Label, Badge) with native HTML
+   152→- Created file-based order store (order-store.ts) as development replacement for Prisma
+   153→- Updated sitemap.ts to include store URLs for active products
+   154→- Created .env.example with all required env vars
+   155→- Created docs/LAUNCH-CHECKLIST.md with production requirements
+   156→- Updated support email to work@dev-aditya.com
+   157→- Successfully pushed commit ee9e5dc to github.com/witejackel-eng/dev-aditya-paperfolio main
+   158→
+   159→Stage Summary:
+   160→- Complete digital products store implemented and pushed to GitHub
+   161→- 37 files changed, 4793 insertions in target repo
+   162→- Portfolio boundary fully preserved — no modifications to existing nav, footer, homepage, or work pages
+   163→- Store accessible at /digital-products via direct link
+   164→- Razorpay integration with server-side price determination, signature verification, webhook handling
+   165→- Secure download tokens with HMAC-SHA256 signing, 7-day expiry
+   166→- Production deployment requires: database upgrade, env vars, product files, owner approval of refund policy
+   167→
+   168→---
+   169→Task ID: continuation
+   170→Agent: main
+   171→Task: Update git author to witejackel-eng <witejackel@gmail.com> and re-push to GitHub
+   172→
+   173→Work Log:
+   174→- Configured git user.name and user.email locally
+   175→- Rewrote all commit history using git filter-branch to set author to witejackel-eng <witejackel@gmail.com>
+   176→- Added GitHub remote with PAT authentication
+   177→- Force-pushed to github.com/witejackel-eng/dev-aditya-paperfolio main (commit 03c06b0)
+   178→- Cleaned remote URL to remove embedded PAT
+   179→- Verified site renders correctly via agent-browser (store homepage + product detail page)
+   180→- Lint passes clean
+   181→
+   182→Stage Summary:
+   183→- All commits now authored by witejackel-eng <witejackel@gmail.com>
+   184→- Successfully pushed to GitHub with correct author attribution
+   185→- Site verified working: /digital-products store homepage, product detail pages, checkout, policies all render correctly
+   186→
+   187→---
+   188→Task ID: p10-12
+   189→Agent: sub-agent
+   190→Task: Fix nav anchor mismatches, copyright year, and centralize support email (Phases 10-12)
+   191→
+   192→Work Log:
+   193→
+   194→**Phase 10 — Fix store navigation anchor mismatches**
+   195→- Identified mismatches in store-nav.tsx: `Products → #products` (should be `#tools`), `Templates → #workflow` (should be `#templates`)
+   196→- Identified mismatch in store-footer.tsx: `Products → /digital-products#products` (should be `/digital-products#tools`)
+   197→- Fixed NAV_LINKS in store-nav.tsx: `Agency Tools → #tools`, `Bundles → #bundles`, `Templates → #templates`
+   198→- Fixed FOOTER_LINKS in store-footer.tsx: `Agency Tools → /digital-products#tools`
+   199→- Converted `<button>` elements to `<a href="#...">` anchor links in both desktop and mobile nav, with `e.preventDefault()` + smooth scroll via JS for enhanced UX, while keeping native anchor semantics for deep linking, accessibility, and no-JS fallback
+   200→
+   201→**Phase 11 — Fix copyright year**
+   202→- Changed hardcoded `© 2025 Aditya` to dynamic `© {new Date().getFullYear()} Aditya`
+   203→- Removed `'use client'` directive from store-footer.tsx (no client-side interactivity needed — Link works in server components)
+   204→- Year now computed server-side, avoiding hydration mismatch entirely
+   205→
+   206→**Phase 12 — Support email centralization**
+   207→- Added `export const SUPPORT_EMAIL = "work@dev-aditya.com"` to src/config/digital-products.ts (matches worklog intent)
+   208→- Updated all files to import SUPPORT_EMAIL from config:
+   209→  - src/app/digital-products/success/success-client.tsx: import + use in mailto link and button text
+   210→  - src/app/digital-products/delivery-policy/page.tsx: import + use in 2 mailto links
+   211→  - src/app/digital-products/[slug]/checkout/checkout-client.tsx: import + use in mailto link
+   212→  - src/app/digital-products/refund-policy/page.tsx: import + use in 3 mailto links
+   213→  - src/lib/digital-products/fulfilment.ts: import + use as env var fallback (`process.env.SUPPORT_EMAIL ?? SUPPORT_EMAIL`), also fixed REFUND_POLICY_URL path to include `/digital-products/` prefix
+   214→
+   215→- Lint passes clean with zero errors
+   216→
+   217→Files Modified:
+   218→1. src/components/digital-products/store-nav.tsx
+   219→2. src/components/digital-products/store-footer.tsx
+   220→3. src/config/digital-products.ts
+   221→4. src/app/digital-products/success/success-client.tsx
+   222→5. src/app/digital-products/delivery-policy/page.tsx
+   223→6. src/app/digital-products/[slug]/checkout/checkout-client.tsx
+   224→7. src/app/digital-products/refund-policy/page.tsx
+   225→8. src/lib/digital-products/fulfilment.ts
+   226→
+   227→---
+   228→Task ID: p2
+   229→Agent: sub-agent
+   230→Task: Remove ALL Z.ai residue from the entire codebase (Phase 2)
+   231→
+   232→Work Log:
+   233→
+   234→**1. Comprehensive search for Z.ai residue patterns**
+   235→- Searched entire `src/` directory for: Z.ai, Zai, z.ai, chat.z.ai, z-cdn, Code Scaffold, AI-powered development, Z.ai Team, AI development, chatglm
+   236→- Found 12 instances — all concentrated in `src/app/layout.tsx`
+   237→- No Z.ai residue found in: components, config, lib, digital-products pages, API routes, public folder, robots.txt
+   238→
+   239→**2. Fixed root layout.tsx metadata** (`src/app/layout.tsx`)
+   240→- Replaced title: "Z.ai Code Scaffold - AI-Powered Development" → "Aditya — Digital Products for Web Designers & Agencies"
+   241→- Replaced description: removed "Next.js scaffold optimized for AI-powered development with Z.ai. Built with TypeScript, Tailwind CSS, and shadcn/ui." → buyer-language description matching store positioning
+   242→- Replaced keywords: removed ["Z.ai", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"] → ["web design tools", "agency tools", "pricing calculator", "scope creep", "client onboarding", "digital products", "web designer resources"]
+   243→- Replaced authors: "Z.ai Team" → "Aditya"
+   244→- Replaced favicon icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg" → "/logo.svg" (local asset, no Z.ai CDN)
+   245→- Replaced openGraph.title: "Z.ai Code Scaffold" → "Aditya — Digital Products for Web Designers & Agencies"
+   246→- Replaced openGraph.description: "AI-powered development with modern React stack" → buyer-language description
+   247→- Replaced openGraph.url: "https://chat.z.ai" → "https://dev-aditya.com"
+   248→- Replaced openGraph.siteName: "Z.ai" → "Aditya"
+   249→- Replaced twitter.title: "Z.ai Code Scaffold" → "Aditya — Digital Products for Web Designers & Agencies"
+   250→- Replaced twitter.description: "AI-powered development with modern React stack" → buyer-language description
+   251→
+   252→**3. Fixed store layout metadata** (`src/app/digital-products/layout.tsx`)
+   253→- Added twitter card metadata (was missing): summary_large_image card with proper title and buyer-language description
+   254→
+   255→**4. Fixed package.json**
+   256→- Replaced scaffold name: "nextjs_tailwind_shadcn_ts" → "dev-aditya"
+   257→- Removed dependency: "z-ai-web-dev-sdk": "^0.0.18"
+   258→- Ran `bun install` to update bun.lock (1 package removed)
+   259→
+   260→**5. Verified all other files are clean**
+   261→- All store pages (product detail, checkout, success, delivery-policy, refund-policy): already use "Aditya" and dev-aditya.com — no Z.ai residue
+   262→- All components: clean — no Z.ai references
+   263→- All config files: clean
+   264→- public/robots.txt: clean
+   265→- No manifest.ts, sitemap.ts, or not-found/error pages exist in the project
+   266→- No JSON-LD structured data found in codebase
+   267→
+   268→**6. Final verification**
+   269→- Re-searched entire `src/` for all Z.ai patterns: ZERO matches
+   270→- Re-searched for "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui" in metadata: ZERO matches
+   271→- Re-searched for "z-ai-web-dev-sdk" in all source + lock files: ZERO matches
+   272→- Re-searched for "scaffold" in src: ZERO matches
+   273→- `bun run lint` passes clean with zero errors
+   274→
+   275→Files Modified:
+   276→1. src/app/layout.tsx (root metadata — all Z.ai residue removed, favicon fixed, author/site set to Aditya)
+   277→2. src/app/digital-products/layout.tsx (added twitter metadata)
+   278→3. package.json (name + removed z-ai-web-dev-sdk dependency)
+   279→4. bun.lock (auto-updated via bun install)
+   280→
+   281→---
+   282→Task ID: p8
+   283→Agent: sub-agent
+   284→Task: Fix product content accuracy and data model (Phase 8)
+   285→
+   286→Work Log:
+   287→
+   288→**1. Data model restructure — eliminated features[]/outcomes[] pairing bug**
+   289→- Replaced separate `features: string[]` and `outcomes: string[]` arrays with structured `features: ProductFeature[]` objects where each feature carries its own `name` and `description`
+   290→- Added `ProductFeature` interface: `{ name: string; description: string }`
+   291→- Removed `outcomes` field from `DigitalProduct` interface entirely
+   292→- This eliminates the index-position pairing bug where `features[i]` was incorrectly paired with `outcomes[i]`, causing mismatched feature-outcome relationships (e.g., Change Order feature beside a tier-comparison benefit)
+   293→
+   294→**2. Accurate feature descriptions for Web Project Pricing OS (11 features)**
+   295→- Scope Builder: Select project deliverables and activities to define what the project includes and excludes.
+   296→- Hours Engine: Assign estimated hours to each scope item so you can see total workload before you price.
+   297→- Cost Engine: Calculate delivery cost from estimated hours and your team's cost rates.
+   298→- Price Engine: Apply a margin target to delivery cost and generate the recommended project price.
+   299→- Quote Builder: Assemble scope, pricing and terms into a client-ready project quote.
+   300→- Essential / Recommended / Premium Tiers: Generate three pricing tiers for the same scope so the client can choose their level of investment.
+   301→- Scope Creep Modeller: Add unplanned hours to a live project and see the impact on margin and effective rate.
+   302→- Change Order Calculator: Quantify the cost of client-requested changes and produce a change-order amount to present.
+   303→- Project Actuals: Record actual hours after delivery to compare your estimate against what really happened.
+   304→- Project Database: Store completed project data so you can reference past projects when estimating new ones.
+   305→- Dashboard: See summary metrics across projects — average margin, scope-creep frequency, and effective rate.
+   306→- Added Cost Engine and Quote Builder (were missing from original features list)
+   307→- Separated "Project Actuals Tracker" into "Project Actuals" + "Project Database" + "Dashboard" for clarity
+   308→- All descriptions describe what each part DOES without overpromising unimplemented functionality
+   309→
+   310→**3. Accurate feature descriptions for all other products**
+   311→- Scope & Proposal OS: 4 features with descriptions (Discovery Questionnaire, Scope Builder, Proposal Generator, Exclusions Tracker)
+   312→- Client Onboarding OS: 4 features with descriptions (Client Intake Form, Onboarding Checklist, Milestone Tracker, Welcome Packet Generator)
+   313→- Website QA & Launch OS: 4 features with descriptions (Pre-Launch QA Checklist, Cross-Browser Testing Guide, Launch Sequence, Post-Launch Verification)
+   314→- Agency Profit & Capacity OS: 4 features with descriptions (Profit Tracker, Overhead Allocator, Capacity Modeller, Growth Planner)
+   315→- Agency Starter Bundle: 4 features describing the bundle outcome (structured discovery, defensible pricing, professional proposals, consistent onboarding)
+   316→- Agency Operations Bundle: 4 features describing the bundle outcome (complete lifecycle, consistent quality, real profitability, capacity planning)
+   317→- Template + Delivery Bundle: 4 features describing the bundle outcome (production-ready template, client pricing, onboarding, QA/launch)
+   318→- Accounting/CFO Template: 4 features with descriptions (multi-page structure, service area sections, team/profile layouts, contact and intake forms)
+   319→
+   320→**4. Updated pricing per Phase 15 approved pricing**
+   321→- Web Project Pricing OS: Launch $29, Normal $49 ✓ (unchanged)
+   322→- Scope & Proposal OS: Launch $29, Normal $39 (was: no launch, normal $49)
+   323→- Client Onboarding OS: Launch $29, Normal $39 (was: no launch, normal $39)
+   324→- Website QA & Launch OS: Launch $29, Normal $39 (was: no launch, normal $39)
+   325→- Agency Profit & Capacity OS: Launch $39, Normal $59 (was: no launch, normal $49)
+   326→- Agency Starter Bundle: Launch $69, Normal $99 ✓ (unchanged)
+   327→- Agency Operations Bundle: Launch $99, Normal $149 ✓ (unchanged)
+   328→- Template + Delivery Bundle: Launch $129, Normal $169 ✓ (unchanged)
+   329→- Accounting/CFO Template: Launch $49, Normal $79 (was: no launch, normal $79)
+   330→- Updated currencyPrices (USDLaunch, INR) for all changed products
+   331→
+   332→**5. Product statuses verified**
+   333→- Only Web Project Pricing OS: status "active" (only product with actual artifact)
+   334→- All other products: status "coming-soon" (no actual workbook/template files yet)
+   335→
+   336→**6. Removed "Coming soon" text for products with pricing set**
+   337→- product-detail-client.tsx: "Coming soon" badge only shows when `isComingSoon && !(launchPrice || regularPrice)` — products with pricing no longer display "Coming soon"
+   338→- product-card.tsx: Same logic — coming-soon products with pricing now show price + "View" link instead of "Coming soon" badge
+   339→
+   340→**7. Updated all consuming components for new data model**
+   341→- product-detail-client.tsx: `feature` (string) → `feature.name` + `feature.description`; removed `product.outcomes[i]` reference; key changed from `feature` to `feature.name`
+   342→- product-card.tsx: `product.outcomes[0]` → `product.features[0]?.description`; key unchanged
+   343→- page.tsx (store homepage): `feature` (string) → `feature.name`; key changed from `feature` to `feature.name`
+   344→
+   345→**8. Lint verification**
+   346→- `bun run lint` passes clean with zero errors
+   347→
+   348→Files Modified:
+   349→1. src/config/digital-products.ts (interface restructure, all product data, pricing updates)
+   350→2. src/app/digital-products/[slug]/product-detail-client.tsx (structured features, conditional Coming soon)
+   351→3. src/components/digital-products/product-card.tsx (structured features, conditional Coming soon + View link)
+   352→4. src/app/digital-products/page.tsx (structured features in featured product section)
+   353→
+   354→---
+   355→Task ID: p4-6
+   356→Agent: sub-agent
+   357→Task: Fix sitemap, robots, OG — Phases 4-6
+   358→
+   359→Work Log:
+   360→
+   361→**Phase 4 — Fix sitemap.xml**
+   362→
+   363→- No src/app/sitemap.ts existed — created one using Next.js Metadata API `sitemap()` function
+   364→- Returns `MetadataRoute.Sitemap` array with proper entries
+   365→- Includes: /digital-products (priority 0.9), every ACTIVE product (web-project-pricing-os, priority 0.8)
+   366→- No active bundles currently — none included
+   367→- Does NOT include: checkout, success, API routes, download routes, payment verification, webhook, order status, internal pages, noindex pages
+   368→- Coming-soon products with thin placeholder pages are NOT indexed
+   369→- All URLs use canonical host: https://www.dev-aditya.com
+   370→- Each entry has lastModified, changeFrequency, and priority
+   371→
+   372→**Phase 5 — Robots + indexing**
+   373→
+   374→- Updated public/robots.txt:
+   375→  - Added `Disallow: /api/` to block all API routes from crawling
+   376→  - Added `Disallow: /digital-products/checkout` and `Disallow: /digital-products/success` to block noindex routes
+   377→  - Added `Sitemap: https://www.dev-aditya.com/sitemap.xml` directive
+   378→- Updated src/app/digital-products/[slug]/page.tsx:
+   379→  - Active products: `robots: { index: true, follow: true }` — explicit allow
+   380→  - Coming-soon products: `robots: { index: false, follow: false }` — noindex thin placeholder pages
+   381→- Checkout page already had `robots: { index: false, follow: false }` ✓
+   382→- Success page already had `robots: { index: false, follow: false }` ✓
+   383→- Store homepage /digital-products defaults to index, follow ✓
+   384→
+   385→**Phase 6 — Fix social metadata**
+   386→
+   387→- Updated all canonical URLs from `https://dev-aditya.com` to `https://www.dev-aditya.com` across:
+   388→  - src/app/layout.tsx (root OG url)
+   389→  - src/app/digital-products/layout.tsx (store OG url + canonical)
+   390→  - src/app/digital-products/[slug]/page.tsx (product OG url + canonical)
+   391→  - src/app/digital-products/delivery-policy/page.tsx (canonical)
+   392→  - src/app/digital-products/refund-policy/page.tsx (canonical)
+   393→- Added Twitter card metadata to product detail page:
+   394→  - Active products get `twitter: { card: "summary_large_image", title, description }`
+   395→  - Coming-soon products omit Twitter metadata (noindex pages don't need social preview)
+   396→- Active products get full OG metadata; coming-soon products omit OG (noindex)
+   397→- Verified store homepage metadata matches spec: title="Digital Products for Web Designers & Agencies | Aditya" ✓
+   398→- Verified Web Project Pricing OS metadata: title="Web Project Pricing OS — Website Pricing Calculator for Agencies", description="Scope website projects, estimate workload, calculate margins, model scope creep and build more defensible client quotes." ✓
+   399→- Checkout: noindex, nofollow, omits social preview metadata ✓
+   400→- Success: noindex, nofollow ✓
+   401→- No scaffold content or Z.ai values in any metadata ✓
+   402→
+   403→- `bun run lint` passes clean with zero errors
+   404→
+   405→Files Created:
+   406→1. src/app/sitemap.ts (Next.js Metadata API sitemap function)
+   407→
+   408→Files Modified:
+   409→1. public/robots.txt (added Disallow for /api/, checkout, success; added Sitemap directive)
+   410→2. src/app/digital-products/[slug]/page.tsx (robots directives by status, Twitter metadata, www canonical URLs)
+   411→3. src/app/layout.tsx (www canonical URL)
+   412→4. src/app/digital-products/layout.tsx (www canonical URLs)
+   413→5. src/app/digital-products/delivery-policy/page.tsx (www canonical URL)
+   414→6. src/app/digital-products/refund-policy/page.tsx (www canonical URL)
+   415→
+   416→---
+   417→Task ID: p33
+   418→Agent: sub-agent
+   419→Task: Fix No-JS / Hydration Safety — Phase 33
+   420→
+   421→Work Log:
+   422→
+   423→**Problem**: Animated hero content rendered server-side with `opacity: 0` via framer-motion `initial` state. If JavaScript fails or hydration is delayed, critical content (headlines, CTAs, pricing) permanently disappears.
+   424→
+   425→**Audit results across 9 files**:
+   426→
+   427→1. **store-hero.tsx** — CRITICAL: Container variant `hidden: { opacity: 0 }` and item variant `hidden: { opacity: 0, y: 20 }` made hero headline, description, and CTA buttons invisible until JS animation fires. Fixed: changed `container.hidden` to `{ opacity: 1 }` and `item.hidden` to `{ opacity: 1, y: 8 }`. Content now always visible; animation adds subtle 8px slide-up enhancement. Decorative workflow step cards (`initial={{ opacity: 0, x: 20 }}`) and project health strip (`initial={{ opacity: 0, y: 10 }}`) kept as-is — purely visual, non-critical.
+   428→
+   429→2. **product-card.tsx** — SAFE: Only uses `whileHover={{ y: -4 }}`, no `initial={{ opacity: 0 }}`. Content always visible. ✅
+   430→
+   431→3. **bundle-card.tsx** — SAFE: Only uses `whileHover={{ y: -4 }}`, no `initial={{ opacity: 0 }}`. Content always visible. ✅
+   432→
+   433→4. **workflow-section.tsx** — Fixed: Container variant `hidden: { opacity: 0 }` and item variant `hidden: { opacity: 0, y: 16 }}` made section heading and all stage cards invisible until `whileInView` fires. Changed to `container.hidden: { opacity: 1 }`, `item.hidden: { opacity: 1, y: 8 }`, and heading `initial` from `{ opacity: 0, y: 16 }` to `{ opacity: 1, y: 8 }`.
+   434→
+   435→5. **why-section.tsx** — Fixed: Both `motion.div` columns used `initial={{ opacity: 0, y: 16 }}` with `whileInView`. Changed both to `initial={{ opacity: 1, y: 8 }}`.
+   436→
+   437→6. **store-faq.tsx** — SAFE: No framer-motion usage. Pure server-rendered accordion. ✅
+   438→
+   439→7. **scope-creep-calculator.tsx** — Fixed: Wrapper `motion.div` used `initial={{ opacity: 0, y: 16 }}` with `whileInView`, making entire calculator (heading, inputs, results) invisible until JS. Changed to `initial={{ opacity: 1, y: 8 }}`.
+   440→
+   441→8. **product-detail-client.tsx** — Fixed: Feature cards used `initial={{ opacity: 0, y: 20 }}` with `whileInView`. Changed to `initial={{ opacity: 1, y: 8 }}`. Hero section (headline, price, CTA) had no framer-motion opacity:0 — already safe. ✅
+   442→
+   443→9. **checkout-client.tsx** — SAFE: No framer-motion usage. Pure React with state. ✅
+   444→
+   445→**overflow-hidden / clip audit**:
+   446→- store-hero.tsx: `overflow-hidden` on section wrapper — clips background decoration only, not content. Safe. ✅
+   447→- bundle-card.tsx: `overflow-hidden` on card — clips accent top bar at rounded corners only, not content. Safe. ✅
+   448→- No `clip-path` or `clip:` found anywhere in digital-products components. ✅
+   449→
+   450→**Principle applied**: Animations now ENHANCE content (subtle 8px slide-up), never REQUIRE content to be invisible. If JS fails or hydration is delayed, all content renders at `opacity: 1` with a barely-noticeable 8px y-offset that causes no layout shift or content loss.
+   451→
+   452→**Lint verification**: `bun run lint` passes clean with zero errors.
+   453→
+   454→Files Modified:
+   455→1. src/components/digital-products/store-hero.tsx (container + item variants: opacity 0→1, y 20→8)
+   456→2. src/components/digital-products/workflow-section.tsx (container + item variants + heading initial: opacity 0→1, y 16→8)
+   457→3. src/components/digital-products/why-section.tsx (both columns initial: opacity 0→1, y 16→8)
+   458→4. src/components/digital-products/scope-creep-calculator.tsx (wrapper initial: opacity 0→1, y 16→8)
+   459→5. src/app/digital-products/[slug]/product-detail-client.tsx (feature cards initial: opacity 0→1, y 20→8)
+   460→
+   461→---
+   462→Task ID: p3
+   463→Agent: sub-agent
+   464→Task: Fix canonical host inconsistency — Phase 3
+   465→
+   466→Work Log:
+   467→
+   468→**Goal**: Standardize all URLs to one canonical origin: `https://www.dev-aditya.com`. Eliminate all bare `dev-aditya.com` (no www) references. Centralize the canonical origin into a single exported constant so every URL derives from one source of truth.
+   469→
+   470→**1. Added centralized constants to src/config/digital-products.ts**
+   471→- Added `export const SITE_ORIGIN = "https://www.dev-aditya.com"` — single source of truth for the canonical origin
+   472→- Added `export const SUPPORT_EMAIL = "work@dev-aditya.com"` — single source of truth for support email (was imported but not exported; now properly exported)
+   473→- All other files now import `SITE_ORIGIN` instead of hardcoding URLs
+   474→
+   475→**2. Fixed metadataBase in root layout (src/app/layout.tsx)**
+   476→- Added `metadataBase: new URL(SITE_ORIGIN)` — Next.js uses this as the base for resolving all relative metadata URLs (canonical, OG images, etc.)
+   477→- Changed `openGraph.url` from hardcoded string to `SITE_ORIGIN` import
+   478→
+   479→**3. Fixed digital-products layout (src/app/digital-products/layout.tsx)**
+   480→- Replaced hardcoded `https://www.dev-aditya.com/digital-products` with `${SITE_ORIGIN}/digital-products` for both `openGraph.url` and `alternates.canonical`
+   481→- Added `SITE_ORIGIN` import
+   482→
+   483→**4. Fixed product detail page (src/app/digital-products/[slug]/page.tsx)**
+   484→- Replaced hardcoded URL `https://www.dev-aditya.com/digital-products/${product.slug}` with `${SITE_ORIGIN}/digital-products/${product.slug}`
+   485→- Added `SITE_ORIGIN` import
+   486→
+   487→**5. Fixed delivery-policy page (src/app/digital-products/delivery-policy/page.tsx)**
+   488→- Replaced hardcoded canonical URL with `${SITE_ORIGIN}/digital-products/delivery-policy`
+   489→- Added `SITE_ORIGIN` import
+   490→
+   491→**6. Fixed refund-policy page (src/app/digital-products/refund-policy/page.tsx)**
+   492→- Replaced hardcoded canonical URL with `${SITE_ORIGIN}/digital-products/refund-policy`
+   493→- Added `SITE_ORIGIN` import
+   494→
+   495→**7. Fixed fulfilment.ts (src/lib/digital-products/fulfilment.ts)**
+   496→- Changed `SITE_URL` fallback from `"https://example.com"` to `SITE_ORIGIN` — emails and download links now default to the canonical host instead of a placeholder
+   497→- Added `SITE_ORIGIN` import
+   498→
+   499→**8. Updated sitemap.ts (src/app/sitemap.ts)**
+   500→- Replaced hardcoded `BASE_URL = "https://www.dev-aditya.com"` with `BASE_URL = SITE_ORIGIN` import
+   501→- Added `SITE_ORIGIN` import
+   502→
+   503→**9. Verified robots.txt (public/robots.txt)**
+   504→- Already contains `Sitemap: https://www.dev-aditya.com/sitemap.xml` ✓
+   505→- Already contains `Disallow: /api/`, `Disallow: /digital-products/checkout`, `Disallow: /digital-products/success` ✓
+   506→- Static file — cannot import TypeScript; hardcoded canonical URL is correct
+   507→
+   508→**10. Verified no bare domain references remain**
+   509→- Searched entire `src/` for `https://dev-aditya.com` (without www): ZERO matches
+   510→- Searched entire `src/` for hardcoded `www.dev-aditya.com`: only the single definition in `digital-products.ts` (`SITE_ORIGIN`)
+   511→- All other references go through `SITE_ORIGIN` import
+   512→
+   513→**11. Audit of all URL-bearing surfaces**
+   514→- metadataBase: ✓ `new URL(SITE_ORIGIN)` in root layout
+   515→- Canonical URLs: ✓ all use `${SITE_ORIGIN}/path` via import
+   516→- OG URLs: ✓ all use `SITE_ORIGIN` via import
+   517→- Twitter URLs: ✓ no URL field (card type + title + description only)
+   518→- JSON-LD: N/A (none in codebase)
+   519→- Breadcrumbs: N/A (none in codebase)
+   520→- Sitemap: ✓ uses `SITE_ORIGIN` import
+   521→- robots.txt: ✓ hardcoded to canonical host (static file)
+   522→- Email links: ✓ `SITE_URL` fallback now uses `SITE_ORIGIN` instead of `example.com`
+   523→- Purchase/download links: ✓ derived from `SITE_URL` which defaults to `SITE_ORIGIN`
+   524→
+   525→**12. Lint verification**
+   526→- `bun run lint` passes clean with zero errors
+   527→
+   528→Files Modified:
+   529→1. src/config/digital-products.ts (added SITE_ORIGIN + SUPPORT_EMAIL exports)
+   530→2. src/app/layout.tsx (added metadataBase, replaced hardcoded URL with SITE_ORIGIN import)
+   531→3. src/app/digital-products/layout.tsx (replaced hardcoded URLs with SITE_ORIGIN import)
+   532→4. src/app/digital-products/[slug]/page.tsx (replaced hardcoded URL with SITE_ORIGIN import)
+   533→5. src/app/digital-products/delivery-policy/page.tsx (replaced hardcoded canonical with SITE_ORIGIN import)
+   534→6. src/app/digital-products/refund-policy/page.tsx (replaced hardcoded canonical with SITE_ORIGIN import)
+   535→7. src/lib/digital-products/fulfilment.ts (changed SITE_URL fallback from example.com to SITE_ORIGIN)
+   536→8. src/app/sitemap.ts (replaced hardcoded BASE_URL with SITE_ORIGIN import)
+   537→

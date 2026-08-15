@@ -69,7 +69,7 @@ export async function sendFulfilmentEmail(
   const displayAmount = formatAmount(order.amount, order.currency);
 
   // Build the secure download URL
-  const downloadUrl = `${SITE_URL}/api/download?token=${encodeURIComponent(downloadToken)}`;
+  const downloadUrl = `${SITE_URL}/api/digital-products/download/${encodeURIComponent(downloadToken)}`;
 
   // Order reference for the customer
   const orderRef = order.razorpayOrderId ?? order.id;

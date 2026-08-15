@@ -534,3 +534,239 @@ Files Modified:
 6. src/app/digital-products/refund-policy/page.tsx (replaced hardcoded canonical with SITE_ORIGIN import)
 7. src/lib/digital-products/fulfilment.ts (changed SITE_URL fallback from example.com to SITE_ORIGIN)
 8. src/app/sitemap.ts (replaced hardcoded BASE_URL with SITE_ORIGIN import)
+
+## Task p38: Add SEO Structured Data (JSON-LD)
+
+**Agent**: general-purpose
+**Date**: 2025-01-24
+**Status**: ✅ Completed
+
+### Summary
+Implemented accurate JSON-LD structured data for the digital products store:
+- **Store homepage** (`/digital-products`): CollectionPage + BreadcrumbList schemas
+- **Product detail pages** (`/digital-products/[slug]`): Product + Offer + BreadcrumbList schemas (active products only)
+
+### Design Decisions
+- Product schema only emitted for `status === "active"` products — no schema for coming-soon/hidden/sold-out
+- No AggregateRating, Review, or fake inventory fields per task requirements
+- Single Product schema per page — no duplicates
+- Price uses `launchPrice` if available, falls back to `regularPrice`
+- All URLs derived from `SITE_ORIGIN` constant in `src/config/digital-products.ts`
+- BreadcrumbList uses 2 levels for homepage (Home → Digital Products), 3 levels for product pages (Home → Digital Products → Product Name)
+- Offer `priceValidUntil` set to `2026-12-31`, availability to `https://schema.org/InStock`
+
+### Files Modified
+1. `src/app/digital-products/page.tsx` — Added SITE_ORIGIN import, CollectionPage JSON-LD schema, BreadcrumbList JSON-LD schema via `<script type="application/ld+json">` tags
+2. `src/app/digital-products/[slug]/page.tsx` — Added BreadcrumbList JSON-LD for all visible products, Product+Offer JSON-LD conditionally for active products only
+
+### Verification
+- `bun run lint` passed with zero errors
+
+---
+
+## Task p42-p29: Policy Audit + Checkout/Success UX Polish
+
+**Agent**: code-agent
+**Date**: 2025-01-24
+**Status**: ✅ Completed
+
+### Phase 42 — Policy Audit
+
+#### Refund Policy (`src/app/digital-products/refund-policy/page.tsx`)
+- Removed draft warning banner (was a launch-blocking placeholder)
+- Renamed "Digital product nature" → "Digital products only" and added explicit "delivered electronically, no physical goods shipped" language
+- Added "Payment processing" section: explicitly names Razorpay as payment processor, states card/banking details never touch our servers, states collected data is name + email only, names Resend for order communications
+- "How to request a refund" now says "processed via Razorpay through the original payment method" instead of vague "processed through the original payment method"
+
+#### Delivery Policy (`src/app/digital-products/delivery-policy/page.tsx`)
+- Added Resend mention in "Delivery method" section: download link email sent "via Resend"
+
+#### Terms of Service (`src/app/digital-products/terms/page.tsx`) — **NEW**
+- Created dedicated terms page under digital-products route (footer was pointing to `/terms` which 404'd)
+- Covers: scope, products/delivery (digital only), license (single-user for tools, single-site for templates), payment (Razorpay), data collection (name + email only, Resend for email), IP, disclaimer, changes, contact
+- Does NOT invent legal guarantees; liability limited to purchase amount
+
+#### Privacy Policy (`src/app/digital-products/privacy/page.tsx`) — **NEW**
+- Created dedicated privacy page under digital-products route (footer was pointing to `/privacy` which 404'd)
+- Covers: data collected (name + email only), how used, data sharing (only Razorpay + Resend), cookies/analytics, retention, user rights, contact
+- Explicitly states "We do not collect, store, or have access to your card or banking details"
+
+#### Footer Links (`src/components/digital-products/store-footer.tsx`)
+- Updated Terms link from `/terms` → `/digital-products/terms`
+- Updated Privacy link from `/privacy` → `/digital-products/privacy`
+
+### Phase 28 — Checkout Polish
+
+#### Checkout Client (`src/app/digital-products/[slug]/checkout/checkout-client.tsx`)
+- Changed 2-column grid (License + Delivery) → 3-column grid (License + Formats + Delivery)
+- Added "Formats" card showing `product.formats.join(", ")` so exact file formats are immediately visible
+- Already had: product name, price, contents (includes), license, delivery, name/email fields, secure-payment CTA, policy links, single dominant CTA
+
+#### Checkout Page Metadata (`src/app/digital-products/[slug]/checkout/page.tsx`)
+- Added `openGraph: null`, `twitter: null`, `alternates: undefined` to strip inherited layout social metadata from noindex checkout pages
+- Already had `robots: { index: false, follow: false }` ✓
+
+### Phase 29 — Success UX Polish
+
+#### Success Client (`src/app/digital-products/success/success-client.tsx`)
+- Added tip below download CTA: "Tip: Start with **01_START_HERE.pdf** inside the ZIP."
+- Already had: "Payment successful." headline, "[Product name] is yours.", order reference, purchase email, download CTA, no heavy upsell above download
+
+### Verification
+- `bun run lint` passed with zero errors
+
+---
+
+## Task p7-p43: OG Images + Content Proofreading
+
+**Agent**: general-purpose
+**Date**: 2025-08-15
+**Status**: ✅ Completed
+
+### Phase 7: Open Graph / Social Preview Images
+
+Created two OG images using the image-generation skill (z-ai CLI) at 1344×768 (closest supported landscape size to 1200×630):
+
+1. **`public/og/store-og.png`** — Store homepage OG image
+   - Warm paper (#FAF9F6) background with grain texture
+   - "ADITYA / DIGITAL PRODUCTS" small caps eyebrow
+   - Headline: "Tools and templates for people who build websites for clients."
+   - Workflow cards: SCOPE → PRICE → ONBOARD → QA → LAUNCH
+   - Black border, hard shadow aesthetic
+
+2. **`public/og/pricing-os-og.png`** — Product detail OG image
+   - Warm paper (#FAF9F6) background
+   - "WEB PROJECT PRICING OS" small caps
+   - Headline: "Stop guessing what to charge for websites."
+   - Workflow chain: Scope → Workload → Cost → Margin → Quote
+   - "$29 launch" in coral (#FF4A60)
+   - Black border, hard shadow aesthetic
+
+### Metadata Updates
+
+1. **`src/app/digital-products/layout.tsx`** — Added `images` array to `openGraph` and `twitter` metadata pointing to `/og/store-og.png` with width/height/alt
+2. **`src/app/digital-products/[slug]/page.tsx`** — Added `images` array to `openGraph` and `twitter` metadata pointing to `/og/pricing-os-og.png` with width/height/alt
+
+### Phase 43: Content Proofreading
+
+Proofread all 14 store-visible files. Issues found and fixed:
+
+**British → American English spellings:**
+- `digital-products.ts`: "standardises" → "standardizes" (onboarding description)
+- `digital-products.ts`: "Standardise" → "Standardize" (onboarding SEO description)
+- `digital-products.ts`: "standardise" → "standardize" (bundle feature description)
+- `digital-products.ts`: "specialisations" → "specializations" (template feature)
+- `store-faq.tsx`: "customise" → "customize" (FAQ question + answer)
+- `store-faq.tsx`: "behaviours" → "behaviors" (Google Sheets FAQ)
+- `page.tsx`: "customised" → "customized" (templates section)
+- `product-detail-client.tsx`: "customise" → "customize" (product FAQ)
+- `product-detail-client.tsx`: "customisation" → "customization" (product FAQ)
+
+**Product naming consistency:**
+- `digital-products.ts`: "Client Onboarding OS" → "Web Agency Client Onboarding OS" in Template + Delivery Bundle contents (to match the actual product name)
+
+**License/FAQ clarity:**
+- `store-faq.tsx`: Fixed contradictory agency license FAQ — was "Yes for internal use. A single-user commercial license lets one person use the product." → "A single-user commercial license covers one person. If multiple people in your agency need their own copies, purchase one license per user."
+- `product-detail-client.tsx`: Fixed agency FAQ — was "A single license covers internal use by one person or one agency." → "A single-user commercial license covers one person. If multiple team members need separate copies, purchase additional licenses."
+
+**No issues found in:**
+- AI-like phrasing (no instances of revolutionize, supercharge, ultimate, game-changing, unlock, 10x)
+- Price consistency (all match config values)
+- Hyphenation consistency
+- Dead/repetitive copy
+- Grammar/punctuation errors
+
+### Verification
+- `bun run lint` passed with zero errors
+
+---
+
+## Task p46-49: Link Audit + Environment Variables Review
+
+**Agent**: code-agent
+**Date**: 2025-01-25
+**Status**: ✅ Completed
+
+### Phase 46: Link Audit — Findings & Fixes
+
+#### Files Audited
+- `src/components/digital-products/store-nav.tsx`
+- `src/components/digital-products/store-footer.tsx`
+- `src/components/digital-products/store-hero.tsx`
+- `src/components/digital-products/product-card.tsx`
+- `src/components/digital-products/bundle-card.tsx`
+- `src/app/digital-products/page.tsx`
+- `src/app/digital-products/[slug]/product-detail-client.tsx`
+- `src/app/digital-products/[slug]/checkout/checkout-client.tsx`
+- `src/app/digital-products/success/success-client.tsx`
+- `src/app/digital-products/delivery-policy/page.tsx`
+- `src/app/digital-products/refund-policy/page.tsx`
+- `src/app/digital-products/terms/page.tsx` (discovered during audit)
+- `src/app/digital-products/privacy/page.tsx` (discovered during audit)
+
+#### Anchor Links — All Valid ✅
+| Anchor | Location | Matching `id` |
+|--------|----------|--------------|
+| `#tools` | store-nav.tsx, page.tsx | `id="tools"` in page.tsx |
+| `#bundles` | store-nav.tsx, page.tsx | `id="bundles"` in page.tsx |
+| `#templates` | store-nav.tsx | `id="templates"` in page.tsx |
+| `#how-it-works` | product-detail-client.tsx | `id="how-it-works"` in product-detail-client.tsx |
+
+#### Policy Paths — All Correct ✅
+- `/digital-products/delivery-policy` → page exists
+- `/digital-products/refund-policy` → page exists
+- `/digital-products/terms` → page exists
+- `/digital-products/privacy` → page exists
+
+#### Product Slugs — All Dynamic & Valid ✅
+All product/bundle links use `product.slug` or `featured.slug` from `src/config/digital-products.ts`. No hardcoded invalid slugs found.
+
+#### Checkout Links — All Valid ✅
+- `/digital-products/${product.slug}/checkout` → checkout page exists
+
+#### Portfolio Link — Correct ✅
+- Footer `href: '/'` → root page exists
+
+#### Canonical Links — All Correct ✅
+- All canonical URLs use `SITE_ORIGIN` (`https://www.dev-aditya.com`) with correct paths
+
+#### Fixes Applied
+
+1. **store-footer.tsx — Fixed 404 `/contact` link**
+   - Replaced broken `href: '/contact'` (no page exists) with `mailto:${SUPPORT_EMAIL}` Contact link
+   - Imported `SUPPORT_EMAIL` from `@/config/digital-products`
+   - Restored `/digital-products/terms` and `/digital-products/privacy` links (pages confirmed to exist during audit)
+
+2. **fulfilment.ts — Fixed broken download URL in purchase confirmation email**
+   - **Before**: `${SITE_URL}/api/download?token=${...}` (404 — no such API route exists)
+   - **After**: `${SITE_URL}/api/digital-products/download/${...}` (matches actual route at `/api/digital-products/download/[token]/route.ts`)
+
+### Phase 49: Environment Variables Review
+
+#### `.env.example` Created ✅
+New file at project root documenting all required env vars with comments and categories.
+
+#### All `process.env` Usage Audited
+| Variable | Location | Server-Only | Category |
+|----------|----------|-------------|----------|
+| `NEXT_PUBLIC_SITE_URL` | fulfilment.ts | No (intentionally public) | Site URL |
+| `RAZORPAY_KEY_ID` | razorpay.ts, orders/route.ts | Yes (passed via API) | Payment |
+| `RAZORPAY_KEY_SECRET` | razorpay.ts | Yes | Payment |
+| `RAZORPAY_WEBHOOK_SECRET` | razorpay.ts | Yes | Payment |
+| `DOWNLOAD_TOKEN_SECRET` | download-token.ts | Yes | Download Security |
+| `PRODUCT_FILES_DIR` | product-storage.ts | Yes | Product Files |
+| `RESEND_API_KEY` | fulfilment.ts | Yes | Email |
+| `SUPPORT_EMAIL` | fulfilment.ts | Yes | Store Config |
+| `STORE_CURRENCY` | orders/route.ts | Yes | Store Config |
+| `DATABASE_URL` | db.ts (Prisma) | Yes | Database |
+
+#### Security Check ✅
+- **No secrets use `NEXT_PUBLIC_` prefix** — all server-only secrets correctly NOT prefixed
+- `NEXT_PUBLIC_SITE_URL` is the only `NEXT_PUBLIC_` var — intentionally public
+- `RAZORPAY_KEY_ID` accessed server-side and passed to client via API response (correct pattern)
+
+#### Unused Scaffold Variables
+- No unused scaffold env vars found
+
+### Verification
+- `bun run lint` passed with exit code 0

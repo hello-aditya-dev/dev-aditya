@@ -228,7 +228,7 @@ export const digitalProducts: DigitalProduct[] = [
     eyebrow: "03 / ONBOARD",
     shortDescription: "Onboard new clients without chaos.",
     description:
-      "A client onboarding system that standardises how new projects start — from signed proposal to first deliverable review.",
+      "A client onboarding system that standardizes how new projects start — from signed proposal to first deliverable review.",
     launchPrice: 29,
     regularPrice: 39,
     currencyPrices: { USD: 39, USDLaunch: 29, INR: 1999, INRLaunch: 1499 },
@@ -258,7 +258,7 @@ export const digitalProducts: DigitalProduct[] = [
     seo: {
       title: "Web Agency Client Onboarding OS — Client Onboarding System",
       description:
-        "Standardise how new client projects start — from signed proposal to first deliverable review.",
+        "Standardize how new client projects start — from signed proposal to first deliverable review.",
     },
   },
 
@@ -388,7 +388,7 @@ export const digitalProducts: DigitalProduct[] = [
       },
       {
         name: "Consistent client onboarding",
-        description: "Standardise how every new project starts with intake forms, checklists and milestones.",
+        description: "Standardize how every new project starts with intake forms, checklists and milestones.",
       },
     ],
     bundleContents: [
@@ -509,7 +509,7 @@ export const digitalProducts: DigitalProduct[] = [
     bundleContents: [
       "Accounting / Fractional CFO website template",
       "Web Project Pricing OS",
-      "Client Onboarding OS",
+      "Web Agency Client Onboarding OS",
       "Website QA & Launch OS",
       "Delivery documentation",
     ],
@@ -555,7 +555,7 @@ export const digitalProducts: DigitalProduct[] = [
       },
       {
         name: "Team / profile layouts",
-        description: "Professional layouts for team members, credentials and specialisations.",
+        description: "Professional layouts for team members, credentials and specializations.",
       },
       {
         name: "Contact and intake forms",

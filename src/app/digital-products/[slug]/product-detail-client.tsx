@@ -404,12 +404,12 @@ function getProductFAQ(product: DigitalProduct) {
       a: "No. This is a one-time purchase. You pay once and download the files. There are no recurring charges.",
     },
     {
-      q: "Can I customise the files for my own use?",
-      a: "Yes. You can modify the files for your own projects and workflow. The license restricts redistribution, not personal customisation.",
+      q: "Can I customize the files for my own use?",
+      a: "Yes. You can modify the files for your own projects and workflow. The license restricts redistribution, not personal customization.",
     },
     {
       q: "Can an agency use these internally?",
-      a: "Yes. A single license covers internal use by one person or one agency. If multiple team members need separate copies, purchase additional licenses.",
+      a: "Yes. A single-user commercial license covers one person. If multiple team members need separate copies, purchase additional licenses.",
     },
     {
       q: "Can I resell the files?",

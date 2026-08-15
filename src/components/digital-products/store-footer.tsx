@@ -1,13 +1,13 @@
 import Link from 'next/link';
+import { SUPPORT_EMAIL } from '@/config/digital-products';
 
 const FOOTER_LINKS = [
   { label: 'Agency Tools', href: '/digital-products#tools' },
   { label: 'Bundles', href: '/digital-products#bundles' },
   { label: 'Delivery Policy', href: '/digital-products/delivery-policy' },
   { label: 'Refund Policy', href: '/digital-products/refund-policy' },
-  { label: 'Terms', href: '/terms' },
-  { label: 'Privacy', href: '/privacy' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Terms', href: '/digital-products/terms' },
+  { label: 'Privacy', href: '/digital-products/privacy' },
   { label: 'Portfolio', href: '/' },
 ];
 
@@ -33,6 +33,15 @@ export function StoreFooter() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <a
+                  href={`mailto:${SUPPORT_EMAIL}`}
+                  className="text-xs font-medium transition-colors hover:underline"
+                  style={{ color: '#5E5E5F' }}
+                >
+                  Contact
+                </a>
+              </li>
             </ul>
           </nav>
 

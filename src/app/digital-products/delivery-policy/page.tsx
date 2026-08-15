@@ -36,7 +36,7 @@ export default function DeliveryPolicyPage() {
 
           <section>
             <h2 className="text-xl font-semibold mb-3" style={{ color: "#0B0B0B" }}>Delivery method</h2>
-            <p>After successful payment verification, you will receive immediate access to download your purchased files through a secure download link. The download link is also sent to the email address you provided during checkout.</p>
+            <p>After successful payment verification, you will receive immediate access to download your purchased files through a secure download link. The download link is also sent to the email address you provided during checkout via <a href="https://resend.com" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "#1C92FF" }}>Resend</a>.</p>
           </section>
 
           <section>

@@ -170,11 +170,15 @@ export default function CheckoutClient({ product }: { product: DigitalProduct })
               </div>
             )}
 
-            {/* License + format */}
-            <div className="grid sm:grid-cols-2 gap-4">
+            {/* License + formats + delivery */}
+            <div className="grid sm:grid-cols-3 gap-4">
               <div className="rounded-lg border-2 p-4" style={{ borderColor: "#0B0B0B", backgroundColor: "#FAF9F6" }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5E5E5F" }}>License</h3>
                 <p className="text-sm" style={{ color: "#0B0B0B" }}>{product.licenseType || "Single-user commercial license"}</p>
+              </div>
+              <div className="rounded-lg border-2 p-4" style={{ borderColor: "#0B0B0B", backgroundColor: "#FAF9F6" }}>
+                <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5E5E5F" }}>Formats</h3>
+                <p className="text-sm" style={{ color: "#0B0B0B" }}>{product.formats.join(", ")}</p>
               </div>
               <div className="rounded-lg border-2 p-4" style={{ borderColor: "#0B0B0B", backgroundColor: "#FAF9F6" }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#5E5E5F" }}>Delivery</h3>

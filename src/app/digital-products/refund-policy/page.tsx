@@ -29,19 +29,9 @@ export default function RefundPolicyPage() {
         </h1>
 
         <div className="prose max-w-none space-y-6" style={{ color: "#5E5E5F" }}>
-          {/* Owner review notice */}
-          <div
-            className="rounded-lg border-2 p-4"
-            style={{ borderColor: "#FFC431", backgroundColor: "#FFC43115" }}
-          >
-            <p className="text-sm font-medium" style={{ color: "#9B7A1E" }}>
-              ⚠ Launch-blocking item: Refund policy terms require owner review and approval before production go-live. The language below is a draft placeholder.
-            </p>
-          </div>
-
           <section>
-            <h2 className="text-xl font-semibold mb-3" style={{ color: "#0B0B0B" }}>Digital product nature</h2>
-            <p>Due to the digital nature of these products, all sales are generally considered final once the product has been downloaded or accessed. Unlike physical goods, digital products can be reproduced without return of the original.</p>
+            <h2 className="text-xl font-semibold mb-3" style={{ color: "#0B0B0B" }}>Digital products only</h2>
+            <p>All products on this store are digital products delivered electronically. No physical goods are shipped. Due to the digital nature of these products, all sales are generally considered final once the product has been downloaded or accessed. Unlike physical goods, digital products can be reproduced without return of the original.</p>
           </section>
 
           <section>
@@ -67,7 +57,12 @@ export default function RefundPolicyPage() {
               <li>The email address used for the purchase.</li>
               <li>The reason for your refund request.</li>
             </ol>
-            <p className="mt-2">Refund requests are reviewed within 3 business days. Approved refunds are processed through the original payment method and may take 5–10 business days to appear, depending on your payment provider.</p>
+            <p className="mt-2">Refund requests are reviewed within 3 business days. Approved refunds are processed via Razorpay through the original payment method and may take 5–10 business days to appear, depending on your payment provider.</p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold mb-3" style={{ color: "#0B0B0B" }}>Payment processing</h2>
+            <p>Payments are processed by <a href="https://razorpay.com" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "#1C92FF" }}>Razorpay</a>. Card and banking details are handled entirely by Razorpay and never touch our servers. We collect only your name and email address to deliver your purchase and send order communications via <a href="https://resend.com" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "#1C92FF" }}>Resend</a>.</p>
           </section>
 
           <section>

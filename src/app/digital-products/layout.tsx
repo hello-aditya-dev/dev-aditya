@@ -14,12 +14,21 @@ export const metadata: Metadata = {
     url: `${SITE_ORIGIN}/digital-products`,
     siteName: "Aditya",
     type: "website",
+    images: [
+      {
+        url: `${SITE_ORIGIN}/og/store-og.png`,
+        width: 1344,
+        height: 768,
+        alt: "Aditya Digital Products — Tools and templates for people who build websites for clients",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Digital Products for Web Designers & Agencies | Aditya",
     description:
       "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
+    images: [`${SITE_ORIGIN}/og/store-og.png`],
   },
   alternates: {
     canonical: `${SITE_ORIGIN}/digital-products`,

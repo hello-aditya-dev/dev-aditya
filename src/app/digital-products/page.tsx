@@ -4,6 +4,7 @@ import {
   getTemplates,
   getFeaturedProduct,
   accentColors,
+  SITE_ORIGIN,
 } from "@/config/digital-products";
 import { StoreHero } from "@/components/digital-products/store-hero";
 import { ProductCard } from "@/components/digital-products/product-card";
@@ -21,8 +22,45 @@ export default function DigitalProductsPage() {
   const templates = getTemplates();
   const featured = getFeaturedProduct();
 
+  // ── JSON-LD Structured Data ──────────────────────────
+  const collectionPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Digital Products for Web Designers & Agencies",
+    description:
+      "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
+    url: `${SITE_ORIGIN}/digital-products`,
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_ORIGIN,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Digital Products",
+        item: `${SITE_ORIGIN}/digital-products`,
+      },
+    ],
+  };
+
   return (
     <div className="paper-grain">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* ── Hero ──────────────────────────────────────── */}
       <StoreHero />
 
@@ -174,7 +212,7 @@ export default function DigitalProductsPage() {
             Start from a better foundation
           </h2>
           <p className="text-lg mb-10 max-w-2xl" style={{ color: "#5E5E5F" }}>
-            Production-ready starting points built around actual business categories. Designed to be customised for client projects. Not generic one-page demos.
+            Production-ready starting points built around actual business categories. Designed to be customized for client projects. Not generic one-page demos.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {templates.map((template, i) => (

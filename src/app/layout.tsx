@@ -16,24 +16,24 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN),
-  title: "Aditya — Digital Products for Web Designers & Agencies",
-  description: "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
-  keywords: ["web design tools", "agency tools", "pricing calculator", "scope creep", "client onboarding", "digital products", "web designer resources"],
+  title: "Aditya — Web Designer & Developer",
+  description: "Web designer and developer based in India. Clean design, solid code, clear process.",
+  keywords: ["web designer", "web developer", "freelance web designer", "India web developer", "website design", "Aditya"],
   authors: [{ name: "Aditya" }],
   icons: {
     icon: "/logo.svg",
   },
   openGraph: {
-    title: "Aditya — Digital Products for Web Designers & Agencies",
-    description: "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
+    title: "Aditya — Web Designer & Developer",
+    description: "Web designer and developer based in India. Clean design, solid code, clear process.",
     url: SITE_ORIGIN,
     siteName: "Aditya",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Aditya — Digital Products for Web Designers & Agencies",
-    description: "Pricing systems, agency operations tools and website templates for web designers, developers and small studios.",
+    title: "Aditya — Web Designer & Developer",
+    description: "Web designer and developer based in India. Clean design, solid code, clear process.",
   },
 };
 

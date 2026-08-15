@@ -126,19 +126,24 @@ export default function SuccessClient() {
               )}
 
               {downloadUrl ? (
-                <a
-                  href={downloadUrl}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-base border-2 transition-all hover:translate-x-[2px] hover:translate-y-[2px] mb-6"
-                  style={{
-                    backgroundColor: "#0B0B0B",
-                    color: "#FAF9F6",
-                    borderColor: "#0B0B0B",
-                    boxShadow: "3px 3px 0px 0px #0B0B0B",
-                  }}
-                >
-                  <Download className="w-4 h-4" />
-                  Download files
-                </a>
+                <>
+                  <a
+                    href={downloadUrl}
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-base border-2 transition-all hover:translate-x-[2px] hover:translate-y-[2px] mb-4"
+                    style={{
+                      backgroundColor: "#0B0B0B",
+                      color: "#FAF9F6",
+                      borderColor: "#0B0B0B",
+                      boxShadow: "3px 3px 0px 0px #0B0B0B",
+                    }}
+                  >
+                    <Download className="w-4 h-4" />
+                    Download files
+                  </a>
+                  <p className="text-xs mb-6" style={{ color: "#5E5E5F" }}>
+                    Tip: Start with <strong style={{ color: "#0B0B0B" }}>01_START_HERE.pdf</strong> inside the ZIP.
+                  </p>
+                </>
               ) : (
                 <p className="text-sm mb-6" style={{ color: "#5E5E5F" }}>
                   Your download link is being prepared. Please check your email.

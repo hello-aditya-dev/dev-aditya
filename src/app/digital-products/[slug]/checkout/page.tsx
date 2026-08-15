@@ -16,6 +16,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `Checkout — ${product.name} | Aditya`,
     description: `Purchase ${product.name}`,
     robots: { index: false, follow: false },
+    openGraph: null,
+    twitter: null,
+    alternates: undefined,
   };
 }
 
