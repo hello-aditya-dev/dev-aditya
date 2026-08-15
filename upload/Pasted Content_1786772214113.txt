@@ -1,0 +1,3877 @@
+# MASTER IMPLEMENTATION PROMPT
+
+You are acting as a senior:
+
+* product designer
+* ecommerce UX designer
+* Next.js architect
+* React engineer
+* TypeScript engineer
+* frontend engineer
+* backend/payment engineer
+* Razorpay integration engineer
+* SEO engineer
+* technical copywriter
+* accessibility engineer
+* performance engineer
+* security reviewer
+* QA engineer
+* release engineer
+
+You are working on an EXISTING production-quality portfolio codebase.
+
+Your job is NOT to return recommendations.
+
+Your job is to inspect the repository, understand the existing architecture and visual identity, then IMPLEMENT a complete digital-product ecommerce section inside the existing website without damaging or redesigning the normal portfolio experience.
+
+---
+
+# TARGET REPOSITORY
+
+Repository:
+
+`https://github.com/witejackel-eng/dev-aditya-paperfolio`
+
+Target public domain:
+
+`https://dev-aditya.com`
+
+Current public site reference:
+
+`https://www.dev-aditya.com/`
+
+The repository and live site may not be identical.
+
+Inspect both before making decisions.
+
+The repository README currently warns that this Paperfolio redesign is not necessarily the repository automatically serving the current production domain.
+
+Therefore:
+
+DO NOT assume deployment wiring.
+
+Before any deployment or domain change:
+
+1. inspect the current branch;
+2. inspect Vercel configuration if available;
+3. identify which repository/project actually owns `dev-aditya.com`;
+4. do not modify DNS;
+5. do not switch production domains;
+6. do not overwrite another production deployment.
+
+Implement the requested functionality in this repository.
+
+Deployment/domain changes are a separate final step and must only happen if the current environment clearly authorizes them.
+
+---
+
+# PRIMARY BUSINESS OBJECTIVE
+
+Add a complete digital-product storefront at:
+
+`/digital-products`
+
+The store is aimed at:
+
+* independent web designers
+* web developers
+* freelancers
+* Framer freelancers
+* Webflow freelancers
+* WordPress developers
+* Shopify developers
+* small web studios
+* small digital agencies
+* approximately 1–15 person web agencies
+
+The store sells:
+
+## Agency operating tools
+
+Examples:
+
+* Web Project Pricing OS
+* Web Project Scope & Proposal OS
+* Web Agency Client Onboarding OS
+* Website QA & Launch OS
+* Agency Profit & Capacity OS
+
+## Bundles
+
+* Agency Starter Bundle
+* Agency Operations Bundle
+* Template + Delivery Bundle
+
+## Website templates
+
+Initially:
+
+* Accounting / Fractional CFO Framer Template
+
+with more vertical templates later.
+
+The overall positioning is:
+
+> Tools and templates for people who build websites for clients.
+
+The store should feel like a serious extension of Aditya's existing design/development practice.
+
+It should NOT feel like:
+
+* Gumroad embedded inside a portfolio
+* a generic Shopify template
+* a SaaS landing-page clone
+* a new unrelated brand
+* a dark ecommerce theme
+* an AI-generated storefront
+* a marketplace with fake activity
+* a dropshipping website
+
+---
+
+# CRITICAL PORTFOLIO BOUNDARY
+
+The normal portfolio must remain essentially unchanged.
+
+DO NOT:
+
+* add "Digital Products" to the existing primary navigation;
+* add a shop banner to the homepage;
+* add store cards to `/work`;
+* modify normal portfolio positioning;
+* replace existing portfolio CTAs;
+* redesign the global navigation;
+* redesign existing case studies;
+* turn the main footer into a store footer;
+* inject product promotion into normal portfolio pages.
+
+The existing portfolio experience should continue to behave as it does now.
+
+The digital store should primarily be accessed through direct links such as:
+
+`/digital-products`
+
+and product URLs sent through email/outbound.
+
+SEO indexing is allowed and desired.
+
+"Not shown in the portfolio navigation" does NOT mean "noindex."
+
+---
+
+# INSPECT BEFORE EDITING
+
+Before changing code, inspect:
+
+* `package.json`
+* `src/app/layout.tsx`
+* `src/app/globals.css`
+* `src/app/page.tsx`
+* `src/app/sitemap.ts`
+* `src/app/robots.ts`
+* `src/app/manifest.ts`
+* `src/config/site.ts`
+* `src/config/navigation.ts`
+* `src/config/contact.ts`
+* `src/components/navigation.tsx`
+* `src/components/footer.tsx`
+* `src/components/ui/*`
+* existing metadata implementation
+* existing OG image implementation
+* existing legal pages
+* existing API route patterns
+* existing Zod validation
+* existing Resend integration
+* existing same-origin/security helpers
+* existing accessibility conventions
+* existing animation/reduced-motion handling
+* `next.config.ts`
+* `.env.example`
+
+Also run the site locally and inspect:
+
+* desktop
+* tablet
+* mobile
+
+before starting the store design.
+
+Do not blindly add a second design system.
+
+---
+
+# EXISTING TECH STACK
+
+Preserve the existing stack unless a new dependency is genuinely necessary.
+
+The repository currently uses approximately:
+
+* Next.js 15 App Router
+* React 19
+* TypeScript
+* Tailwind CSS 4
+* Framer Motion
+* Zod
+* Resend
+* Onest via `next/font`
+* existing custom UI components
+
+Do not replace these with:
+
+* another CSS framework;
+* Material UI;
+* Chakra;
+* Bootstrap;
+* a different animation library;
+* an unnecessary component framework.
+
+Use existing primitives wherever practical.
+
+---
+
+# EXISTING VISUAL IDENTITY
+
+The store must inherit the existing visual grammar.
+
+Current palette:
+
+Paper:
+
+`#FAF9F6`
+
+Ink:
+
+`#0B0B0B`
+
+Muted ink:
+
+`#5E5E5F`
+
+Coral:
+
+`#FF4A60`
+
+Blue:
+
+`#1C92FF`
+
+Yellow:
+
+`#FFC431`
+
+Violet:
+
+`#5C42FB`
+
+Typography:
+
+Onest
+
+Current signatures:
+
+* paper background
+* subtle grain
+* bold black outlines
+* hard offset shadows
+* rounded cards
+* coloured highlight blocks
+* editorial hierarchy
+* generous whitespace
+* strong typography
+* deliberate micro-labels
+* restrained motion
+
+Reuse these.
+
+Do not invent a neon gradient ecommerce theme.
+
+---
+
+# STORE-SPECIFIC ART DIRECTION
+
+The store should feel like:
+
+"Aditya's existing portfolio became a small product studio."
+
+Not:
+
+"Aditya installed an ecommerce template."
+
+Use the existing design language but make the commerce interface more systematic.
+
+Recommended store visual motifs:
+
+* numbered product cards
+* document/spreadsheet-inspired diagrams
+* paper-stack compositions
+* compact price labels
+* visible file-format labels
+* outcome-focused product summaries
+* hard-shadow CTA buttons
+* small status labels
+* product category indexing
+* restrained diagrams showing workflow
+* real screenshots when available
+
+Avoid excessive laptop/device mockups.
+
+Avoid glossy 3D floating boxes.
+
+Avoid generic SaaS dashboards.
+
+---
+
+# STORE ROUTE ARCHITECTURE
+
+Implement a clean structure similar to:
+
+```text
+src/app/digital-products/
+    layout.tsx
+    page.tsx
+
+    [slug]/
+        page.tsx
+
+        checkout/
+            page.tsx
+
+    success/
+        page.tsx
+
+    refund-policy/
+        page.tsx
+
+    delivery-policy/
+        page.tsx
+
+src/app/api/digital-products/
+    orders/
+        route.ts
+
+    verify/
+        route.ts
+
+    order-status/
+        route.ts
+
+    webhook/
+        razorpay/
+            route.ts
+
+    download/
+        [token]/
+            route.ts
+```
+
+Adjust this structure only if the existing repository architecture clearly suggests a better equivalent.
+
+Do not create unnecessary route fragmentation.
+
+---
+
+# PRODUCT CATALOG ARCHITECTURE
+
+Do not hard-code every product across multiple pages.
+
+Create a single typed product source of truth.
+
+For example:
+
+`src/config/digital-products.ts`
+
+Each product should support fields conceptually similar to:
+
+```ts
+type ProductStatus =
+  | "active"
+  | "coming-soon"
+  | "hidden"
+  | "sold-out";
+
+type ProductType =
+  | "tool"
+  | "bundle"
+  | "template";
+
+interface DigitalProduct {
+  id: string;
+  slug: string;
+  name: string;
+  type: ProductType;
+  category: string;
+
+  eyebrow: string;
+  shortDescription: string;
+  description: string;
+
+  launchPrice?: number;
+  regularPrice: number;
+
+  currencyPrices: {
+    USD?: number;
+    INR?: number;
+  };
+
+  status: ProductStatus;
+
+  featured: boolean;
+
+  version?: string;
+
+  formats: string[];
+
+  includes: string[];
+
+  outcomes: string[];
+
+  features: string[];
+
+  bundleContents?: string[];
+
+  screenshots?: string[];
+
+  thumbnail?: string;
+
+  accent: "coral" | "blue" | "yellow" | "violet";
+
+  seo: {
+    title: string;
+    description: string;
+  };
+}
+```
+
+Do not necessarily copy this exact shape if a cleaner architecture works better.
+
+The important requirement is:
+
+ONE SOURCE OF TRUTH.
+
+---
+
+# SECURITY BOUNDARY FOR PRODUCT CONFIG
+
+Do NOT put these inside client-accessible config:
+
+* private file path
+* object-storage secret
+* secret download key
+* Razorpay secret
+* database credentials
+* webhook secret
+
+Keep commerce-only information server-side.
+
+Use `server-only` where appropriate.
+
+---
+
+# INITIAL PRODUCT CATALOG
+
+Support these items.
+
+Do NOT mark something purchasable unless the actual customer artifact exists.
+
+---
+
+## PRODUCT 1
+
+### Web Project Pricing OS
+
+Type:
+
+Tool
+
+Status:
+
+ACTIVE only if the final product ZIP is present and delivery is configured.
+
+Positioning:
+
+> Stop guessing what to charge for websites.
+
+Description:
+
+A project-pricing system for web designers and agencies that turns scope into estimated workload, delivery cost, target margin and a defensible project quote.
+
+Core outcomes:
+
+* estimate true project workload;
+* calculate delivery cost;
+* protect margin;
+* generate recommended project pricing;
+* compare Essential / Recommended / Premium tiers;
+* model scope creep;
+* calculate change orders;
+* compare estimated vs actual hours;
+* learn from completed projects.
+
+Formats:
+
+* Excel workbook
+* demo workbook
+* PDF documentation
+* ZIP package
+
+Version:
+
+1.0
+
+Pricing:
+
+Launch:
+
+USD 29
+
+Normal:
+
+USD 49
+
+If using INR:
+
+configure a server-owned INR price.
+
+Do not derive checkout amount from a browser-supplied USD conversion.
+
+---
+
+## BUNDLE 1
+
+### Agency Starter Bundle
+
+Type:
+
+Bundle
+
+Core contents:
+
+* Web Project Pricing OS
+* Web Project Scope & Proposal OS
+* Web Agency Client Onboarding OS
+
+Core lifecycle:
+
+DISCOVER
+
+→ SCOPE
+
+→ PRICE
+
+→ PROPOSE
+
+→ ONBOARD
+
+Target launch price:
+
+USD 69
+
+Target normal price:
+
+USD 99
+
+Do not mark ACTIVE until the bundle file exists.
+
+---
+
+## BUNDLE 2
+
+### Agency Operations Bundle
+
+Type:
+
+Bundle
+
+Core contents:
+
+* everything in Agency Starter
+* Website QA & Launch OS
+* Agency Profit & Capacity OS
+
+Lifecycle:
+
+DISCOVER
+
+→ SCOPE
+
+→ PRICE
+
+→ PROPOSE
+
+→ ONBOARD
+
+→ DELIVER
+
+→ QA
+
+→ LAUNCH
+
+→ REVIEW PROFITABILITY
+
+→ PLAN CAPACITY
+
+Target launch price:
+
+USD 99
+
+Target normal price:
+
+USD 149
+
+Do not mark ACTIVE until the bundle artifact exists.
+
+---
+
+## BUNDLE 3
+
+### Template + Delivery Bundle
+
+Type:
+
+Bundle
+
+Core contents:
+
+* Accounting / Fractional CFO website template
+* Web Project Pricing OS
+* Client Onboarding OS
+* Website QA & Launch OS
+* delivery documentation
+
+Lifecycle:
+
+BUY TEMPLATE
+
+→ PRICE CLIENT PROJECT
+
+→ COLLECT CLIENT INFORMATION
+
+→ CUSTOMIZE
+
+→ QA
+
+→ LAUNCH
+
+Target launch price:
+
+USD 129
+
+Target normal price:
+
+USD 169
+
+Do not mark ACTIVE until the bundle and template actually exist.
+
+---
+
+# FUTURE INDIVIDUAL PRODUCTS
+
+The architecture should support future activation of:
+
+* Web Project Scope & Proposal OS
+* Web Agency Client Onboarding OS
+* Website QA & Launch OS
+* Agency Profit & Capacity OS
+* Accounting / CFO Framer Template
+
+Do not build separate hard-coded page systems for each.
+
+All should use the product system.
+
+---
+
+# COMING SOON BEHAVIOUR
+
+Do not fill the page with fake buy buttons.
+
+If a product is not ready:
+
+* show `Coming soon` only if showing it actually improves the store;
+* do not display an active checkout CTA;
+* do not create a fake "Only 2 left" state;
+* do not invent a launch date;
+* optionally noindex thin coming-soon product pages.
+
+Prefer a smaller store with real products over a large fake catalogue.
+
+---
+
+# STORE HOMEPAGE
+
+Route:
+
+`/digital-products`
+
+---
+
+# STORE HERO
+
+Recommended content direction:
+
+Micro-label:
+
+`A.DIGITAL PRODUCTS`
+
+Primary headline:
+
+> Tools and templates for people who build websites for clients.
+
+Supporting copy:
+
+> Pricing systems, delivery tools and production-ready templates for freelancers and small web agencies. Built to make client work clearer from scope to launch.
+
+Primary CTA:
+
+`Browse agency tools`
+
+Secondary CTA:
+
+`See bundles`
+
+Do not write exaggerated startup copy.
+
+Do not write:
+
+> Revolutionize your agency.
+
+Do not write:
+
+> 10x your profits.
+
+Do not write:
+
+> The ultimate toolkit.
+
+Keep language direct.
+
+---
+
+# STORE HERO VISUAL
+
+Create a native illustration/composition using the site's design system.
+
+Possible concept:
+
+A layered stack representing:
+
+SCOPE
+
+PRICE
+
+ONBOARD
+
+QA
+
+LAUNCH
+
+Each is a bordered paper card with hard offset shadow.
+
+A smaller "project health" strip can show:
+
+SCOPE
+
+`Defined`
+
+PRICE
+
+`Protected`
+
+QA
+
+`Ready`
+
+LAUNCH
+
+`Clear`
+
+Do not fabricate real customer numbers.
+
+---
+
+# STORE SECTIONS
+
+Recommended flow:
+
+1. Hero
+2. Featured product
+3. Agency tools
+4. Bundles
+5. Website templates
+6. Workflow
+7. Why these exist
+8. FAQ
+9. Final CTA
+10. Store-specific policy/support links
+
+---
+
+# FEATURED PRODUCT SECTION
+
+Feature Web Project Pricing OS first while it is the primary available product.
+
+The section should immediately communicate:
+
+* what problem it solves;
+* what is inside;
+* launch price;
+* normal price;
+* product format;
+* real screenshot/visual;
+* who it is for.
+
+Example:
+
+Micro-label:
+
+`01 / PRICING`
+
+Heading:
+
+> Know what a website project needs to cost before you send the proposal.
+
+Show:
+
+* Scope Builder
+* Hours Engine
+* Price Engine
+* Scope Creep
+* Project Actuals
+
+CTA:
+
+`View Web Project Pricing OS`
+
+---
+
+# AGENCY TOOLS SECTION
+
+Use cards with consistent information hierarchy:
+
+* number
+* category
+* title
+* one-sentence problem
+* outcome
+* format
+* price/status
+* CTA
+
+Do not put paragraphs inside cards.
+
+Cards should feel scannable.
+
+---
+
+# BUNDLES SECTION
+
+Make bundles visually distinct.
+
+Show:
+
+### Agency Starter Bundle
+
+For:
+
+Freelancers and small studios formalising the front half of their client process.
+
+### Agency Operations Bundle
+
+For:
+
+Studios that need pricing, onboarding, delivery QA and profitability management.
+
+### Template + Delivery Bundle
+
+For:
+
+Designers who want both the site starting point and the delivery systems around it.
+
+Provide a clean comparison.
+
+Do not create a giant pricing table full of meaningless checkmarks.
+
+Show workflow differences.
+
+---
+
+# TEMPLATE SECTION
+
+Heading direction:
+
+> Start from a better foundation.
+
+Explain that templates are:
+
+* production-ready starting points;
+* built around actual business categories;
+* designed to be customised for client projects;
+* not generic one-page demos.
+
+The first template can be:
+
+Accounting / Fractional CFO
+
+if available.
+
+---
+
+# WORKFLOW SECTION
+
+Visualise:
+
+LEAD
+
+→ SCOPE
+
+→ PRICE
+
+→ ONBOARD
+
+→ BUILD
+
+→ QA
+
+→ LAUNCH
+
+→ REVIEW
+
+Then map products beneath the stages.
+
+This is a strong store-level explanation of why the products belong together.
+
+---
+
+# WHY THESE PRODUCTS EXIST
+
+Do not invent customer testimonials.
+
+Instead establish credibility through the real context:
+
+Aditya is a designer/developer building websites and digital systems.
+
+The products focus on the operational problems around paid client work.
+
+Possible copy direction:
+
+> Website work is not only design and development. A profitable project also depends on scoping, pricing, approvals, client inputs, QA and handover. These products turn those hidden parts of the work into repeatable systems.
+
+Keep it grounded.
+
+---
+
+# STORE FAQ
+
+Cover:
+
+* What formats are included?
+* Are these subscriptions?
+* Can I customise the files?
+* Can an agency use them internally?
+* Can I resell the files?
+* Do they work in Google Sheets?
+* How are downloads delivered?
+* What happens if my payment succeeds but the download page fails?
+* How do refunds work?
+* How are template licenses different from tool licenses?
+
+Do not claim Google Sheets compatibility unless the actual files have been tested there.
+
+For Web Project Pricing OS currently describe it as Excel unless compatibility has been independently verified.
+
+---
+
+# PRODUCT PAGE ARCHITECTURE
+
+Dynamic route:
+
+`/digital-products/[slug]`
+
+Each product page should feel much more detailed than a normal ecommerce card.
+
+Recommended flow:
+
+1. product hero
+2. immediate product visual
+3. buyer problem
+4. what the product actually does
+5. interactive or visual demonstration
+6. screenshots
+7. what's included
+8. workflow
+9. who it is for
+10. who it is not for
+11. pricing
+12. license summary
+13. refund/delivery information
+14. FAQ
+15. final buy CTA
+
+---
+
+# WEB PROJECT PRICING OS PAGE
+
+Use this as the first fully polished product page.
+
+---
+
+# PRODUCT HERO COPY
+
+Micro-label:
+
+`WEB AGENCY TOOL / VERSION 1.0`
+
+Headline:
+
+> Stop guessing what to charge for websites.
+
+Supporting copy:
+
+> Turn project scope into estimated workload, delivery cost, target margin and a defensible client quote before the proposal goes out.
+
+Product facts:
+
+`Excel`
+
+`No subscription`
+
+`Demo included`
+
+`Guides included`
+
+Price:
+
+Normal:
+
+`$49`
+
+Launch:
+
+`$29`
+
+Use restrained strike-through treatment for the normal price.
+
+Do NOT use:
+
+* fake countdown timer;
+* fake "sale ends tonight";
+* fake stock;
+* fake recent purchases.
+
+CTA:
+
+`Get Web Project Pricing OS — $29`
+
+Secondary:
+
+`See how it works`
+
+---
+
+# INTERACTIVE SCOPE-CREEP DEMO
+
+Create a small browser-side illustrative calculator.
+
+Inputs:
+
+* project quote;
+* planned delivery hours;
+* unplanned additional hours.
+
+Outputs:
+
+* original effective rate;
+* new effective rate;
+* effective-rate drop;
+* value of added work at the original effective rate.
+
+Clearly label:
+
+`Illustrative example`
+
+Do not claim the mini calculator reproduces every workbook calculation.
+
+Do not turn this into a complex financial application.
+
+It is a sales demonstration.
+
+---
+
+# EXAMPLE CALCULATOR
+
+If:
+
+Quote:
+
+$6,000
+
+Planned hours:
+
+70
+
+Extra hours:
+
+15
+
+Then show approximately:
+
+Original effective rate:
+
+$85.71/hour
+
+After extra work:
+
+$70.59/hour
+
+This explains the problem visually.
+
+Use client-side calculation only.
+
+Do not send this data anywhere.
+
+---
+
+# PRODUCT DEMO SECTION
+
+Show real product screenshots if the supplied product package contains usable screenshots or if screenshots can be created from the actual product.
+
+DO NOT fabricate screenshots that imply functionality not present in the workbook.
+
+Required visual subjects:
+
+* Scope Builder
+* Price Engine
+* Scope Creep
+* Dashboard
+
+If real screenshots are unavailable, use clearly stylised diagrams based on genuine product structure rather than fake Excel screenshots.
+
+---
+
+# WHAT'S INCLUDED
+
+For Web Project Pricing OS show the actual package:
+
+* main pricing workbook;
+* fictional demo workbook;
+* Start Here guide;
+* project scoping questionnaire;
+* pricing and margin guide;
+* change-order guide;
+* license.
+
+Make this easy to scan.
+
+---
+
+# DEMO CASE
+
+Use the real fictional demonstration data from the product package if available.
+
+Label it clearly:
+
+`FICTIONAL DEMONSTRATION`
+
+Do not imply it is a customer case study.
+
+Use it to show:
+
+baseline project
+
+→ scope change
+
+→ margin impact
+
+→ change-order recommendation
+
+---
+
+# CHECKOUT PAGE
+
+Route:
+
+`/digital-products/[slug]/checkout`
+
+The checkout page must NOT look like a generic payment gateway screen.
+
+It should still feel like the Aditya site.
+
+But simplify the experience.
+
+---
+
+# CHECKOUT LAYOUT
+
+Desktop:
+
+Two columns.
+
+Left:
+
+* product
+* package contents
+* license type
+* delivery format
+* support/refund link
+
+Right:
+
+* customer information
+* order summary
+* price
+* purchase button
+
+Mobile:
+
+One column.
+
+Order summary first or compact sticky summary.
+
+---
+
+# CUSTOMER FIELDS
+
+Collect only necessary data:
+
+* name
+* email
+
+Optionally:
+
+* country
+
+only if actually needed.
+
+Do not collect unnecessary address data unless Razorpay or tax/legal requirements require it.
+
+Use Zod validation.
+
+Accessible field errors.
+
+---
+
+# PAYMENT BUTTON
+
+Example:
+
+`Continue to secure payment`
+
+Do not render custom card-number fields.
+
+Use Razorpay Standard Checkout.
+
+Razorpay handles the payment methods.
+
+Do not manually promise payment methods that may not be enabled on the merchant account.
+
+---
+
+# RAZORPAY INTEGRATION
+
+Use the CURRENT official Razorpay Standard Checkout documentation at implementation time.
+
+Do not implement payment handling from memory.
+
+The architecture must satisfy these principles:
+
+1. create a Razorpay Order SERVER-SIDE;
+2. server determines the product and amount;
+3. never trust browser-supplied price;
+4. pass server-generated `order_id` into Checkout;
+5. Razorpay Checkout opens only after customer action;
+6. verify payment signature SERVER-SIDE;
+7. use the server-owned original order ID for signature verification;
+8. confirm payment/capture state before fulfilment;
+9. implement signed Razorpay webhooks;
+10. make fulfilment idempotent;
+11. never expose Razorpay Key Secret;
+12. never expose webhook secret.
+
+---
+
+# ORDER CREATION ENDPOINT
+
+Example route:
+
+`POST /api/digital-products/orders`
+
+Input:
+
+* product slug/id
+* customer name
+* customer email
+
+Do NOT accept:
+
+* amount
+* currency price
+* discount amount
+
+as authoritative client inputs.
+
+Server should:
+
+1. validate input with Zod;
+2. find active product;
+3. retrieve server-owned price;
+4. reject unavailable products;
+5. create local pending order;
+6. create Razorpay order;
+7. persist Razorpay order ID;
+8. return only safe checkout data.
+
+---
+
+# PRICE SECURITY
+
+Do this correctly.
+
+BAD:
+
+```ts
+amount: request.body.price
+```
+
+GOOD:
+
+```ts
+const product = getProductFromServerCatalog(productId);
+const amount = product.activePrice[currency];
+```
+
+The browser must never decide how much it pays.
+
+---
+
+# CURRENCY
+
+Support a clean production configuration.
+
+Possible environment:
+
+`STORE_CURRENCY=INR`
+
+or:
+
+`STORE_CURRENCY=USD`
+
+Do not silently display USD while charging INR.
+
+Displayed currency must match the Razorpay order currency.
+
+If international payments are not enabled:
+
+do not present foreign-card capability as available.
+
+If the merchant activates international payments:
+
+support the configured international currency according to Razorpay's current requirements.
+
+Do not perform unreliable live FX conversion at checkout.
+
+Use explicit server-configured product prices.
+
+---
+
+# PAYMENT VERIFICATION
+
+Example endpoint:
+
+`POST /api/digital-products/verify`
+
+Verify:
+
+* local order exists;
+* Razorpay order matches the local order;
+* payment signature is authentic;
+* payment belongs to the correct order;
+* amount/currency match expected purchase;
+* payment is captured before final fulfilment.
+
+Use HMAC-SHA256 according to current Razorpay documentation.
+
+Use timing-safe comparison.
+
+Do not simply compare strings using an unsafe pattern if timing-safe utilities are available.
+
+Do not fulfil from browser callback values alone.
+
+---
+
+# PAYMENT CAPTURE
+
+Inspect current Razorpay settings/API.
+
+Use auto-capture if that is the configured strategy.
+
+Fulfil only after confirmed captured state.
+
+If the browser callback is verified but payment is still authorised/processing:
+
+show:
+
+`Payment received. Finalising your order…`
+
+Do not falsely show successful fulfilment.
+
+Implement an order-status endpoint/polling mechanism where useful.
+
+---
+
+# RAZORPAY WEBHOOK
+
+Example:
+
+`POST /api/digital-products/webhook/razorpay`
+
+Important:
+
+Use the RAW request body for webhook signature verification.
+
+Do not JSON parse before signature verification.
+
+Validate:
+
+`X-Razorpay-Signature`
+
+using the webhook secret.
+
+Use current Razorpay event names.
+
+At minimum handle the events necessary for:
+
+* successful captured payment;
+* failed payment;
+* refund state if refunds are supported;
+* dispute state if relevant.
+
+Webhooks must be idempotent.
+
+The same event arriving twice must not:
+
+* send two fulfilment emails;
+* create two orders;
+* generate duplicate entitlements.
+
+Persist webhook event IDs when a durable store is available.
+
+---
+
+# NEXT.JS ASYNC WEBHOOK WORK
+
+This repository is Next.js 15.5.x.
+
+Use the current stable Next.js mechanism for post-response work where appropriate.
+
+For example:
+
+`after()` from `next/server`
+
+may be appropriate for non-blocking side effects on supported deployment infrastructure.
+
+The webhook should:
+
+1. verify authenticity quickly;
+2. perform the minimal durable acknowledgement/idempotency step;
+3. return HTTP 200 promptly;
+4. move slower email/fulfilment work out of the critical response path where the deployment platform safely supports it.
+
+Do not hold the webhook open for long external operations.
+
+---
+
+# DURABLE ORDER STORAGE
+
+The current repository intentionally has no database.
+
+Do NOT use an in-memory JavaScript object as the production purchase database.
+
+Implement a small durable order store.
+
+Preferred approach:
+
+* reuse an existing durable database if one is already configured;
+* otherwise add a minimal Postgres-compatible implementation;
+* Neon/Postgres is acceptable for a Vercel deployment;
+* keep the schema intentionally small.
+
+If database credentials are not available:
+
+complete the implementation and migration/schema, document the required `DATABASE_URL`, but DO NOT silently fall back to insecure non-persistent production storage.
+
+---
+
+# ORDER SCHEMA
+
+Something conceptually similar to:
+
+```text
+digital_product_orders
+
+id
+product_id
+customer_name
+customer_email
+currency
+amount
+
+status
+
+razorpay_order_id
+razorpay_payment_id
+
+created_at
+paid_at
+refunded_at
+
+fulfilment_sent_at
+
+download_count
+last_download_at
+```
+
+Statuses may include:
+
+* CREATED
+* PAID
+* FAILED
+* REFUNDED
+
+Use a clean enum/type.
+
+---
+
+# WEBHOOK EVENT STORAGE
+
+If practical add:
+
+```text
+payment_webhook_events
+
+event_id
+event_type
+created_at
+processed_at
+```
+
+Unique event ID.
+
+This supports idempotency.
+
+Keep it minimal.
+
+---
+
+# SECURE DIGITAL DELIVERY
+
+Paid ZIP files must NOT live under:
+
+`public/`
+
+Do not create:
+
+`/public/downloads/product.zip`
+
+Do not expose a permanent static product URL.
+
+---
+
+# PRODUCT FILE STORAGE
+
+Create a clean storage abstraction.
+
+Preferred production approach:
+
+private object storage or equivalent server-only asset storage.
+
+Examples may include:
+
+* private Vercel-compatible object storage;
+* S3-compatible/R2 storage;
+* another existing private storage mechanism already used by the project.
+
+Do not introduce a complex new infrastructure stack if the project already has a suitable storage provider.
+
+The interface should conceptually support:
+
+```ts
+getSecureProductFile(productId)
+```
+
+and return/stream the product only after entitlement validation.
+
+---
+
+# DOWNLOAD TOKENS
+
+After confirmed payment:
+
+generate a cryptographically signed download entitlement.
+
+Token should bind at least:
+
+* order ID
+* product ID
+* customer/purchase identity reference
+* expiry
+
+Do not include secrets.
+
+Do not treat base64 as security.
+
+Use HMAC or another secure signing mechanism.
+
+Environment:
+
+`DOWNLOAD_TOKEN_SECRET`
+
+must be server-only.
+
+---
+
+# DOWNLOAD ROUTE
+
+Example:
+
+`GET /api/digital-products/download/[token]`
+
+Flow:
+
+1. verify token signature;
+2. verify expiration;
+3. retrieve order;
+4. verify order is PAID;
+5. verify product matches entitlement;
+6. optionally enforce reasonable download policy;
+7. increment download count;
+8. stream or redirect to a short-lived private-object URL.
+
+Set sensible headers:
+
+* Content-Type
+* Content-Disposition
+* Cache-Control
+
+Do not expose internal storage URLs permanently.
+
+---
+
+# DOWNLOAD EXPERIENCE
+
+Success page:
+
+> Payment successful.
+
+> Web Project Pricing OS is yours.
+
+Show:
+
+* product name
+* order reference
+* customer email
+* Download button
+
+Also say:
+
+> A copy of the download link has been sent to your email.
+
+Only say this if email delivery was actually attempted/succeeded according to your implementation.
+
+If email fails:
+
+the page download must still work.
+
+Do not punish the buyer because Resend is temporarily unavailable.
+
+---
+
+# TRANSACTIONAL EMAIL
+
+Reuse the existing Resend infrastructure and visual conventions where sensible.
+
+Create a digital-product purchase email.
+
+Subject direction:
+
+`Your Web Project Pricing OS download`
+
+Contents:
+
+* thank you;
+* product name;
+* amount/currency;
+* order reference;
+* secure download button;
+* what to open first;
+* support email;
+* refund policy link.
+
+Do not attach a giant ZIP to the email.
+
+Use secure download link.
+
+---
+
+# PURCHASE EMAIL SECURITY
+
+Never put:
+
+* Razorpay secret
+* webhook secret
+* internal storage path
+* database ID that grants access
+
+in the email.
+
+Download link must use the signed entitlement.
+
+---
+
+# PAYMENT FAILURE UX
+
+Handle:
+
+* user closes Razorpay;
+* payment fails;
+* verification fails;
+* payment still processing;
+* network error.
+
+Never show a blank screen.
+
+Provide:
+
+`Try payment again`
+
+and:
+
+`Contact support`
+
+when appropriate.
+
+---
+
+# SUCCESS PAGE SECURITY
+
+Route:
+
+`/digital-products/success`
+
+Must be:
+
+`noindex, nofollow`
+
+A random visitor must not get a valid download by opening this URL directly.
+
+Require valid purchase context/token.
+
+---
+
+# CHECKOUT SEO
+
+Checkout pages:
+
+`noindex, nofollow`
+
+Success pages:
+
+`noindex, nofollow`
+
+API/download routes:
+
+not included in sitemap.
+
+Do not rely on robots.txt as a security mechanism.
+
+---
+
+# DIGITAL PRODUCT POLICY PAGES
+
+Razorpay currently expects merchants to provide appropriate policy/contact information.
+
+Audit existing:
+
+* `/terms`
+* `/privacy`
+* `/contact`
+
+Reuse them if they already accurately cover digital-product commerce.
+
+Do not duplicate legal pages unnecessarily.
+
+Add missing store-specific pages.
+
+---
+
+# DIGITAL DELIVERY / SHIPPING POLICY
+
+Create:
+
+`/digital-products/delivery-policy`
+
+Page title should make the relationship clear:
+
+`Digital Delivery / Shipping Policy`
+
+Explain accurately:
+
+* these are digital products;
+* no physical goods are shipped;
+* delivery occurs electronically after successful payment verification;
+* expected delivery mechanism;
+* what buyer should do if access fails;
+* support contact.
+
+Do not make unsupported legal promises.
+
+---
+
+# REFUND / CANCELLATION POLICY
+
+Create:
+
+`/digital-products/refund-policy`
+
+Do not invent a generous guarantee that the owner has never approved.
+
+First inspect any existing refund language.
+
+If there is no approved policy:
+
+implement the page structure and add a clearly identified launch-blocking owner-review item.
+
+Do not deploy a made-up refund promise merely to fill the page.
+
+The final launch checklist must explicitly state:
+
+`Refund policy approved by owner: YES / NO`
+
+Production go-live requires YES.
+
+---
+
+# TERMS
+
+Audit existing `/terms`.
+
+Add digital-product-specific provisions only where necessary.
+
+Potential areas:
+
+* license
+* purchase
+* download access
+* prohibited redistribution
+* pricing
+* refunds
+* third-party payment processing
+
+Do not present generated copy as legal advice.
+
+Mark legal copy for owner review before live launch.
+
+---
+
+# PRIVACY
+
+Audit `/privacy`.
+
+Ensure digital-product flow accurately describes:
+
+* buyer name/email collection;
+* payment processing through Razorpay;
+* transactional email through Resend;
+* order records;
+* analytics if implemented.
+
+The website should NOT claim that it stores card details.
+
+It should not.
+
+Payment card data should remain with Razorpay's payment interface.
+
+---
+
+# CONTACT
+
+Existing `/contact` may satisfy contact requirements.
+
+Store pages should link to the same real support email.
+
+Do not create a fake support department.
+
+---
+
+# STORE-SPECIFIC FOOTER
+
+Inside `/digital-products` pages, create a compact commerce-specific link group.
+
+Possible links:
+
+* Products
+* Bundles
+* Delivery Policy
+* Refund Policy
+* Terms
+* Privacy
+* Contact
+* Portfolio
+
+Do not alter the normal global footer architecture in ways visible across the rest of the site.
+
+---
+
+# SEO STRATEGY
+
+SEO should be implemented properly from day one.
+
+The store is NOT visible in the main navigation, but active product pages SHOULD be indexable.
+
+---
+
+# CANONICAL DOMAIN CHECK
+
+The repository config currently references:
+
+`https://dev-aditya.com`
+
+while public browsing may involve:
+
+`https://www.dev-aditya.com`
+
+Before writing final canonical URLs:
+
+test both origins.
+
+Use:
+
+```bash
+curl -I https://dev-aditya.com
+curl -I https://www.dev-aditya.com
+```
+
+Determine which one is the canonical production origin.
+
+There should be one canonical host.
+
+The other should permanently redirect.
+
+Do not allow both to be independently indexable.
+
+Update central site configuration only if necessary and without breaking production.
+
+---
+
+# PER-PAGE METADATA
+
+Use Next.js Metadata API.
+
+Store page:
+
+Title direction:
+
+`Digital Products for Web Designers & Agencies | Aditya`
+
+Description direction:
+
+> Pricing systems, agency operations tools and website templates for web designers, developers and small studios.
+
+Web Project Pricing OS:
+
+Title direction:
+
+`Web Project Pricing OS — Website Pricing Calculator for Agencies`
+
+Description direction:
+
+> Scope website projects, estimate workload, calculate margins, model scope creep and build more defensible client quotes.
+
+Write unique metadata for every ACTIVE product.
+
+No keyword stuffing.
+
+---
+
+# CANONICALS
+
+Every indexable page should have a route-specific canonical.
+
+Do not inherit the homepage canonical accidentally.
+
+For example:
+
+`/digital-products`
+
+canonical:
+
+`https://CANONICAL_DOMAIN/digital-products`
+
+Product canonical:
+
+`https://CANONICAL_DOMAIN/digital-products/web-project-pricing-os`
+
+Checkout canonical does not matter because checkout should be noindex.
+
+---
+
+# OPEN GRAPH
+
+Create polished Open Graph assets.
+
+Use the existing brand system.
+
+Recommended:
+
+Store OG:
+
+1200 × 630
+
+Content:
+
+`Aditya / Digital Products`
+
+`Tools + templates for people who build websites for clients.`
+
+Use:
+
+* paper background
+* black border
+* coral highlight
+* small blue/yellow utility cards
+* monogram
+* strong Onest-like hierarchy
+
+Do not create a generic gradient OG card.
+
+---
+
+# PRODUCT OG IMAGES
+
+Generate product-specific OG images.
+
+For Web Project Pricing OS:
+
+Headline:
+
+`Stop guessing what to charge for websites.`
+
+Secondary:
+
+`Web Project Pricing OS`
+
+Price can be included only if it is sourced directly from the active product config.
+
+If price changes, metadata/OG must not silently show stale price.
+
+---
+
+# TWITTER / SOCIAL PREVIEW
+
+Provide corresponding Twitter summary-large-image metadata.
+
+Keep titles concise enough for WhatsApp, LinkedIn, Slack, X, Discord previews.
+
+---
+
+# STRUCTURED DATA
+
+For the store page:
+
+consider:
+
+* CollectionPage
+* ItemList
+* BreadcrumbList
+
+For individual products:
+
+use accurate Product structured data.
+
+Potential fields:
+
+* name
+* description
+* image
+* brand
+* category
+* offers
+* price
+* priceCurrency
+* availability
+* url
+
+The structured-data price MUST match actual checkout price.
+
+Do not create:
+
+* fake AggregateRating;
+* fake Review;
+* fake customer count;
+* fake stock availability.
+
+For bundles:
+
+Product schema is acceptable if accurate.
+
+---
+
+# BREADCRUMBS
+
+Product page visual breadcrumb:
+
+`Digital Products / Agency Tools / Web Project Pricing OS`
+
+Structured breadcrumb should match.
+
+Keep it visually subtle.
+
+---
+
+# SITEMAP
+
+Audit existing `src/app/sitemap.ts`.
+
+Extend it.
+
+Include:
+
+* `/digital-products`
+* every ACTIVE indexable product
+* any valuable active bundle page
+
+Do NOT include:
+
+* checkout
+* success
+* API
+* download
+* thin unavailable product pages
+* internal admin/order routes
+
+Use correct canonical host.
+
+---
+
+# ROBOTS
+
+Audit existing robots implementation.
+
+Do not accidentally block `/digital-products`.
+
+Allow catalog/product crawling.
+
+Checkout/success should be noindex via metadata.
+
+You may additionally disallow sensitive utility routes in robots, but remember robots is not access control.
+
+---
+
+# GOOGLE INDEXING READINESS
+
+After implementation provide manual final steps for the owner:
+
+1. deploy production;
+2. verify canonical domain;
+3. open `/sitemap.xml`;
+4. open `/robots.txt`;
+5. inspect source metadata;
+6. add/verify site in Google Search Console if not already present;
+7. submit sitemap;
+8. request indexing for:
+
+   * `/digital-products`
+   * active product pages;
+9. inspect URL canonical;
+10. verify noindex checkout/success pages.
+
+Do not claim pages are indexed simply because a sitemap exists.
+
+---
+
+# PRODUCT KEYWORD STRATEGY
+
+Use natural buyer language.
+
+For Web Project Pricing OS, relevant concepts include:
+
+* web design pricing calculator
+* website project pricing
+* agency pricing spreadsheet
+* web agency profitability
+* website quote calculator
+* project scope calculator
+* web design project estimate
+* scope creep calculator
+
+Use terms naturally in:
+
+* title
+* H1/H2
+* description
+* FAQ
+* copy
+
+Do not spam exact-match keywords.
+
+---
+
+# STORE INFORMATION ARCHITECTURE FOR SEO
+
+Store should have enough real content to explain:
+
+* agency pricing tools
+* client delivery tools
+* website QA tools
+* agency operations systems
+* website templates
+
+But do not create dozens of thin category routes on day one.
+
+Start with one strong store page and strong product pages.
+
+---
+
+# PRODUCT SCREENSHOTS AND ASSETS
+
+Prefer:
+
+1. supplied real product assets;
+2. screenshots generated from actual workbook/template;
+3. native diagrams based on actual product logic.
+
+Never use:
+
+* unrelated stock dashboards;
+* fake Excel screenshots;
+* random marketplace thumbnails;
+* screenshots stolen from competitors.
+
+Create an asset structure such as:
+
+```text
+public/
+    digital-products/
+        web-project-pricing-os/
+            hero.webp
+            scope-builder.webp
+            price-engine.webp
+            scope-creep.webp
+            dashboard.webp
+
+        agency-starter/
+            ...
+
+        og/
+            ...
+```
+
+Use WebP/AVIF where appropriate.
+
+Use Next/Image.
+
+Provide meaningful alt text.
+
+---
+
+# IMAGE PERFORMANCE
+
+Do not ship enormous 4K screenshots.
+
+Optimise:
+
+* width
+* compression
+* lazy loading
+* priority only for actual LCP image
+* responsive sizes
+
+Avoid layout shifts.
+
+---
+
+# INTERACTIONS
+
+Use Framer Motion only where it improves comprehension.
+
+Good examples:
+
+* section reveal;
+* card hover;
+* paper-stack shift;
+* product-preview transition;
+* FAQ accordion;
+* small scope-creep number animation.
+
+Do NOT animate every object continuously.
+
+Honour:
+
+`prefers-reduced-motion`
+
+Use existing reduced-motion conventions.
+
+---
+
+# MOBILE UX
+
+Treat mobile as a primary sales surface.
+
+Test at least around:
+
+* 320px
+* 375px
+* 390px
+* 430px
+
+Check:
+
+* headline wrapping
+* product pricing
+* CTA width
+* cards
+* comparison
+* screenshots
+* checkout form
+* Razorpay button
+* sticky purchase bar
+* policy links
+
+No horizontal scrolling.
+
+---
+
+# STICKY MOBILE BUY BAR
+
+On ACTIVE product pages, consider a compact bottom bar after the hero is passed:
+
+Product:
+
+`Web Project Pricing OS`
+
+Price:
+
+`$29`
+
+CTA:
+
+`Buy`
+
+Do not cover important content.
+
+Respect safe-area insets.
+
+Do not display on checkout/success.
+
+---
+
+# ACCESSIBILITY
+
+Maintain at least the quality level of the existing site.
+
+Requirements:
+
+* correct semantic headings;
+* one clear H1;
+* keyboard navigation;
+* focus-visible states;
+* labelled form inputs;
+* accessible error messages;
+* adequate contrast;
+* reduced motion;
+* alt text;
+* correct button/link semantics;
+* no click-only divs;
+* no colour-only status communication.
+
+Razorpay modal accessibility is owned partly by Razorpay, but the surrounding checkout UI must be accessible.
+
+---
+
+# PERFORMANCE
+
+Do not let the store degrade the portfolio.
+
+Important:
+
+* keep most pages server rendered;
+* isolate checkout into client components only where needed;
+* lazy-load Razorpay script on checkout, not across the entire portfolio;
+* do not ship Razorpay JS on normal portfolio routes;
+* avoid huge client bundles;
+* avoid unnecessary global state;
+* avoid global ecommerce libraries;
+* optimise media.
+
+The homepage and case-study routes should not pay the JS cost of the store.
+
+---
+
+# RAZORPAY SCRIPT
+
+Only load Checkout script on checkout route or when purchase intent occurs.
+
+Do not put Razorpay script in root layout.
+
+---
+
+# STORE STATE
+
+Do not add Redux or another global state library.
+
+This store does not need it.
+
+Use:
+
+* server components;
+* URL params;
+* local React state;
+* API calls.
+
+Keep architecture simple.
+
+---
+
+# CHECKOUT SESSION RESILIENCE
+
+The customer should be able to:
+
+* return from payment flow;
+* retry failed payment;
+* reload processing page safely;
+* avoid duplicate fulfilment.
+
+Use the durable order record as the source of truth.
+
+---
+
+# IDEMPOTENCY
+
+This is non-negotiable.
+
+A user double-clicking Buy must not accidentally create uncontrolled duplicate fulfilments.
+
+Webhook retries must not create duplicate fulfilments.
+
+Download route must not create a new order.
+
+Store unique:
+
+* Razorpay order IDs;
+* payment IDs;
+* webhook event IDs where possible.
+
+---
+
+# EMAIL / PAYMENT PII
+
+Do not log:
+
+* complete webhook payload unnecessarily;
+* customer email in public logs;
+* secrets;
+* card/payment sensitive data.
+
+Use safe operational logging.
+
+---
+
+# ENVIRONMENT VARIABLES
+
+Update `.env.example`.
+
+Expected variables may include:
+
+```text
+# Existing site
+NEXT_PUBLIC_SITE_URL=
+
+# Resend
+RESEND_API_KEY=
+CONTACT_FROM_EMAIL=
+CONTACT_TO_EMAIL=
+
+# Digital products
+DIGITAL_PRODUCTS_FROM_EMAIL=
+DIGITAL_PRODUCTS_SUPPORT_EMAIL=
+
+# Razorpay
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
+
+# Store
+STORE_CURRENCY=
+DOWNLOAD_TOKEN_SECRET=
+
+# Database
+DATABASE_URL=
+
+# Private product storage
+PRODUCT_STORAGE_PROVIDER=
+PRODUCT_STORAGE_BUCKET=
+PRODUCT_STORAGE_ENDPOINT=
+PRODUCT_STORAGE_ACCESS_KEY_ID=
+PRODUCT_STORAGE_SECRET_ACCESS_KEY=
+```
+
+Only include storage variables relevant to the chosen implementation.
+
+Do not create ten unused env variables.
+
+Clearly distinguish:
+
+PUBLIC
+
+versus
+
+SERVER SECRET.
+
+Never prefix secrets with:
+
+`NEXT_PUBLIC_`
+
+---
+
+# EXISTING RAZORPAY PAYMENT LINK
+
+There may already be a functional Razorpay payment link.
+
+If provided:
+
+support it as an OPTIONAL temporary fallback.
+
+Preferred architecture remains Standard Checkout with Orders API and verified fulfilment.
+
+If only the hosted Payment Link is currently usable:
+
+do not pretend automated secure fulfilment is working unless you have actually integrated and verified its webhook/order mapping.
+
+The fallback can be:
+
+`Continue to Razorpay`
+
+But secure automated downloads should only activate once purchase verification is trustworthy.
+
+---
+
+# PRODUCT AVAILABILITY SAFETY
+
+A product must NOT become buyable merely because it exists in public config.
+
+Require:
+
+* status active;
+* valid price;
+* valid storage key/file mapping;
+* checkout enabled.
+
+If any are missing:
+
+server must reject order creation.
+
+---
+
+# 404 / UNKNOWN PRODUCT
+
+Unknown slug:
+
+return proper Next.js `notFound()`.
+
+Do not show generic empty state.
+
+---
+
+# ANALYTICS
+
+First inspect what analytics already exist.
+
+If analytics already exist:
+
+add ecommerce events without exposing PII.
+
+Useful events:
+
+* digital_products_view
+* product_view
+* checkout_start
+* payment_open
+* purchase_success
+* download_start
+
+Never send:
+
+* buyer name
+* buyer email
+* Razorpay payment ID
+
+to analytics unnecessarily.
+
+If no analytics exist:
+
+do not install a giant analytics platform merely for this feature unless justified.
+
+At minimum architect events cleanly so analytics can be added later.
+
+---
+
+# CONVERSION UX
+
+Do not over-design the page.
+
+The user should understand:
+
+WHAT IS IT?
+
+WHO IS IT FOR?
+
+WHAT DOES IT DO?
+
+WHAT DO I GET?
+
+HOW MUCH?
+
+HOW DO I BUY?
+
+within the first portion of the product page.
+
+---
+
+# NO FAKE SOCIAL PROOF
+
+Do not add:
+
+* fake testimonials
+* fake review stars
+* fake customer names
+* fake agencies
+* fake download numbers
+* fake "X people are viewing"
+* fake "popular"
+* fake revenue claims
+
+Until real data exists, use product proof instead.
+
+---
+
+# TRUST SIGNALS
+
+Use real signals:
+
+* built by Aditya;
+* link back to portfolio;
+* real product screenshots;
+* clear version;
+* clear package contents;
+* secure Razorpay payment;
+* transparent policies;
+* real contact email;
+* no subscription;
+* defined license;
+* real domain.
+
+---
+
+# REFUND TRUST COPY
+
+Do not use manipulative copy.
+
+Do not say:
+
+`Risk free`
+
+unless the actual policy warrants it.
+
+Link the real refund policy close to checkout.
+
+---
+
+# PURCHASE CTA HIERARCHY
+
+Primary colour:
+
+Coral.
+
+Use coral for purchase intent.
+
+Blue/yellow can support diagrams/highlights.
+
+Do not make every card coral.
+
+The existing palette is controlled.
+
+Preserve that restraint.
+
+---
+
+# STORE SUBNAVIGATION
+
+Do not add store to global primary nav.
+
+Inside the digital-products route, however, a small contextual subnav is allowed.
+
+Example:
+
+`Agency Tools`
+
+`Bundles`
+
+`Templates`
+
+It should sit inside store content, not the global header.
+
+---
+
+# CHECKOUT DISTRACTIONS
+
+Checkout should have fewer secondary links than product pages.
+
+Do not add cross-sell carousels above payment.
+
+Order completion first.
+
+Cross-sell can happen after successful purchase or later via email.
+
+---
+
+# POST-PURCHASE
+
+Success page may include a subtle next step:
+
+`Start with 01_START_HERE.pdf`
+
+Do not immediately bombard the buyer with five upsells.
+
+A small:
+
+`Explore the Agency Starter Bundle`
+
+can appear below fulfilment later, but download access must remain dominant.
+
+---
+
+# DESIGN DETAILS
+
+Use the site's existing:
+
+* `Container`
+* `Button`
+* `Card`
+* `Section`
+* `SectionLabel`
+* `Reveal`
+* `Highlight`
+* `Monogram`
+
+where appropriate.
+
+Do not duplicate primitives unnecessarily.
+
+Create store-specific primitives only when needed, for example:
+
+```text
+components/digital-products/
+    product-card.tsx
+    price-block.tsx
+    product-preview.tsx
+    product-hero.tsx
+    bundle-card.tsx
+    store-subnav.tsx
+    purchase-button.tsx
+    checkout-form.tsx
+    order-summary.tsx
+    product-jsonld.tsx
+```
+
+Keep the component architecture understandable.
+
+---
+
+# COPY STYLE
+
+Match the existing site.
+
+Characteristics:
+
+* simple English
+* direct
+* specific
+* commercially aware
+* no exaggerated adjectives
+* no fake urgency
+* no AI jargon
+* no vague "unlock your potential" copy
+
+Prefer:
+
+> See what extra revisions do to the project margin.
+
+Not:
+
+> Supercharge your agency profitability.
+
+Prefer:
+
+> Scope, price and protect the margin on website projects.
+
+Not:
+
+> The ultimate all-in-one agency growth operating system.
+
+---
+
+# SEO COPY MUST STILL SOUND HUMAN
+
+Do not create paragraphs solely to repeat keywords.
+
+SEO should emerge from precise product explanation.
+
+---
+
+# PRODUCT LICENSE DISPLAY
+
+Each product page should summarise license accurately.
+
+For operating tools:
+
+* internal business use;
+* modify for own business;
+* use outputs with own clients;
+* no redistribution;
+* no resale of source files.
+
+For templates:
+
+support the exact license created with the product.
+
+Do not assume multi-client usage if the template license says one client.
+
+---
+
+# INDEXING OF COMING SOON PRODUCTS
+
+If a product page has little content and cannot be purchased:
+
+`noindex`
+
+When activated:
+
+switch to:
+
+`index, follow`
+
+and add to sitemap.
+
+This prevents thin future placeholder pages from being indexed.
+
+---
+
+# SEO QA
+
+After local implementation inspect rendered HTML.
+
+Verify:
+
+* one H1;
+* title;
+* description;
+* canonical;
+* robots;
+* OG tags;
+* Twitter tags;
+* JSON-LD;
+* internal links;
+* status code;
+* sitemap inclusion;
+* noindex on checkout/success.
+
+Use actual browser devtools or page source.
+
+---
+
+# RAZORPAY WEBSITE REVIEW QA
+
+Before production launch ensure the site has accessible pages/links for:
+
+* Terms and Conditions
+* Privacy Policy
+* Shipping / Digital Delivery Policy
+* Contact
+* Cancellation / Refund Policy
+* product pricing/details
+
+Do not hide these only behind JavaScript.
+
+---
+
+# RAZORPAY TEST MODE QA
+
+Before live keys:
+
+Use Test Mode.
+
+Test:
+
+1. normal successful payment;
+2. failed payment;
+3. user closes checkout;
+4. duplicate click;
+5. callback tampering;
+6. invalid signature;
+7. wrong order ID;
+8. webhook duplicate;
+9. page close after payment;
+10. captured payment fulfilment;
+11. invalid download token;
+12. expired download token;
+13. refunded order download behaviour.
+
+Do not skip security failure scenarios.
+
+---
+
+# WEBHOOK QA
+
+Use Razorpay's current webhook test mechanism.
+
+Verify:
+
+* correct raw-body signature validation;
+* invalid signature returns failure;
+* valid webhook returns 200 rapidly;
+* duplicate event is safe;
+* correct payment updates exactly one order;
+* no duplicate emails;
+* no duplicate entitlement.
+
+---
+
+# EMAIL QA
+
+Test:
+
+* valid email
+* invalid email
+* Resend unavailable
+* duplicate webhook
+* order already fulfilled
+
+Purchase should not disappear because email provider fails.
+
+---
+
+# STORAGE QA
+
+Verify:
+
+* direct public URL does not exist;
+* unpaid visitor cannot retrieve product;
+* random token fails;
+* modified token fails;
+* expired token fails;
+* paid valid token succeeds.
+
+---
+
+# SECURITY HEADERS
+
+Audit existing `next.config.ts`.
+
+Do not blindly add a CSP that breaks Razorpay, images, fonts or existing routes.
+
+If adding/updating Content Security Policy:
+
+use the current official Razorpay domains required by Checkout.
+
+Test it thoroughly.
+
+Do not solve Razorpay compatibility by setting:
+
+`script-src *`
+
+or another dangerously broad policy.
+
+---
+
+# ERROR HANDLING
+
+Create polished error states.
+
+Examples:
+
+### Product unavailable
+
+> This product isn't available for checkout yet.
+
+### Payment processing
+
+> Your payment was received and is still being confirmed.
+
+### Verification problem
+
+> We couldn't verify the payment automatically. Your payment reference has been recorded. Contact support if this does not resolve.
+
+### Download expired
+
+> This download link has expired. Enter the purchase email to request a new link.
+
+Only implement resend/recovery functionality if it is securely supported.
+
+---
+
+# DO NOT LEAK PAYMENT DETAILS
+
+Public order reference can be an internal safe order ID.
+
+Do not display secrets.
+
+Do not expose raw database IDs if avoidable.
+
+---
+
+# DATABASE MIGRATION
+
+If adding a database:
+
+create:
+
+* schema;
+* migration;
+* README/setup instructions.
+
+Do not silently modify production database without understanding existing data.
+
+If no DB exists in this project:
+
+create a clean isolated digital-products schema.
+
+---
+
+# DOCUMENTATION
+
+Update README with a section:
+
+# Digital Products Store
+
+Document:
+
+* routes
+* product config
+* status activation
+* pricing config
+* Razorpay setup
+* webhook URL
+* Resend setup
+* database
+* storage
+* download entitlement
+* policy pages
+* test mode
+* live mode
+* SEO/indexing
+* manual go-live checklist
+
+Do not overwrite useful existing README documentation.
+
+---
+
+# RAZORPAY DASHBOARD MANUAL STEPS
+
+At the end, report exactly what the owner must configure manually.
+
+Expected examples:
+
+1. add/verify `dev-aditya.com` in Razorpay;
+2. confirm website review/policies;
+3. generate Test keys;
+4. configure Test webhook;
+5. run payment tests;
+6. enable payment capture strategy;
+7. generate Live keys;
+8. configure Live webhook;
+9. configure webhook secret;
+10. verify active payment methods;
+11. if needed, request international payments.
+
+Do not claim you completed Razorpay Dashboard actions unless you actually did.
+
+---
+
+# INTERNATIONAL PAYMENT CHECK
+
+If the store targets international agencies:
+
+verify whether Razorpay international payments are actually enabled.
+
+Do not assume.
+
+If not enabled:
+
+report this clearly as a launch limitation.
+
+The site must not promise foreign-card support until the account supports it.
+
+---
+
+# GOOGLE SEARCH MANUAL STEPS
+
+At the end, report:
+
+* canonical origin;
+* sitemap URL;
+* robots URL;
+* store URL;
+* active product URLs;
+* Search Console submission steps.
+
+Do not claim indexing happened instantly.
+
+---
+
+# NORMAL PORTFOLIO REGRESSION TEST
+
+This is mandatory.
+
+After implementing the store, revisit:
+
+* `/`
+* `/work`
+* at least two case studies
+* `/about`
+* `/contact`
+* `/terms`
+* `/privacy`
+
+Check:
+
+* visual identity unchanged;
+* global navigation unchanged;
+* no "Digital Products" link appeared unexpectedly;
+* contact form still works;
+* no JavaScript errors;
+* no layout shifts caused by store code;
+* no Razorpay script loaded;
+* no ecommerce JS bundle loaded unnecessarily.
+
+The digital-products work must not degrade the main portfolio.
+
+---
+
+# STORE RESPONSIVE QA
+
+Test:
+
+### Store homepage
+
+Desktop:
+1440px
+
+Laptop:
+1280px
+
+Tablet:
+768px
+
+Mobile:
+430px
+
+Mobile:
+390px
+
+Mobile:
+375px
+
+Mobile:
+320px
+
+### Product page
+
+same sizes.
+
+### Checkout
+
+same sizes.
+
+### Success
+
+same sizes.
+
+Fix every overflow and wrapping issue.
+
+---
+
+# BROWSER QA
+
+At minimum:
+
+* Chromium/Chrome
+* Safari-compatible checks if available
+* Firefox if available
+
+Do not claim Safari testing if you did not actually run Safari/WebKit.
+
+---
+
+# BUILD VALIDATION
+
+Run the repository's actual checks.
+
+At minimum:
+
+```bash
+npm install
+npm run typecheck
+npm run build
+```
+
+Run lint using the repository's valid lint setup.
+
+If the existing `npm run lint` script is incompatible with the installed Next.js version:
+
+do not hide the problem.
+
+Fix the script/config if appropriate or run ESLint directly and document it.
+
+Do not declare success while type errors remain.
+
+---
+
+# CONSOLE QA
+
+Use browser tooling.
+
+Check store/product/checkout pages for:
+
+* runtime errors;
+* hydration errors;
+* React warnings;
+* failed requests;
+* image errors;
+* 404 assets;
+* metadata failures.
+
+Fix them.
+
+---
+
+# PAYMENT SECURITY REVIEW
+
+Before finalizing inspect specifically for:
+
+* client-controlled price;
+* exposed secret;
+* insecure download path;
+* fulfilment before verification;
+* fulfilment before capture;
+* unsigned webhook;
+* parsed-body webhook HMAC;
+* duplicate fulfilment;
+* public ZIP;
+* open redirect;
+* user-controlled file path;
+* PII logging.
+
+Do not ship if any exist.
+
+---
+
+# PERFORMANCE REVIEW
+
+Confirm:
+
+* Razorpay script absent from normal routes;
+* images optimised;
+* large demo screenshots lazy loaded;
+* no huge client component wrapping whole store;
+* no unnecessary animation on mobile;
+* no global store JS.
+
+---
+
+# STORE ACCESSIBILITY REVIEW
+
+Keyboard through:
+
+* store subnav;
+* product cards;
+* FAQ;
+* calculator;
+* purchase CTA;
+* checkout form;
+* retry/error states.
+
+Verify focus is visible.
+
+---
+
+# REAL PRODUCT ASSET RULE
+
+When the actual bundles arrive:
+
+inspect their exact filenames and package contents.
+
+Do not guess.
+
+Do not publish:
+
+"includes 5 workbooks"
+
+if it includes 4.
+
+Do not publish:
+
+"Google Sheets"
+
+if only Excel was validated.
+
+Product listing must match actual customer package.
+
+---
+
+# PRODUCT ARTIFACT ACTIVATION WORKFLOW
+
+Create a simple activation checklist in code/docs:
+
+1. place/upload final product artifact;
+2. configure storage key;
+3. verify ZIP integrity;
+4. update actual package contents;
+5. set price;
+6. set status active;
+7. verify checkout;
+8. verify download;
+9. verify email;
+10. enable index;
+11. add to sitemap.
+
+This lets new bundles be activated without redesigning the store.
+
+---
+
+# FUTURE PRODUCT SCALABILITY
+
+The system should support adding a product by editing config rather than writing a new store manually.
+
+But do not build a CMS/admin dashboard now.
+
+A typed config is enough for V1.
+
+---
+
+# DO NOT OVERENGINEER
+
+Do NOT build:
+
+* customer accounts;
+* wishlists;
+* carts for twenty products;
+* coupon engine;
+* affiliate system;
+* inventory management;
+* subscriptions;
+* product reviews;
+* admin CMS;
+* recommendation AI.
+
+Not required for this launch.
+
+V1 is direct product purchase.
+
+---
+
+# CART STRATEGY
+
+No multi-item cart is necessary initially.
+
+One product/bundle per checkout is sufficient.
+
+This simplifies:
+
+* pricing;
+* fulfilment;
+* security;
+* refunds;
+* downloads.
+
+Build the architecture so a cart could exist later, but do not implement one now.
+
+---
+
+# FINAL FILE STRUCTURE TARGET
+
+A reasonable result may look similar to:
+
+```text
+src/
+  app/
+    digital-products/
+      layout.tsx
+      page.tsx
+
+      [slug]/
+        page.tsx
+        checkout/
+          page.tsx
+
+      success/
+        page.tsx
+
+      delivery-policy/
+        page.tsx
+
+      refund-policy/
+        page.tsx
+
+    api/
+      digital-products/
+        orders/
+          route.ts
+
+        verify/
+          route.ts
+
+        order-status/
+          route.ts
+
+        webhook/
+          razorpay/
+            route.ts
+
+        download/
+          [token]/
+            route.ts
+
+    sitemap.ts
+    robots.ts
+
+  components/
+    digital-products/
+      product-card.tsx
+      product-hero.tsx
+      product-preview.tsx
+      bundle-card.tsx
+      price-block.tsx
+      checkout-form.tsx
+      order-summary.tsx
+      purchase-button.tsx
+      scope-creep-demo.tsx
+      store-subnav.tsx
+      product-jsonld.tsx
+
+  config/
+    digital-products.ts
+
+  lib/
+    digital-products/
+      pricing.ts
+      products.ts
+      validation.ts
+
+  server/
+    digital-products/
+      razorpay.ts
+      orders.ts
+      downloads.ts
+      email.ts
+      storage.ts
+      tokens.ts
+      database.ts
+```
+
+Use the actual project conventions rather than blindly matching this tree.
+
+---
+
+# IMPLEMENTATION ORDER
+
+Follow this sequence.
+
+## Phase 1
+
+Inspect repository.
+
+## Phase 2
+
+Run current site.
+
+## Phase 3
+
+Capture existing portfolio visual system and boundaries.
+
+## Phase 4
+
+Audit metadata/sitemap/robots/legal pages.
+
+## Phase 5
+
+Design typed product catalog.
+
+## Phase 6
+
+Build `/digital-products`.
+
+## Phase 7
+
+Build reusable product page system.
+
+## Phase 8
+
+Build Web Project Pricing OS page completely.
+
+## Phase 9
+
+Build bundle/catalog states.
+
+## Phase 10
+
+Build checkout UI.
+
+## Phase 11
+
+Implement Razorpay Test Mode integration.
+
+## Phase 12
+
+Implement durable order storage.
+
+## Phase 13
+
+Implement payment verification.
+
+## Phase 14
+
+Implement webhook processing.
+
+## Phase 15
+
+Implement secure downloads.
+
+## Phase 16
+
+Implement Resend purchase email.
+
+## Phase 17
+
+Implement success/payment states.
+
+## Phase 18
+
+Implement policy pages/links.
+
+## Phase 19
+
+Implement metadata/OG/JSON-LD.
+
+## Phase 20
+
+Extend sitemap/robots.
+
+## Phase 21
+
+Responsive/accessibility QA.
+
+## Phase 22
+
+Payment/security QA.
+
+## Phase 23
+
+Portfolio regression QA.
+
+## Phase 24
+
+Typecheck/lint/build.
+
+## Phase 25
+
+Produce final report and manual configuration checklist.
+
+---
+
+# FINAL VALIDATION MATRIX
+
+Do not call the work complete until all applicable items pass.
+
+## PORTFOLIO
+
+* existing homepage works
+* existing navigation unchanged
+* existing footer preserved
+* work routes work
+* contact works
+* portfolio has no store promotion
+* no Razorpay script on portfolio
+
+## STORE
+
+* `/digital-products` works
+* active product pages work
+* coming-soon state works
+* mobile works
+* real screenshots/assets work
+
+## CHECKOUT
+
+* server-owned price
+* Test Mode checkout works
+* invalid product rejected
+* invalid email rejected
+* unavailable product rejected
+* payment failure handled
+
+## PAYMENT
+
+* signature verified
+* captured state confirmed
+* webhook signed
+* duplicate webhook safe
+* duplicate fulfilment prevented
+
+## DELIVERY
+
+* no public ZIP
+* valid token works
+* invalid token fails
+* expired token fails
+* unpaid token cannot exist
+* email includes secure link
+
+## SEO
+
+* unique titles
+* descriptions
+* canonicals
+* OG
+* Twitter
+* Product JSON-LD
+* breadcrumb schema
+* sitemap
+* robots
+* active products index
+* checkout noindex
+* success noindex
+
+## LEGAL / TRUST
+
+* pricing visible
+* Terms linked
+* Privacy linked
+* Delivery/Shipping linked
+* Refund/Cancellation linked
+* Contact linked
+* no fake reviews
+* no fake scarcity
+
+## CODE
+
+* typecheck passes
+* lint passes
+* production build passes
+* no console errors
+* no hydration errors
+* no broken assets
+
+---
+
+# DELIVERABLE REPORT
+
+When finished, give me:
+
+## 1. IMPLEMENTED
+
+Exact features implemented.
+
+## 2. ROUTES ADDED
+
+Every new route.
+
+## 3. FILES CHANGED
+
+Every file added/modified.
+
+## 4. PAYMENT ARCHITECTURE
+
+Explain:
+
+order
+
+→ checkout
+
+→ verification
+
+→ webhook
+
+→ fulfilment
+
+→ download.
+
+## 5. SECURITY
+
+Explain protections against:
+
+* price tampering
+* fake callback
+* public download
+* duplicate fulfilment
+* forged webhook
+
+## 6. SEO
+
+Report:
+
+* canonical
+* title
+* descriptions
+* sitemap
+* robots
+* structured data
+* OG assets
+* index/noindex decisions.
+
+## 7. QA RESULTS
+
+Give actual results for:
+
+* typecheck
+* lint
+* build
+* responsive tests
+* browser tests
+* payment tests
+* webhook tests
+* regression tests.
+
+Do not simply write:
+
+"Everything works."
+
+List what was actually tested.
+
+## 8. REQUIRED ENV VARIABLES
+
+Give complete list.
+
+## 9. MANUAL RAZORPAY STEPS
+
+Exact Dashboard actions still required.
+
+## 10. MANUAL STORAGE/DATABASE STEPS
+
+Only if applicable.
+
+## 11. MANUAL GOOGLE INDEXING STEPS
+
+Exact post-deploy indexing actions.
+
+## 12. REMAINING LIMITATIONS
+
+Be explicit.
+
+---
+
+# GIT SAFETY
+
+Work directly in the repository working tree.
+
+Before editing:
+
+check:
+
+```bash
+git status
+git branch --show-current
+git log -5 --oneline
+```
+
+Do not delete unrelated user work.
+
+Do not reset the repository.
+
+Do not overwrite unrelated files.
+
+Prefer a dedicated feature branch if the surrounding environment permits.
+
+Only commit after:
+
+* implementation complete;
+* QA passed;
+* build passed.
+
+Do not merge into production or alter DNS unless explicitly authorized by the surrounding session/user.
+
+Do not claim a push/deployment happened unless it actually happened.
+
+---
+
+# CRITICAL SUCCESS CRITERION
+
+The finished experience should make this journey feel completely natural:
+
+```text
+personalised agency email
+        ↓
+dev-aditya.com/digital-products/web-project-pricing-os
+        ↓
+clear product explanation
+        ↓
+real product proof
+        ↓
+$29 purchase
+        ↓
+Razorpay
+        ↓
+server verification
+        ↓
+secure download
+        ↓
+professional receipt email
+```
+
+At no point should the buyer feel that they have been redirected from a professional designer/developer's website into a generic marketplace.
+
+At no point should the normal portfolio visitor feel that the portfolio was converted into an ecommerce store.
+
+The two experiences must coexist cleanly.
+
+---
+
+# FINAL DESIGN TEST
+
+Ask yourself:
+
+If a web-agency founder receives this link cold:
+
+`dev-aditya.com/digital-products/web-project-pricing-os`
+
+do they immediately understand:
+
+1. who made this?
+2. what problem does it solve?
+3. what exactly do I get?
+4. why is it relevant to a web agency?
+5. how much is it?
+6. can I trust this domain?
+7. is checkout legitimate?
+8. what happens after payment?
+
+If any answer is unclear:
+
+the page is not finished.
+
+---
+
+# START NOW
+
+Do not respond with another plan.
+
+Inspect the repository and current live site.
+
+Then implement the complete digital-products system described above.
+
+Preserve the normal portfolio.
+
+Use current official Razorpay and Next.js documentation for any implementation detail that may have changed.
+
+Do not fake completion.
+
+Do not stop at visual design.
+
+The work is complete only when the storefront, checkout architecture, payment verification, secure delivery, metadata, indexing setup, policy surface, responsiveness, accessibility and production build have all been implemented and verified.

@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ── Digital Product Orders ────────────────────────────────
+model DigitalProductOrder {
+  id                  String   @id @default(cuid())
+  productId           String
+  productSlug         String
+  customerName        String
+  customerEmail       String
+  currency            String   @default("USD")
+  amount              Int      // in cents/paise (smallest unit)
+  status              String   @default("CREATED") // CREATED | PAID | FAILED | REFUNDED
+
+  razorpayOrderId     String?
+  razorpayPaymentId   String?
+  razorpaySignature   String?
+
+  createdAt           DateTime @default(now())
+  paidAt              DateTime?
+  refundedAt          DateTime?
+
+  fulfilmentSentAt    DateTime?
+
+  downloadCount       Int      @default(0)
+  lastDownloadAt      DateTime?
+
+  // Indexes for lookups
+  @@index([razorpayOrderId])
+  @@index([customerEmail])
+  @@index([productSlug])
+}
+
+// ── Payment Webhook Events (idempotency) ─────────────────
+model PaymentWebhookEvent {
+  id          String    @id @default(cuid())
+  eventId     String    @unique
+  eventType   String
+  payload     String?
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([eventId])
+}
