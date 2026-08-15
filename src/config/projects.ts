@@ -33,6 +33,22 @@ export interface ProofPoint {
 export interface CaseStudyData {
   /** Honest disclosure of project status. */
   disclosure: string;
+  /**
+   * Short customer-facing problem statement (2–4 sentences) used by the
+   * simplified case study layout. The longer `problem` field is preserved
+   * for the detailed layout but is no longer rendered by default.
+   */
+  shortProblem: string;
+  /**
+   * 3–5 short, scannable bullet points describing what was changed.
+   * Shown as the "What I changed" block on the simplified case study.
+   */
+  changes: string[];
+  /**
+   * Short customer-facing result paragraph (1 paragraph) used by the
+   * simplified case study layout.
+   */
+  shortResult: string;
   /** The real problem behind the interface. */
   problem: string;
   /** Meaningful constraints that shaped the solution. */
@@ -128,6 +144,17 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       disclosure:
         'Live production site. Built and deployed as a real business website, not a concept.',
+      shortProblem:
+        'IBS offered multiple technology services through one website, and every service demanded equal prominence — leaving serious buyers lost in a flat catalogue.',
+      changes: [
+        'Reorganised six service divisions into one clear taxonomy',
+        'Created dedicated buyer journeys for each division',
+        'Redesigned the visual system around credibility, not decoration',
+        'Developed the complete production website',
+        'Improved enquiry routing to the correct team',
+      ],
+      shortResult:
+        'A simpler corporate website where buyers can quickly understand what IBS provides and reach the relevant service — and the team can keep it current without engineering help.',
       problem:
         'The business sold six different technology disciplines through one website, and every discipline wanted equal prominence. Buyers arrived looking for one service — fire-safety, or structured cabling, or a call-centre setup — and landed in a flat catalogue where everything looked equally important, which meant nothing read as important. Enquiries were generic, routing was manual, and the homepage tried to be a brochure for everything at once.',
       constraints: [
@@ -237,6 +264,17 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       disclosure:
         'Deployed ecommerce application. Verify the current deployment before publishing the link publicly.',
+      shortProblem:
+        'Electronics buyers arrive knowing the exact model they want, but the storefront was built for browsing — not for finding, comparing and buying a specific device.',
+      changes: [
+        'Built exact-model search and dedicated product landing pages',
+        'Added side-by-side product comparison',
+        'Engineered GST-safe pricing across cart, checkout and invoices',
+        'Integrated Razorpay with webhook recovery',
+        'Generated invoices from verified payment records',
+      ],
+      shortResult:
+        'A buyer finds the exact model, compares it, pays safely and receives a correct invoice — even when the payment provider’s webhook is slow or fires twice.',
       problem:
         'Buyers in this category do not browse — they arrive knowing the exact model number they want. A conventional catalogue front page is useless to them. They need to land on the right variant, confirm it is the right one, compare it against the one they almost bought instead, check the GST-inclusive price, pay, and get an invoice they can file. Most storefronts optimise for browsing. This one had to optimise for certainty.',
       constraints: [
@@ -345,6 +383,17 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       disclosure:
         'Concept product demonstration, not a commissioned client deployment. Designed end-to-end as an operational workspace; a live interactive preview is available so the 24-route workspace can be explored hands-on.',
+      shortProblem:
+        'A call-centre workspace crams live queues, agent states, escalations and reporting into one screen, leaving operators scanning a dashboard wall instead of reading it.',
+      changes: [
+        'Mapped 24 application routes to a role-weighted priority grid',
+        'Defined a shared status language reused across every route',
+        'Separated “now” surfaces from “later” surfaces at the navigation level',
+        'Built a density-first design system',
+        'Scoped motion to signal state change, never to decorate',
+      ],
+      shortResult:
+        'A concept workspace proving dense operational software can be designed without drowning the operator — 24 routes collapse into a small number of mental models an agent can hold.',
       problem:
         'Operational software fails when it treats every screen as equally urgent. A call-centre workspace has live queues, agent states, escalations, compliance steps and reporting — all demanding attention at once. The default outcome is a dashboard wall that an operator scans instead of reads. The design problem is hierarchy: deciding what an agent, a supervisor and an admin each need to see first, and making the rest reachable without being loud.',
       constraints: [
@@ -452,6 +501,17 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       disclosure:
         'Deployed interactive brand experience. Creative direction and engineering by Aditya.',
+      shortProblem:
+        'A hospitality concept sells the feeling of being there, not a product — but a conventional menu-and-gallery website would describe the place without evoking it.',
+      changes: [
+        'Led with art direction — type, colour and pacing carry the mood before any 3D loads',
+        'Used WebGL selectively to reinforce a moment, not to decorate the page',
+        'Treated motion as pacing: slow reveals, no constant movement',
+        'Kept practical information (menu, hours, location) one tap away',
+        'Built a static poster fallback for low-power and reduced-motion devices',
+      ],
+      shortResult:
+        'Visitors land in an atmosphere, not a template — the brand reads as intentional before anyone reads a word of copy, and the practical information is still there.',
       problem:
         'A hospitality concept does not sell a product — it sells the feeling of being there. A conventional menu-and-gallery website would describe the place without evoking it. The work was to make the website itself feel like the first visit: warm, slow, considered, a little theatrical, and impossible to confuse with the ten other café sites built from the same template.',
       constraints: [
@@ -558,6 +618,17 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       disclosure:
         'Deployed professional-services website. Built under explicit marketing restrictions.',
+      shortProblem:
+        'A law firm cannot market like a SaaS company — no testimonials, no fabricated results, no stock photography — but the default legal-website template leans on exactly those tactics.',
+      changes: [
+        'Made practice-area structure the primary navigation',
+        'Built a publishing model with review states before any publish',
+        'Designed a procedural visual system without stock photography',
+        'Wrote scope-honest practice-area copy',
+        'Built an enquiry path that qualifies without pressure',
+      ],
+      shortResult:
+        'The site reads as a serious firm using structure, restraint and editorial discipline — not the marketing crutches a law firm is not allowed to use.',
       problem:
         'A law firm cannot market the way a SaaS company does. No testimonials without consent, no results claims that cannot be substantiated, no comparisons that imply superiority, no generic legal stock photography of gavels and handshakes, no false credentials. The default legal-website template fails here because it leans on exactly those tactics. The work was to build credibility without any of the crutches — using structure, restraint and editorial discipline instead.',
       constraints: [
@@ -663,6 +734,15 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       disclosure:
         'Experimental atelier. Built to learn editorial luxury presentation, not a commissioned client project.',
+      shortProblem:
+        'Luxury property online defaults to a portal aesthetic — filters, grids, price-first cards — when a discerning buyer is deciding whether a place is worth visiting.',
+      changes: [
+        'Led with editorial layout over a filter grid',
+        'Let typography carry hierarchy where portals use badges',
+        'Kept practical details reachable but never primary',
+      ],
+      shortResult:
+        'A small experiment proving luxury property can be presented editorially without losing the practical layer a real buyer still needs.',
       problem:
         'Luxury property online defaults to the portal aesthetic: filters, grids, price-first cards. A discerning buyer is not searching a portal — they are deciding whether a place is worth visiting. The experiment was to present property the way a magazine presents a subject.',
       constraints: [
@@ -730,6 +810,15 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       disclosure:
         'Experimental project. Built to learn data-heavy decision-support UX. Verify or create a stable preview before linking publicly.',
+      shortProblem:
+        'Pricing decisions often live in a spreadsheet that one person understands, with the formula doing the talking instead of the decision.',
+      changes: [
+        'Surfaced the decision and its consequences, not the formula mechanics',
+        'Let pricing scenarios live side by side instead of across tabs',
+        'Kept the spreadsheet importable so it stays the source of truth',
+      ],
+      shortResult:
+        'A useful experiment in turning spreadsheet logic into a decision interface — the kind of thinking that transfers directly to operational product work.',
       problem:
         'Pricing decisions often live in a spreadsheet that one person understands. The experiment was to take that spreadsheet’s logic — tiers, margins, scenarios — and give it an interface where the decision, not the formula, is the thing on screen.',
       constraints: [
@@ -799,6 +888,15 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       disclosure:
         'Experimental creative-coding project. Built to explore generative interaction; small by design.',
+      shortProblem:
+        'An experiment with no client and no brief — could mathematics and procedural sound become the interaction itself, rather than decoration on a conventional interface?',
+      changes: [
+        'Let the generative system be the interface',
+        'Coupled sound to signal so they share one behaviour',
+        'Kept it short by design — an experiment, not a product',
+      ],
+      shortResult:
+        'A small, honest experiment that keeps creative-coding instincts sharp — the kind of thinking that surfaces later in real brand work.',
       problem:
         'An experiment with no client and no brief — the question was whether mathematics and procedural sound could become the interaction itself, rather than decoration on top of a conventional interface.',
       constraints: [
@@ -849,6 +947,28 @@ export const FLAGSHIP_PROJECTS = PROJECTS.filter((p) => p.tier === 'flagship').s
 export const LABORATORY_PROJECTS = PROJECTS.filter((p) => p.tier === 'laboratory').sort(
   (a, b) => a.featuredRank - b.featuredRank,
 );
+
+/**
+ * The four strongest projects shown on the homepage Selected Work section.
+ *
+ * Curated by hand (not derived from featuredRank) so the homepage always
+ * shows the most commercially credible, visually strongest work — real
+ * client/business work first, strong deployed products second. Saffron &
+ * Steam remains a flagship case study on /work but is not on the homepage
+ * because its hospitality brand-experience focus is less directly relevant
+ * to prospective business-website clients than CloudSun's operational
+ * product design.
+ */
+export const HOMEPAGE_FEATURED_SLUGS = [
+  'ibs-infra',
+  'device-destination',
+  'cloudsun',
+  'aarohan-legal',
+];
+
+export const HOMEPAGE_FEATURED = HOMEPAGE_FEATURED_SLUGS.map((slug) =>
+  getProject(slug),
+).filter((p): p is Project => Boolean(p));
 
 /** Corporate + creative groups — preserved for backward compatibility. */
 export const CORPORATE_PROJECTS = PROJECTS.filter(

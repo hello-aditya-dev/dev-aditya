@@ -4,36 +4,38 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionLabel } from "@/components/ui/section-label";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ProjectFrame } from "@/components/ui/project-frame";
 import { Reveal } from "@/components/ui/reveal";
-import { PROJECTS, FLAGSHIP_PROJECTS, STATUS_LABELS, type Project } from "@/config/projects";
+import { PROJECTS, FLAGSHIP_PROJECTS, type Project } from "@/config/projects";
 import { projectAccent, ACCENT_HEX } from "@/config/project-accents";
 import { CONTACT_EMAIL_HREF } from "@/config/contact";
 
 /**
- * CaseStudyContent — full case-study layout for a single project.
+ * CaseStudyContent — short, customer-facing case study layout.
  *
- * Graphic hero with metadata rail, large project frame, narrative
- * sections, numbered decisions, proof-point grid, timeline, engineering
- * notes, and a contextual final CTA. Includes previous/next navigation
- * across flagship projects.
+ * Structure (~60–90 seconds to read):
+ *   - Back link
+ *   - Hero: name, category, outcome-oriented title, large hero visual
+ *   - THE PROBLEM (1 short paragraph)
+ *   - WHAT I CHANGED (3–5 short bullet points)
+ *   - THE RESULT (1 short paragraph)
+ *   - VIEW LIVE WEBSITE ↗
+ *   - HAVE A SIMILAR PROJECT? LET'S TALK →
+ *
+ * Removed from the previous long layout: metadata rail, disclosure box,
+ * strategic decisions grid, proof-point grid, honest moment, timeline,
+ * engineering notes, prev/next navigation, GitHub CTA.
+ *
+ * The detailed case-study content is preserved in the project data
+ * (src/config/projects.ts) but is no longer rendered to visitors.
  */
 export function CaseStudyContent({ slug }: { slug: string }) {
   const project = PROJECTS.find((p) => p.slug === slug);
   if (!project) notFound();
 
   const accent = projectAccent(project.slug);
-  const flagshipIndex = FLAGSHIP_PROJECTS.findIndex((p) => p.slug === slug);
-  const prev = flagshipIndex > 0 ? FLAGSHIP_PROJECTS[flagshipIndex - 1] : null;
-  const next =
-    flagshipIndex >= 0 && flagshipIndex < FLAGSHIP_PROJECTS.length - 1
-      ? FLAGSHIP_PROJECTS[flagshipIndex + 1]
-      : null;
-
   const cs = project.caseStudy;
+  const category = project.industry.split("·")[0].trim();
 
   return (
     <>
@@ -44,170 +46,85 @@ export function CaseStudyContent({ slug }: { slug: string }) {
             href="/work"
             className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight text-ink-muted hover:text-coral"
           >
-            <span aria-hidden="true">←</span> Back to work
+            <span aria-hidden="true">&larr;</span> Back to work
           </Link>
 
-          <div className="mt-6 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+          <div className="mt-8 max-w-3xl">
             <Reveal>
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline">{project.industry}</Badge>
-                <Badge variant="outline">{project.projectType}</Badge>
-                <Badge
-                  variant={
-                    project.status === "business"
-                      ? "coral"
-                      : project.status === "concept"
-                        ? "blue"
-                        : "yellow"
-                  }
-                >
-                  {STATUS_LABELS[project.status]}
-                </Badge>
-              </div>
-              <h1 className="mt-4 text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-[1.05] tracking-tight">
+              <p className="micro-label text-ink-muted">{category}</p>
+              <h1 className="mt-3 text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-[1.05] tracking-tight">
                 {project.name}
               </h1>
               <p className="mt-4 text-lg leading-relaxed text-ink-muted sm:text-xl">
                 {project.outcomeHeadline}
               </p>
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-muted">
-                {project.challenge}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                {project.liveUrl && (
-                  <Button href={project.liveUrl} external variant="primary">
-                    View live
-                  </Button>
-                )}
-                {project.githubUrl && (
-                  <Button href={project.githubUrl} external variant="secondary">
-                    GitHub
-                  </Button>
-                )}
-                <Button href={CONTACT_EMAIL_HREF} external variant="ghost">
-                  Discuss similar work
-                </Button>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <div className="relative">
-                <div
-                  className="absolute -inset-3 -z-10 rounded-3xl opacity-20"
-                  style={{ background: ACCENT_HEX[accent] }}
-                  aria-hidden="true"
-                />
-                <ProjectFrame
-                  slug={project.slug}
-                  name={project.name}
-                  industry={project.industry}
-                  accent={accent}
-                  size="lg"
-                  className="shadow-hard"
-                />
-              </div>
             </Reveal>
           </div>
 
-          {/* Metadata rail */}
-          <Reveal delay={0.15}>
-            <Card className="mt-10 overflow-hidden">
-              <dl className="grid grid-cols-1 divide-y divide-ink/15 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
-                <MetaItem label="Role" value={project.role} />
-                <MetaItem label="Scope" value={project.scope} />
-                <MetaItem label="Outcome" value={project.outcome} />
-                <MetaItem label="Technology" value={project.technology.join(", ")} />
-              </dl>
-            </Card>
+          {/* Large hero visual */}
+          <Reveal delay={0.1}>
+            <div className="mt-10 relative">
+              <div
+                className="absolute -inset-3 -z-10 rounded-3xl opacity-20"
+                style={{ background: ACCENT_HEX[accent] }}
+                aria-hidden="true"
+              />
+              <ProjectFrame
+                slug={project.slug}
+                name={project.name}
+                industry={project.industry}
+                accent={accent}
+                size="xl"
+                className="shadow-hard"
+              />
+            </div>
           </Reveal>
 
-          {/* Honest disclosure */}
-          <Reveal delay={0.2}>
-            <div
-              className="mt-6 flex items-start gap-3 rounded-2xl border-l-4 border-coral bg-white p-4"
-              role="note"
-              aria-label="Project disclosure"
-            >
-              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-coral text-xs font-bold text-white" aria-hidden="true">
-                !
-              </span>
-              <p className="text-sm leading-relaxed text-ink-muted">
-                <span className="font-bold text-ink">Disclosure. </span>
-                {cs.disclosure}
-              </p>
-            </div>
+          {/* Optional small info line — Role · Type */}
+          <Reveal delay={0.15}>
+            <p className="mt-6 text-sm text-ink-muted">
+              {project.role}
+              <span className="mx-2" aria-hidden="true">·</span>
+              {project.projectType}
+            </p>
           </Reveal>
         </Container>
       </Section>
 
-      {/* PROBLEM */}
-      <Section className="border-t-1.5 border-ink bg-white pt-12">
+      {/* THE PROBLEM */}
+      <Section className="border-t-1.5 border-ink bg-white">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
+          <div className="grid gap-8 lg:grid-cols-[0.3fr_0.7fr] lg:gap-12">
             <div>
               <SectionLabel accent="coral">The problem</SectionLabel>
             </div>
             <div>
-              <p className="text-lg leading-relaxed text-ink">{cs.problem}</p>
-              <ul className="mt-6 space-y-2">
-                {cs.constraints.map((c) => (
-                  <li key={c} className="flex items-start gap-3 text-sm text-ink-muted">
-                    <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-coral" aria-hidden="true" />
-                    {c}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-lg leading-relaxed text-ink">{cs.shortProblem}</p>
             </div>
           </div>
         </Container>
       </Section>
 
-      {/* DECISIONS */}
+      {/* WHAT I CHANGED */}
       <Section className="border-t-1.5 border-ink bg-paper">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
+          <div className="grid gap-8 lg:grid-cols-[0.3fr_0.7fr] lg:gap-12">
             <div>
-              <SectionLabel accent="blue">Strategic decisions</SectionLabel>
-              <p className="mt-4 text-sm leading-relaxed text-ink-muted">
-                The structural decisions that shaped the solution — explicit and
-                arguable, not hidden inside a polished screen.
-              </p>
+              <SectionLabel accent="blue">What I changed</SectionLabel>
             </div>
-            <ol className="space-y-5">
-              {cs.decisions.map((d) => (
-                <li key={d.num} className="rounded-2xl border-1.5 border-ink bg-white p-5">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-2xl font-extrabold leading-none tracking-tight text-ink">
-                      {d.num}
-                    </span>
-                    <h3 className="text-lg font-bold leading-tight tracking-tight">{d.title}</h3>
-                  </div>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-muted">{d.desc}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </Container>
-      </Section>
-
-      {/* BUILT */}
-      <Section className="border-t-1.5 border-ink bg-white">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
-            <div>
-              <SectionLabel accent="violet">What was built</SectionLabel>
-            </div>
-            <ul className="space-y-2">
-              {cs.built.map((b) => (
-                <li key={b} className="flex items-start gap-3 text-base leading-relaxed">
+            <ul className="space-y-3">
+              {cs.changes.map((change) => (
+                <li
+                  key={change}
+                  className="flex items-start gap-3 text-base leading-relaxed sm:text-lg"
+                >
                   <span
                     className="mt-1.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-violet text-xs font-bold text-white"
                     aria-hidden="true"
                   >
-                    ✓
+                    &check;
                   </span>
-                  {b}
+                  {change}
                 </li>
               ))}
             </ul>
@@ -215,150 +132,75 @@ export function CaseStudyContent({ slug }: { slug: string }) {
         </Container>
       </Section>
 
-      {/* OUTCOME + PROOF */}
-      <Section className="border-t-1.5 border-ink bg-paper">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
-            <div>
-              <SectionLabel accent="coral">Outcome</SectionLabel>
-            </div>
-            <div>
-              <p className="text-lg leading-relaxed text-ink">{cs.outcome}</p>
-              <dl className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {cs.proof.map((p) => (
-                  <div
-                    key={p.label}
-                    className="rounded-xl border-1.5 border-ink bg-white p-4"
-                  >
-                    <dt className="micro-label text-ink-muted">{p.label}</dt>
-                    <dd className="mt-1 text-sm font-semibold tracking-tight">{p.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      {/* HONEST MOMENT */}
+      {/* THE RESULT */}
       <Section className="border-t-1.5 border-ink bg-white">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
+          <div className="grid gap-8 lg:grid-cols-[0.3fr_0.7fr] lg:gap-12">
             <div>
-              <SectionLabel accent="yellow">An honest moment</SectionLabel>
+              <SectionLabel accent="coral">The result</SectionLabel>
             </div>
-            <blockquote className="rounded-2xl border-1.5 border-ink bg-yellow/15 p-6">
-              <p className="text-base leading-relaxed text-ink sm:text-lg">{cs.honestMoment}</p>
-            </blockquote>
-          </div>
-        </Container>
-      </Section>
-
-      {/* TIMELINE */}
-      <Section className="border-t-1.5 border-ink bg-paper">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
             <div>
-              <SectionLabel accent="blue">Timeline</SectionLabel>
-            </div>
-            <ol className="relative space-y-6 border-l-1.5 border-ink pl-6">
-              {cs.timeline.map((t) => (
-                <li key={t.num} className="relative">
-                  <span
-                    className="absolute -left-[31px] flex h-6 w-6 items-center justify-center rounded-full border-1.5 border-ink bg-white font-mono text-[0.65rem] font-bold"
-                    aria-hidden="true"
-                  >
-                    {t.num}
-                  </span>
-                  <h3 className="text-base font-bold leading-tight tracking-tight">{t.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{t.desc}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </Container>
-      </Section>
-
-      {/* ENGINEERING NOTES */}
-      <Section className="border-t-1.5 border-ink bg-white">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
-            <div>
-              <SectionLabel accent="violet">Engineering notes</SectionLabel>
-              <p className="mt-4 text-sm leading-relaxed text-ink-muted">
-                Technical material kept secondary — for the engineering reader who
-                wants to look under the hood.
-              </p>
-            </div>
-            <ul className="space-y-2">
-              {cs.engineeringNotes.map((n) => (
-                <li key={n} className="flex items-start gap-3 text-sm leading-relaxed">
-                  <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-ink" aria-hidden="true" />
-                  {n}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Container>
-      </Section>
-
-      {/* CONTEXTUAL CTA */}
-      <Section className="border-t-1.5 border-ink bg-ink text-white">
-        <Container>
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="micro-label text-ink-soft">{project.name} — wrap-up</p>
-            <h2 className="mt-4 text-[clamp(1.5rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight">
-              {cs.contextualCta.question}
-            </h2>
-            <div className="mt-6 flex justify-center">
-              <Button href="/contact" variant="white" size="lg">
-                {cs.contextualCta.button}
-              </Button>
+              <p className="text-lg leading-relaxed text-ink">{cs.shortResult}</p>
             </div>
           </div>
         </Container>
       </Section>
 
-      {/* PREV / NEXT */}
-      {(prev || next) && (
-        <Section className="border-t-1.5 border-ink bg-paper">
+      {/* VIEW LIVE WEBSITE */}
+      {project.liveUrl && (
+        <Section className="border-t-1.5 border-ink bg-ink text-white">
           <Container>
-            <nav
-              className="grid gap-4 sm:grid-cols-2"
-              aria-label="Previous and next case study"
-            >
-              {prev && (
-                <Link
-                  href={prev.caseStudyUrl}
-                  className="group rounded-2xl border-1.5 border-ink bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-hard-sm"
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="micro-label text-ink-soft">See it for yourself</p>
+              <h2 className="mt-4 text-[clamp(1.5rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight">
+                View the live website.
+              </h2>
+              <div className="mt-6 flex justify-center">
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border-1.5 border-ink bg-coral px-7 py-3.5 text-base font-bold tracking-tight text-white shadow-hard transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-sm"
                 >
-                  <span className="micro-label text-ink-muted">← Previous</span>
-                  <p className="mt-2 text-base font-bold tracking-tight">{prev.name}</p>
-                </Link>
-              )}
-              {next && (
-                <Link
-                  href={next.caseStudyUrl}
-                  className="group rounded-2xl border-1.5 border-ink bg-white p-5 text-right transition-all hover:-translate-y-0.5 hover:shadow-hard-sm sm:col-start-2"
-                >
-                  <span className="micro-label text-ink-muted">Next →</span>
-                  <p className="mt-2 text-base font-bold tracking-tight">{next.name}</p>
-                </Link>
-              )}
-            </nav>
+                  View live website
+                  <span aria-hidden="true">&nearr;</span>
+                </a>
+              </div>
+            </div>
           </Container>
         </Section>
       )}
-    </>
-  );
-}
 
-function MetaItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="p-5">
-      <dt className="micro-label text-ink-muted">{label}</dt>
-      <dd className="mt-1.5 text-sm font-semibold leading-snug tracking-tight">{value}</dd>
-    </div>
+      {/* HAVE A SIMILAR PROJECT? LET'S TALK */}
+      <Section className="border-t-1.5 border-ink bg-paper">
+        <Container>
+          <div className="mx-auto max-w-2xl text-center">
+            <SectionLabel accent="yellow" className="justify-center">
+              Have a similar project?
+            </SectionLabel>
+            <h2 className="mt-4 text-[clamp(1.5rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight">
+              Let&rsquo;s talk.
+            </h2>
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-5">
+              <a
+                href={CONTACT_EMAIL_HREF}
+                className="inline-flex items-center gap-2 rounded-xl border-1.5 border-ink bg-coral px-6 py-3.5 text-base font-bold tracking-tight text-white shadow-hard transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-sm"
+              >
+                work@dev-aditya.com
+                <span aria-hidden="true">&nearr;</span>
+              </a>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-1.5 text-sm font-bold tracking-tight text-ink transition-colors hover:text-coral"
+              >
+                Start a project
+                <span aria-hidden="true">&rarr;</span>
+              </Link>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
   );
 }
 

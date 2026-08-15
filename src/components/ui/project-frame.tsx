@@ -28,7 +28,7 @@ export function ProjectFrame({
   industry: string;
   accent: Accent;
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
 }) {
   const hex = ACCENT_HEX[accent];
   const monogram = name.charAt(0).toUpperCase();
@@ -38,6 +38,7 @@ export function ProjectFrame({
     sm: { chrome: 28, frame: "h-32", title: "text-base", mono: "text-3xl" },
     md: { chrome: 36, frame: "h-44", title: "text-xl", mono: "text-5xl" },
     lg: { chrome: 44, frame: "h-56", title: "text-2xl", mono: "text-6xl" },
+    xl: { chrome: 52, frame: "h-[22rem] sm:h-[26rem] lg:h-[30rem]", title: "text-3xl sm:text-4xl", mono: "text-7xl" },
   }[size];
 
   return (
@@ -73,7 +74,7 @@ export function ProjectFrame({
       </div>
 
       {/* Content area */}
-      <div className="relative flex h-[calc(100%-44px)] items-end justify-between p-4 sm:p-6">
+      <div className="relative flex items-end justify-between p-4 sm:p-6" style={{ height: `calc(100% - ${sizes.chrome}px)` }}>
         <div className="z-10">
           <p className="micro-label text-ink-muted">{subtitle}</p>
           <p className={cn("mt-1 font-bold leading-tight tracking-tight text-ink", sizes.title)}>

@@ -1,9 +1,14 @@
 /**
  * Navigation and footer link configuration.
  *
- * Primary navigation is buyer-focused and matches the Paperfolio-inspired
- * information architecture. Secondary routes (Resources, Mentoring) remain
- * live but are surfaced in the footer rather than the header.
+ * Primary navigation is deliberately short: Work, About, Contact. Secondary
+ * routes (Capabilities, Process, Resources, Mentoring) remain live for SEO
+ * and direct links, but are surfaced only in the footer — never in the
+ * header — so they cannot compete with the primary visitor journey.
+ *
+ * GitHub is intentionally NOT rendered anywhere on the customer-facing
+ * portfolio. The repository URL is retained in src/config/contact.ts for
+ * internal/project-data use only.
  */
 
 export interface NavLink {
@@ -11,48 +16,32 @@ export interface NavLink {
   label: string;
 }
 
-/** Primary header navigation. */
+/** Primary header navigation — keep it to three items. */
 export const PRIMARY_NAV: NavLink[] = [
   { href: "/work", label: "Work" },
-  { href: "/capabilities", label: "Capabilities" },
-  { href: "/process", label: "Process" },
   { href: "/about", label: "About" },
-  { href: "/resources", label: "Resources" },
   { href: "/contact", label: "Contact" },
 ];
 
-/** Footer — Work column. */
+/**
+ * Footer — secondary links only.
+ * Kept small on purpose: a few useful deep links plus legal.
+ * Work column lists featured projects for direct access.
+ */
 export const FOOTER_WORK: NavLink[] = [
   { href: "/work", label: "All work" },
   { href: "/work/ibs-infra", label: "IBS Infra" },
   { href: "/work/device-destination", label: "DeviceDestination" },
+  { href: "/work/cloudsun", label: "CloudSun" },
   { href: "/work/aarohan-legal", label: "Aarohan Legal" },
 ];
 
-/** Footer — Capabilities column. */
-export const FOOTER_CAPABILITIES: NavLink[] = [
-  { href: "/capabilities#corporate-website-design", label: "Corporate websites" },
-  { href: "/capabilities#website-redesign", label: "Website redesign" },
-  { href: "/capabilities#b2b-landing-pages", label: "B2B landing pages" },
-  { href: "/capabilities#frontend-development", label: "Frontend development" },
-];
-
-/** Footer — Explore column. */
+/** Footer — Explore column (secondary routes kept reachable, not loud). */
 export const FOOTER_EXPLORE: NavLink[] = [
-  { href: "/work", label: "Work" },
+  { href: "/about", label: "About" },
   { href: "/capabilities", label: "Capabilities" },
   { href: "/process", label: "Process" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-  { href: "/mentoring", label: "Project help" },
-];
-
-/** Footer — Resources column. */
-export const FOOTER_RESOURCES: NavLink[] = [
-  { href: "/resources", label: "All resources" },
-  { href: "/resources/portfolio-checklist", label: "Portfolio checklist" },
-  { href: "/resources/ai-website-agency", label: "AI website agency notes" },
-  { href: "/resources/frontend-qa", label: "Frontend QA checklist" },
+  { href: "/resources", label: "Resources" },
 ];
 
 /** Footer — Legal column. */
@@ -61,3 +50,8 @@ export const FOOTER_LEGAL: NavLink[] = [
   { href: "/terms", label: "Terms" },
   { href: "/accessibility", label: "Accessibility" },
 ];
+
+// Backwards-compatible exports kept for any legacy consumers, now empty so
+// nothing renders GitHub/capability-strip style columns on the new small footer.
+export const FOOTER_CAPABILITIES: NavLink[] = [];
+export const FOOTER_RESOURCES: NavLink[] = [];

@@ -8,9 +8,16 @@ import { Container } from "@/components/ui/container";
 import { Monogram } from "@/components/ui/monogram";
 import { Button } from "@/components/ui/button";
 import { PRIMARY_NAV } from "@/config/navigation";
-import { CONTACT_EMAIL_HREF } from "@/config/contact";
+import { CONTACT_EMAIL_HREF, CONTACT_EMAIL } from "@/config/contact";
 import { cn } from "@/lib/utils";
 
+/**
+ * Navigation — sticky, compact, three primary links + one CTA.
+ *
+ * Deliberately small: Work · About · Contact, plus a "Let's talk" CTA.
+ * Secondary routes (Capabilities, Process, Resources) are reachable only
+ * from the footer so they never compete with the primary visitor journey.
+ */
 export function Navigation() {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
@@ -87,7 +94,7 @@ export function Navigation() {
 
             <div className="flex items-center gap-2">
               <Button href="/contact" size="sm" variant="primary" className="hidden sm:inline-flex">
-                Start a project
+                Let&rsquo;s talk
               </Button>
               <button
                 type="button"
@@ -152,19 +159,19 @@ export function Navigation() {
                     )}
                   >
                     {link.label}
-                    <span aria-hidden="true" className="text-ink-muted">→</span>
+                    <span aria-hidden="true" className="text-ink-muted">&rarr;</span>
                   </Link>
                 ))}
               </nav>
               <div className="mt-5 flex flex-col gap-2.5">
                 <Button href="/contact" variant="primary" size="lg" className="w-full">
-                  Start a project
+                  Let&rsquo;s talk
                 </Button>
                 <a
                   href={CONTACT_EMAIL_HREF}
                   className="text-center text-sm font-semibold tracking-tight text-ink-muted hover:text-coral"
                 >
-                  work@dev-aditya.com
+                  {CONTACT_EMAIL}
                 </a>
               </div>
             </div>

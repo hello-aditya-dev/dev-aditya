@@ -6,13 +6,12 @@ import { Section } from "@/components/ui/section";
 import { SectionLabel } from "@/components/ui/section-label";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/reveal";
-import { CONTACT_EMAIL, CONTACT_EMAIL_HREF, CONTACT_LOCATION, GITHUB_URL, GITHUB_HANDLE } from "@/config/contact";
+import { CONTACT_EMAIL, CONTACT_EMAIL_HREF, CONTACT_LOCATION } from "@/config/contact";
 import { PROJECT_TYPES } from "@/lib/schemas/contact";
 
 const directContact = [
   { label: "Email", value: CONTACT_EMAIL, href: CONTACT_EMAIL_HREF, external: false },
   { label: "Location", value: CONTACT_LOCATION, href: undefined, external: false },
-  { label: "GitHub", value: `@${GITHUB_HANDLE}`, href: GITHUB_URL, external: true },
 ];
 
 const inputClass =

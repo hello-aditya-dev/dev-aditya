@@ -5,7 +5,7 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
-import { CAPABILITIES, TOOL_GROUPS } from "@/config/capabilities";
+import { CAPABILITIES } from "@/config/capabilities";
 import { CONTACT_LOCATION, CONTACT_WORKING_MODEL } from "@/config/contact";
 
 export const metadata: Metadata = {
@@ -26,28 +26,24 @@ export default function Page() {
           </h1>
           <div className="mt-6 max-w-3xl space-y-4 text-base leading-relaxed text-ink-muted sm:text-lg">
             <p>
-              I'm Aditya, an independent web designer and frontend developer
+              I&rsquo;m Aditya, an independent web designer and frontend developer
               based in Delhi, India. I work with companies that need more than a
               visually polished website — the work begins with structure:
               understanding what the organisation offers, what its audience
-              needs to understand and what action the website should make
+              needs to understand, and what action the website should make
               easier.
             </p>
             <p>
               I then translate that structure into a clear interface and
-              production-ready frontend. The result is a website that
-              communicates before a visitor reads a single line of detail.
-            </p>
-            <p>
-              I work remotely with clients across India and internationally.
-              The relationship is direct — you work with the person designing
-              and building the site, not an account manager.
+              production-ready frontend. The relationship is direct — you work
+              with the person designing and building the site, not an account
+              manager.
             </p>
           </div>
 
           <div className="mt-7 flex flex-wrap gap-3">
             <Button href="/contact" variant="primary" size="lg">
-              Start a project
+              Let&rsquo;s talk
             </Button>
             <Button href="/work" variant="secondary" size="lg">
               See the work
@@ -126,34 +122,6 @@ export default function Page() {
       </Section>
 
       <Section className="border-t-1.5 border-ink bg-white">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
-            <div>
-              <SectionLabel accent="violet">Tools and technologies</SectionLabel>
-              <p className="mt-4 text-sm leading-relaxed text-ink-muted">
-                The stack is the means, not the headline. Technology is kept
-                as secondary metadata in case studies.
-              </p>
-            </div>
-            <div className="grid gap-6 sm:grid-cols-3">
-              {TOOL_GROUPS.map((group) => (
-                <div key={group.category}>
-                  <p className="micro-label text-ink-muted">{group.category}</p>
-                  <ul className="mt-3 space-y-1.5">
-                    {group.items.map((item) => (
-                      <li key={item} className="text-sm font-semibold tracking-tight">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      <Section className="border-t-1.5 border-ink bg-paper">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <SectionLabel accent="coral" className="justify-center">
