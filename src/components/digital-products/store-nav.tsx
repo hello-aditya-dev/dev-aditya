@@ -11,7 +11,7 @@ import {
   SheetTitle,
   SheetClose,
 } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/shadcn/button';
 
 const NAV_LINKS = [
   { label: 'Agency Tools', href: '#tools' },

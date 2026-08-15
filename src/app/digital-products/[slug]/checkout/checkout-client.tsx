@@ -67,7 +67,7 @@ export default function CheckoutClient({ product }: { product: DigitalProduct })
       document.body.appendChild(script);
 
       script.onload = () => {
-        const RazorpayConstructor = (window as Record<string, unknown>).Razorpay as unknown as new (options: Record<string, unknown>) => { open: () => void; on: (event: string, handler: () => void) => void };
+        const RazorpayConstructor = (window as unknown as Record<string, unknown>).Razorpay as unknown as new (options: Record<string, unknown>) => { open: () => void; on: (event: string, handler: () => void) => void };
         const rzp = new RazorpayConstructor({
           key: keyId,
           amount: amount,

@@ -1,46 +1,38 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-import { cn } from "@/lib/utils"
+type Variant = "default" | "coral" | "blue" | "yellow" | "violet" | "outline";
 
-const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
-  {
-    variants: {
-      variant: {
-        default:
-          "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
-        secondary:
-          "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
-        destructive:
-          "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline:
-          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-)
+const variants: Record<Variant, string> = {
+  default: "bg-ink text-white border-1.5 border-ink",
+  coral: "bg-coral text-white border-1.5 border-ink",
+  blue: "bg-blue text-white border-1.5 border-ink",
+  yellow: "bg-yellow text-ink border-1.5 border-ink",
+  violet: "bg-violet text-white border-1.5 border-ink",
+  outline: "bg-transparent text-ink border-1.5 border-ink",
+};
 
-function Badge({
+/**
+ * Badge — small pill for status, tags, project metadata.
+ */
+export function Badge({
+  children,
+  variant = "default",
   className,
-  variant,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : "span"
-
+}: {
+  children: React.ReactNode;
+  variant?: Variant;
+  className?: string;
+}) {
   return (
-    <Comp
-      data-slot="badge"
-      className={cn(badgeVariants({ variant }), className)}
-      {...props}
-    />
-  )
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tracking-tight",
+        variants[variant],
+        className,
+      )}
+    >
+      {children}
+    </span>
+  );
 }
-
-export { Badge, badgeVariants }

@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import type { ReadStream } from "fs";
 import { verifyDownloadToken } from "@/lib/digital-products/download-token";
 import { getSecureProductFile } from "@/lib/digital-products/product-storage";
 import { getProductBySlug } from "@/config/digital-products";
@@ -94,10 +95,10 @@ export async function GET(
     // Convert Node.js ReadStream to a Web ReadableStream
     const readableStream = new ReadableStream({
       start(controller) {
-        const stream = productFile.stream;
+        const stream = productFile.stream as ReadStream;
 
-        stream.on("data", (chunk: Buffer) => {
-          controller.enqueue(new Uint8Array(chunk));
+        stream.on("data", (chunk: Buffer | string) => {
+          controller.enqueue(new Uint8Array(chunk as Buffer));
         });
 
         stream.on("end", () => {
