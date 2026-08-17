@@ -1,9 +1,11 @@
 /**
  * Navigation and footer link configuration.
  *
- * Primary navigation is deliberately short: Work, About, Contact. Secondary
- * routes (Capabilities, Process, Resources, Mentoring) remain live for SEO
- * and direct links, but are surfaced only in the footer — never in the
+ * Primary navigation is deliberately short. The agency offer is the one
+ * commercial route surfaced in the header (between About and Contact) so
+ * agency visitors see it immediately; all other secondary routes
+ * (Capabilities, Process, Resources, Mentoring) remain live for SEO and
+ * direct links but are surfaced only in the footer — never in the
  * header — so they cannot compete with the primary visitor journey.
  *
  * GitHub is intentionally NOT rendered anywhere on the customer-facing
@@ -16,10 +18,11 @@ export interface NavLink {
   label: string;
 }
 
-/** Primary header navigation — keep it to three items. */
+/** Primary header navigation — Work, About, For Agencies, Contact. */
 export const PRIMARY_NAV: NavLink[] = [
   { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
+  { href: "/for-agencies", label: "For Agencies" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -40,6 +43,7 @@ export const FOOTER_WORK: NavLink[] = [
 export const FOOTER_EXPLORE: NavLink[] = [
   { href: "/about", label: "About" },
   { href: "/capabilities", label: "Capabilities" },
+  { href: "/for-agencies", label: "For Agencies" },
   { href: "/process", label: "Process" },
   { href: "/resources", label: "Resources" },
 ];

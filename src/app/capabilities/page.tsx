@@ -141,7 +141,32 @@ export default function Page() {
         </Container>
       </Section>
 
-      <Section className="border-t-1.5 border-ink bg-paper">
+      <Section className="border-t-1.5 border-ink bg-paper pt-0">
+        <Container>
+          <Reveal>
+            <Card className="flex flex-col gap-6 p-7 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:p-9" shadow>
+              <div className="max-w-xl">
+                <SectionLabel accent="violet">For agencies</SectionLabel>
+                <h2 className="mt-3 text-[clamp(1.375rem,2.5vw,1.75rem)] font-extrabold leading-tight tracking-tight">
+                  White-label frontend for agency overflow.
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-ink-muted sm:text-base">
+                  If you’re an agency that needs more frontend capacity —
+                  last-mile delivery, fixed-scope sprints or a design-system
+                  build — I work under your brand, in your stack, against your
+                  design system.
+                </p>
+              </div>
+              <Button href="/for-agencies" variant="secondary" size="lg" className="shrink-0">
+                View agency services
+                <span aria-hidden="true">&rarr;</span>
+              </Button>
+            </Card>
+          </Reveal>
+        </Container>
+      </Section>
+
+      <Section className="border-t-1.5 border-ink bg-white pt-0">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-[clamp(1.5rem,3.5vw,2.5rem)] font-extrabold leading-[1.15] tracking-tight">

@@ -2,17 +2,17 @@ import * as React from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Monogram } from "@/components/ui/monogram";
-import { FOOTER_LEGAL } from "@/config/navigation";
+import { FOOTER_EXPLORE, FOOTER_LEGAL } from "@/config/navigation";
 import { CONTACT_EMAIL, CONTACT_EMAIL_HREF, CONTACT_LOCATION } from "@/config/contact";
 
 /**
  * Footer — deliberately small.
  *
  * Brand line, the email address (primary contact channel), location and
- * a short row of legal links. GitHub is intentionally NOT rendered on the
- * customer-facing portfolio. Secondary routes (Capabilities, Process,
- * Resources) are reachable from the /work and /about pages, not stacked
- * into giant footer columns here.
+ * a short row of legal links. A compact Explore column surfaces the
+ * secondary routes — including For Agencies — so they stay reachable
+ * without competing with the primary visitor journey in the header.
+ * GitHub is intentionally NOT rendered on the customer-facing portfolio.
  */
 export function Footer() {
   const year = new Date().getFullYear();
@@ -35,6 +35,19 @@ export function Footer() {
             </a>
             <p className="mt-1.5 text-sm text-ink-muted">{CONTACT_LOCATION}</p>
           </div>
+
+          {/* Explore — secondary routes kept reachable, not loud */}
+          <nav aria-label="Explore" className="flex flex-wrap gap-x-5 gap-y-2 lg:justify-end">
+            {FOOTER_EXPLORE.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium tracking-tight text-ink-muted hover:text-coral"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
 
           {/* Legal — visually secondary */}
           <nav aria-label="Legal" className="flex flex-wrap gap-x-5 gap-y-2 lg:justify-end">
