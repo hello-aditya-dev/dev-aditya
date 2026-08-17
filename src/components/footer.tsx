@@ -3,16 +3,22 @@ import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Monogram } from "@/components/ui/monogram";
 import { FOOTER_EXPLORE, FOOTER_LEGAL } from "@/config/navigation";
-import { CONTACT_EMAIL, CONTACT_EMAIL_HREF, CONTACT_LOCATION } from "@/config/contact";
+import {
+  CONTACT_EMAIL,
+  CONTACT_EMAIL_HREF,
+  CONTACT_LOCATION,
+  GITHUB_URL,
+  GITHUB_HANDLE,
+} from "@/config/contact";
 
 /**
  * Footer — deliberately small.
  *
- * Brand line, the email address (primary contact channel), location and
- * a short row of legal links. A compact Explore column surfaces the
- * secondary routes — including For Agencies — so they stay reachable
- * without competing with the primary visitor journey in the header.
- * GitHub is intentionally NOT rendered on the customer-facing portfolio.
+ * Brand line, the email address (primary contact channel), location, a
+ * GitHub link, and a short row of legal links. A compact Explore column
+ * surfaces the secondary routes — including For Agencies — so they stay
+ * reachable without competing with the primary visitor journey in the
+ * header.
  */
 export function Footer() {
   const year = new Date().getFullYear();
@@ -34,6 +40,18 @@ export function Footer() {
               {CONTACT_EMAIL}
             </a>
             <p className="mt-1.5 text-sm text-ink-muted">{CONTACT_LOCATION}</p>
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-1 text-sm font-medium tracking-tight text-ink-muted hover:text-coral"
+            >
+              GitHub
+              <span aria-hidden="true" className="text-xs">
+                ↗
+              </span>
+              <span className="sr-only"> — {GITHUB_HANDLE} (opens in new tab)</span>
+            </a>
           </div>
 
           {/* Explore — secondary routes kept reachable, not loud */}

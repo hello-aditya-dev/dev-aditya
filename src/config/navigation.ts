@@ -8,9 +8,9 @@
  * direct links but are surfaced only in the footer — never in the
  * header — so they cannot compete with the primary visitor journey.
  *
- * GitHub is intentionally NOT rendered anywhere on the customer-facing
- * portfolio. The repository URL is retained in src/config/contact.ts for
- * internal/project-data use only.
+ * GitHub is linked once from the footer (brand column) using the URL/handle
+ * centralised in src/config/contact.ts. It is not part of the primary header
+ * navigation.
  */
 
 export interface NavLink {
