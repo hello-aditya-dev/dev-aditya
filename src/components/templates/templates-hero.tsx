@@ -131,6 +131,7 @@ export function TemplatesHero() {
                 <BrowserFrame
                   src={secondary.screenshot.desktop}
                   alt={`${secondary.name} template — live preview screenshot`}
+                  priority
                   className="shadow-hard"
                 />
               </div>
