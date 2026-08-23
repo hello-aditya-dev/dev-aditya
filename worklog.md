@@ -994,3 +994,24 @@ Stage Summary:
 - README documents the whole templates chapter for future maintainers.
 - Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
 - Next-phase candidates: embeddable collection widget consuming the feed, performance spot-check, microcopy polish, optional Twitter-specific image variant.
+
+---
+Task ID: 11 (perf-audit-r9)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 9
+Task: QA, then performance spot-check of the /templates chapter
+
+Work Log:
+- QA sweep: all routes 200 / 0 errors; OG images 200; homepage IDENTICAL. No bugs found → ran the performance audit from the next-phase candidates.
+- PERFORMANCE AUDIT (fresh-load, dev-mode measurements with cache busting):
+  * Collection page: 12 images = 102KB total transfer (next/image optimized, all within budget). 2 eager (hero collage LCP — 367px/281px rendered, 640px fetched: justified sharpness for LCP), 12 lazy. Verified gallery images do NOT load on the collection page (blocked-route test: 0 errors, cards render).
+  * Detail pages: 11 images — 3 eager (hero desktop, hero mobile @256px fetched for 148px render ✓ optimal, gallery-1), 8 lazy (gallery 2-4 + five sibling cards @20vw → 256px for 224px render ✓ optimal). Gallery fetches 828px for 649px render ✓ acceptable.
+  * Scripts: ~995KB in DEV mode (React dev runtime + HMR + framer-motion dev instrumentation). Production build is typically ~40% — same framer-motion baseline as the rest of the site; no additional libraries were added by the templates chapter.
+  * HTML: collection 206KB / detail 92KB in dev mode — RSC payload + dev overlays; normal for dev, compresses well in production.
+  * JSON-LD verified: exactly 2 real scripts (Person + ItemList) — other matches were RSC payload echoes.
+- TYPECHECK: `tsc --noEmit` — zero errors in project code (src/, app/); the only errors are in the sandbox skills/ tooling folder (excluded from the build; pre-existing, unrelated to the site).
+- No code changes needed this round — every metric within budget. Documented instead.
+
+Stage Summary:
+- Performance verdict: HEALTHY. Images are the chapter's main payload (~102KB collection, ~150KB detail) and are fully optimized; JS is the standard site baseline; no perf debt introduced.
+- Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
+- Next-phase candidates: embeddable collection widget consuming the feed, Twitter-image variant for detail pages, microcopy polish, production build verification when the sandbox permits.
