@@ -1,12 +1,14 @@
 /**
  * Navigation and footer link configuration.
  *
- * Primary navigation is deliberately short. The agency offer is the one
- * commercial route surfaced in the header (between About and Contact) so
- * agency visitors see it immediately; all other secondary routes
- * (Capabilities, Process, Resources, Mentoring) remain live for SEO and
- * direct links but are surfaced only in the footer — never in the
- * header — so they cannot compete with the primary visitor journey.
+ * Primary navigation is deliberately short: Work, About, Templates, For
+ * Agencies, Contact. The agency offer is a commercial route surfaced in
+ * the header (between About and Contact) so agency visitors see it
+ * immediately; Templates — the owner-approved product showcase — sits
+ * after About. All other secondary routes (Capabilities, Process,
+ * Resources, Mentoring) remain live for SEO and direct links but are
+ * surfaced only in the footer — never in the header — so they cannot
+ * compete with the primary visitor journey.
  *
  * GitHub is linked once from the footer (brand column) using the URL/handle
  * centralised in src/config/contact.ts. It is not part of the primary header
@@ -18,10 +20,11 @@ export interface NavLink {
   label: string;
 }
 
-/** Primary header navigation — Work, About, For Agencies, Contact. */
+/** Primary header navigation — Work, About, Templates, For Agencies, Contact. */
 export const PRIMARY_NAV: NavLink[] = [
   { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
+  { href: "/templates", label: "Templates" },
   { href: "/for-agencies", label: "For Agencies" },
   { href: "/contact", label: "Contact" },
 ];
@@ -42,6 +45,7 @@ export const FOOTER_WORK: NavLink[] = [
 /** Footer — Explore column (secondary routes kept reachable, not loud). */
 export const FOOTER_EXPLORE: NavLink[] = [
   { href: "/about", label: "About" },
+  { href: "/templates", label: "Templates" },
   { href: "/capabilities", label: "Capabilities" },
   { href: "/for-agencies", label: "For Agencies" },
   { href: "/process", label: "Process" },

@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/config/site";
-import { TemplatesNav } from "@/components/templates/templates-nav";
-import { TemplatesFooter } from "@/components/templates/templates-footer";
 import { TemplatesStructuredData } from "@/components/templates/structured-data";
 
 /**
  * /templates — route layout.
  *
- * This route renders its own local navigation and footer (visual clones
- * of the global chrome with a "Templates" item) so the global Navigation
- * and Footer components stay untouched for every other route. The root
- * layout's SiteShell detects /templates and steps out of the way — the
- * same established pattern the /digital-products store already uses.
+ * SEO metadata + the templates ItemList JSON-LD. The shared site chrome
+ * (Navigation with the site-wide Templates item + Footer) is provided by
+ * the root layout's SiteShell, exactly like every other page.
  */
 
 const TEMPLATES_TITLE =
@@ -56,13 +52,9 @@ export default function TemplatesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <>
       <TemplatesStructuredData />
-      <TemplatesNav />
-      <main id="main" className="flex-1">
-        {children}
-      </main>
-      <TemplatesFooter />
-    </div>
+      {children}
+    </>
   );
 }

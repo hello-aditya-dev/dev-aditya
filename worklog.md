@@ -887,3 +887,20 @@ Stage Summary:
 - Round 3 shipped: comparison matrix + deep-linkable Quick Look, plus git authorship fully corrected and synced to origin/main (b43f7a0).
 - Remaining external dependency (unchanged): real marketplace URLs per product in src/config/templates.ts (Get-template buttons appear automatically once set); optional MARKETPLACE_PROFILE_URL for hero secondary CTA.
 - Next-phase candidates: licensing explainer section/page, print/share-friendly template spec sheets, OG images for detail pages generated via next/og (currently real screenshots — already good), micro-animations pass on compare table rows (low priority).
+
+---
+Task ID: 5 (global-nav-templates)
+Agent: main-agent (Z.ai Code)
+Task: Make Templates visible in the site-wide header of dev-aditya.com (owner request — supersedes the original "route-scoped nav only" constraint)
+
+Work Log:
+- Owner explicitly requested the Templates page be visible in the normal site header, lifting the original additive-only nav constraint.
+- src/config/navigation.ts: PRIMARY_NAV now Work · About · Templates · For Agencies · Contact (Templates after About); FOOTER_EXPLORE gains Templates (after About) for discoverability parity.
+- Consolidated /templates chrome: src/app/templates/layout.tsx now renders only metadata + ItemList JSON-LD (children pass through); SiteShell exclusion for /templates removed (reverted to original /digital-products-only escape hatch); deleted the route-local clones src/components/templates/templates-nav.tsx and templates-footer.tsx (no longer needed — global chrome is now correct everywhere).
+- Verified across routes (/, /work, /about, /for-agencies, /contact, /templates, /templates/multiply): header shows all 5 links with 0 page errors; Templates gets aria-current="page" active state on /templates routes; /digital-products unchanged (own store chrome); footer Explore = About, Templates, Capabilities, For Agencies, Process, Resources everywhere; mobile hamburger menu shows all 5 items; nav pill fits without overflow at 1024/1280/1440 (VLM: balanced); lint exit 0.
+- Updated the scheduled webDevReview cron job (new job id 333653) so future rounds treat the global Templates nav/footer links as owner-approved and do NOT revert them; also added the git identity constraint (witejackel-eng <witejackel@gmail.com>) to the cron instructions.
+
+Stage Summary:
+- Templates is now a first-class site section: site-wide header nav (desktop + mobile), footer Explore link, and the full /templates chapter (collection + detail pages) all using the shared site chrome.
+- Architecture simplified: one Navigation/Footer for everything except the store — less duplication than the local-clone approach.
+- Remaining external dependency (unchanged): real marketplace URLs per product in src/config/templates.ts (Get-template buttons appear automatically once set); optional MARKETPLACE_PROFILE_URL for hero secondary CTA.
