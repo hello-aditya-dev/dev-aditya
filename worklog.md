@@ -938,3 +938,21 @@ Stage Summary:
 - Quick Look is now a full product browser: open from cards, screenshots, deep links, and detail-page siblings; navigate with arrows/buttons; share via copied link; all in-page.
 - Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
 - Next-phase candidates: template detail "gallery" section (multiple scroll-captured sections per site), a11y audit pass with tab-order focus trap inside modal, performance budget doc.
+
+---
+Task ID: 8 (focus-trap-gallery-r6)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 6
+Task: QA + a11y audit, then Quick Look focus trap and detail-page section galleries
+
+Work Log:
+- QA sweep: all routes 200, 0 errors; a11y audit of the Quick Look modal found a REAL issue: focus escapes the modal to background content (Tab from the last footer button landed on a background card — aria-modal is not enforced by browsers).
+- FIX — Focus trap in PreviewModal (preview-modal.tsx): Tab/Shift+Tab now cycle inside the dialog (keydown handler wraps first↔last among visible focusables; dialog container itself participates when focused). Verified: last button + Tab → first control (Desktop toggle); first + Shift+Tab → last button (Meridian→); focus never leaves the dialog while open. Existing focus restoration to the trigger on close unchanged.
+- NEW FEATURE — Detail section galleries (detail-gallery.tsx + 24 optimized captures in public/templates/gallery/, 668KB total): four real scroll captures per template (opening/depth/proof/close) captured from the live sites at 1440px, shown one at a time in a paperfolio browser frame with: numbered tab navigation (role=tablist, arrow-key support, aria-selected), coral progress dots, auto-advance every 5.2s (paused on hover/focus, fully disabled under prefers-reduced-motion), cross-fade transitions. Positioned between the live preview and what's-inside on every detail page with a "Every section, before you decide." editorial intro.
+- VLM verified gallery captures show distinct meaningful sections (hero → dashboard → stats → close) and the composed section is paperfolio-consistent.
+- QA: gallery renders on all six detail pages (4 imgs + 4 tabs each); tab click + auto-advance verified (01→02 after ~5.2s); no horizontal scroll at 390; homepage pixel-IDENTICAL; lint exit 0; 0 console errors.
+
+Stage Summary:
+- Detail pages now present each product three ways: editorial hero composition, four-section scroll gallery, and the on-page live iframe preview — plus sibling Quick Look browsing.
+- Quick Look modal is now fully a11y-correct: focus trap + restore + Escape + arrow navigation.
+- Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
+- Next-phase candidates: bundle/pricing strip summarizing all six prices, RSS/JSON feed of the collection for partners, microcopy polish pass, Lighthouse-style perf spot check.

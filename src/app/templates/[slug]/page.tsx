@@ -8,6 +8,7 @@ import { Section } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { BrowserFrame } from "@/components/templates/browser-frame";
 import { DetailLivePreview } from "@/components/templates/detail-live-preview";
+import { DetailGallery } from "@/components/templates/detail-gallery";
 import { DetailSiblingsWithQuickLook } from "@/components/templates/detail-siblings-wrapper";
 import { TemplateProductJsonLd } from "@/components/templates/structured-data";
 import { TEMPLATES } from "@/config/templates";
@@ -250,6 +251,31 @@ export default async function TemplateDetailPage({
               </p>
             </div>
             <DetailLivePreview template={template} />
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* Section gallery — real scroll captures */}
+      <Section className="pt-14 sm:pt-16 lg:pt-20">
+        <Container>
+          <Reveal>
+            <div className="grid items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
+              <div>
+                <p className="micro-label text-ink-muted">Section by section</p>
+                <h2 className="mt-3 text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold leading-[1.1] tracking-tight">
+                  Every section, before you decide.
+                </h2>
+                <p className="mt-5 max-w-md text-base leading-relaxed text-ink-muted sm:text-lg">
+                  Four views down the real page — the opening, the depth,
+                  the proof and the close. Not highlights chosen for a
+                  screenshot: the website, as it scrolls.
+                </p>
+                <p className="mt-4 text-sm font-semibold tracking-tight text-ink">
+                  Keep going for the full live preview below.
+                </p>
+              </div>
+              <DetailGallery template={template} />
+            </div>
           </Reveal>
         </Container>
       </Section>

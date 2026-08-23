@@ -117,6 +117,37 @@ export function PreviewModal({
     }
   }, [template]);
 
+  // Focus trap — Tab/Shift+Tab cycle inside the dialog while it is open
+  // (aria-modal=true is not enforced by browsers).
+  React.useEffect(() => {
+    if (!template) return;
+    const getFocusable = (): HTMLElement[] =>
+      Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      ).filter((el) => el.offsetParent !== null); // visible only
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const focusables = getFocusable();
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey) {
+        if (active === first || active === dialogRef.current) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else if (active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeydown);
+    return () => document.removeEventListener("keydown", onKeydown);
+  }, [template]);
+
   return (
     <AnimatePresence>
       {template ? (
