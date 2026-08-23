@@ -868,3 +868,22 @@ Stage Summary:
 - /templates is now a full chapter: collection + Quick Look modal + six detail pages with on-page live previews, honest what's-inside, sibling navigation, per-page SEO + Product JSON-LD, all marketplace-URL-ready.
 - Remaining external dependency: real marketplace URLs (per-product marketplaceUrl in src/config/templates.ts) — Get-template buttons appear automatically once set; also optional MARKETPLACE_PROFILE_URL for the hero secondary CTA.
 - Next-phase candidates: comparison table across the six, template licensing explainer page, OG image generation for detail pages (currently real screenshots — already good), 404 page styling scoped to templates (low priority).
+
+---
+Task ID: 4 (git-identity-fix + compare-r3)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 3
+Task: Fix git commit authorship (witejackel-eng <witejackel@gmail.com>) + finish round-3 features (compare section, Quick Look deep links)
+
+Work Log:
+- GIT IDENTITY FIX (user request): set repo-local AND global git config to user.name=witejackel-eng, user.email=witejackel@gmail.com. Rewrote the 5 commits that carried wrong authors (4× "Aditya Dev <dev@dev-aditya.com>" from earlier rounds + 1× "Z User <z@container>" stray auto-commit with UUID message) via git filter-branch env-filter — authors/committers now witejackel-eng everywhere, author dates preserved, and the UUID message replaced with a real one ("feat(templates): compare section, Quick Look deep links, per-template audience data"). Cleaned refs/original + reflog, force-pushed with --force-with-lease. Full history now consistently witejackel-eng <witejackel@gmail.com> (verified with git log). All future commits use this identity automatically.
+- NEW FEATURE — Compare section (src/components/templates/compare-section.tsx): "Choose by fit, not guesswork." — editorial comparison matrix, 7 rows (Built for, Best fit, Price, Responsive, CMS-ready, Live preview, Details) × 6 template columns. Real <table> semantics (scope, caption); featured column subtly yellow-tinted; horizontal scroll inside bordered card on mobile with "Swipe to compare →" hint (page never overflows — verified at 390px).
+- NEW FEATURE — Quick Look deep links: /templates?preview={slug} opens that template's Quick Look on load; slug validated against TEMPLATES (unknown values ignored, page renders normally); URL param consumed and cleaned via history.replaceState so subsequent shares get the clean URL; tracked as quick_look. Verified: ?preview=axiom opens AXIOM modal + dataLayer entry; ?preview=notaslug renders normal collection.
+- CONFIG — templates.ts TemplateProduct gained `audience` field ("best fit" line for the matrix, e.g. "AI agencies & consultants"); all six products filled.
+- templates-collection.tsx: refactored into Suspense boundary (TemplatesCollection → CollectionInner) for the useSearchParams consumer per Next.js App Router requirement; fallback renders the section shell.
+- /templates page composition: CompareSection added between value section and businesses section.
+- QA: compare table renders (7 headers/7 rows, caption present); mobile table scrolls in-card, no page overflow; deep link open/clean/track verified; homepage pixel-IDENTICAL to baseline; /templates 0 errors; lint exit 0.
+
+Stage Summary:
+- Round 3 shipped: comparison matrix + deep-linkable Quick Look, plus git authorship fully corrected and synced to origin/main (b43f7a0).
+- Remaining external dependency (unchanged): real marketplace URLs per product in src/config/templates.ts (Get-template buttons appear automatically once set); optional MARKETPLACE_PROFILE_URL for hero secondary CTA.
+- Next-phase candidates: licensing explainer section/page, print/share-friendly template spec sheets, OG images for detail pages generated via next/og (currently real screenshots — already good), micro-animations pass on compare table rows (low priority).
