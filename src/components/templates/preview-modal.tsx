@@ -22,6 +22,35 @@ import { cn } from "@/lib/utils";
 
 type PreviewMode = "desktop" | "mobile";
 
+/** Copy-to-clipboard feedback label (a11y-live). */
+function useCopyFeedback() {
+  const [copied, setCopied] = React.useState(false);
+  const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Clipboard API unavailable — select-friendly fallback.
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;left:-9999px;";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch { /* ignore */ }
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setCopied(false), 2000);
+  };
+  React.useEffect(() => {
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, []);
+  return { copied, copy };
+}
+
 export function PreviewModal({
   template,
   onClose,
@@ -34,6 +63,7 @@ export function PreviewModal({
   const [loaded, setLoaded] = React.useState(false);
   const dialogRef = React.useRef<HTMLDivElement>(null);
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const { copied, copy } = useCopyFeedback();
 
   // Reset view state + track when a different template opens.
   React.useEffect(() => {
@@ -150,6 +180,33 @@ export function PreviewModal({
                     </button>
                   ))}
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!template) return;
+                    copy(`${window.location.origin}/templates?preview=${template.slug}`);
+                  }}
+                  aria-live="polite"
+                  className="inline-flex items-center gap-1.5 rounded-lg border-1.5 border-ink bg-white px-3.5 py-2 text-xs font-bold tracking-tight text-ink transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-sm"
+                >
+                  {copied ? (
+                    <>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M2 6.5L4.8 9.2 10 3.4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      Link copied
+                    </>
+                  ) : (
+                    <>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+                        <path d="M8 4V2.5A1.5 1.5 0 006.5 1H2.5A1.5 1.5 0 001 2.5v4A1.5 1.5 0 002.5 8H4" stroke="currentColor" strokeWidth="1.6" />
+                      </svg>
+                      Share preview
+                    </>
+                  )}
+                </button>
 
                 <a
                   href={template.previewUrl}

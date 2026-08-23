@@ -6,6 +6,7 @@ import { CompareSection } from "@/components/templates/compare-section";
 import { BusinessesSection } from "@/components/templates/businesses-section";
 import { CreatorSection } from "@/components/templates/creator-section";
 import { TemplatesFaqSection } from "@/components/templates/faq-section";
+import { LicensingSection } from "@/components/templates/licensing-section";
 import { TemplatesCustomCta } from "@/components/templates/final-cta";
 
 /**
@@ -26,8 +27,9 @@ import { TemplatesCustomCta } from "@/components/templates/final-cta";
  *   5. Compare (side-by-side matrix of all six)
  *   6. Built for real businesses (typographic category list)
  *   7. Buyer FAQ (accordion, pre-purchase objections)
- *   8. Creator section (links to the existing /about page)
- *   9. Custom project CTA (links to the existing /contact flow)
+ *   8. Licensing (plain-words buy → customize → launch + terms)
+ *   9. Creator section (links to the existing /about page)
+ *   10. Custom project CTA (links to the existing /contact flow)
  */
 export default function TemplatesPage() {
   return (
@@ -39,6 +41,7 @@ export default function TemplatesPage() {
       <CompareSection />
       <BusinessesSection />
       <TemplatesFaqSection />
+      <LicensingSection />
       <CreatorSection />
       <TemplatesCustomCta />
     </>

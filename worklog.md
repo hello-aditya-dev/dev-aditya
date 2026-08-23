@@ -904,3 +904,20 @@ Stage Summary:
 - Templates is now a first-class site section: site-wide header nav (desktop + mobile), footer Explore link, and the full /templates chapter (collection + detail pages) all using the shared site chrome.
 - Architecture simplified: one Navigation/Footer for everything except the store — less duplication than the local-clone approach.
 - Remaining external dependency (unchanged): real marketplace URLs per product in src/config/templates.ts (Get-template buttons appear automatically once set); optional MARKETPLACE_PROFILE_URL for hero secondary CTA.
+
+---
+Task ID: 6 (licensing-share-r4)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 4
+Task: Post-nav-consolidation QA, then licensing explainer section + shareable Quick Look links
+
+Work Log:
+- QA first: all routes (incl. detail pages + store) render with the global nav Work·About·Templates·For Agencies·Contact, 0 page errors; deep link ?preview=meridian opens Meridian modal; homepage vs original pre-templates baseline differs ONLY inside the nav pill strip (content below nav: 0 pixels differ) — confirming the owner-approved nav change is the sole global-visual delta.
+- NEW FEATURE — Licensing section (src/components/templates/licensing-section.tsx): "Buy once. Own the launch." Three numbered step cards (Buy once / Make it yours / Launch it) + two honest terms cards: "Your license includes" (white card, hard shadow, coral checks: one live website per license, full customization, commercial + client use, non-expiring) and "Not included" (muted card: no reselling, no competing products, no source sharing). Positioned between FAQ and creator section. VLM-verified consistent with paperfolio styling.
+- NEW FEATURE — Share preview (preview-modal.tsx): "Share preview" button in the Quick Look toolbar copies {origin}/templates?preview={slug} to clipboard (navigator.clipboard with execCommand fallback), shows a 2s "Link copied ✓" confirmation (aria-live), pairs with the existing deep-link consumer. Verified: button click → "Link copied" label; deep link round-trips into the modal; works in mobile modal too.
+- BUG INVESTIGATION & HARDENING — compare table on mobile: scrollWidth checks (390/768) flagged "overflow". Deep DOM bisect (element hiding + scroller audit) proved the page does NOT actually scroll horizontally (window.scrollTo positive-x rejected at both viewports; no visual scrollbar) — the phantom scrollWidth comes from the table's min-width content living inside its overflow-x-auto scroll card, which browsers surface in ancestor scrollWidth metrics while containment keeps the page locked (overscroll-x-contain). Nonetheless hardened the structure: scroll card moved to be a direct child of Container (Reveal motion wrapper — a transformed element with visible overflow — no longer wraps the scroll area), plus min-w-0/max-w-full. Verified: internal card scrolling works (scrollLeft 150 at 390px), page locked.
+- QA: licensing section renders in correct position (h2 inventory verified); share button functional; compare card scrolls internally; homepage content below nav IDENTICAL; lint exit 0.
+
+Stage Summary:
+- /templates chapter now: hero, collection + Quick Look (deep-linkable + shareable), marquee, value columns, compare matrix (hardened scroll container), businesses grid, buyer FAQ, licensing explainer, creator section, custom CTA; six detail pages with on-page live previews; full SEO (per-page metadata, ItemList + Product JSON-LD, sitemap).
+- Remaining external dependency (unchanged): real marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
+- Note for future rounds: do NOT use documentElement.scrollWidth === clientWidth as the overflow test on /templates (compare-card containment produces a false positive); use window.scrollTo rejection or visual scrollbar presence instead.

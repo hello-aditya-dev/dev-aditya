@@ -117,13 +117,16 @@ export function CompareSection() {
           </div>
         </Reveal>
 
-        <Reveal delay={0.08}>
-          <div className="mt-10 overflow-x-auto rounded-2xl border-1.5 border-ink bg-white shadow-hard-sm">
-            {/* Scroll hint for small screens */}
-            <p className="border-b border-ink/10 px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-ink-soft md:hidden">
-              Swipe to compare →
-            </p>
-            <table className="w-full min-w-[720px] border-collapse text-left">
+        {/* Scroll container sits directly under Container so the table's
+            min-width can never propagate to the page layout. The Reveal
+            animation is INSIDE the scroll area (transformed wrappers with
+            visible overflow leak scrollWidth upstream). */}
+        <div className="mt-10 w-full min-w-0 max-w-full overflow-x-auto overscroll-x-contain rounded-2xl border-1.5 border-ink bg-white shadow-hard-sm">
+          {/* Scroll hint for small screens */}
+          <p className="border-b border-ink/10 px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-ink-soft md:hidden">
+            Swipe to compare →
+          </p>
+          <table className="w-full min-w-[720px] border-collapse text-left">
               <caption className="sr-only">
                 Comparison of the six website templates: built-for category,
                 best fit, price, responsiveness, CMS, live preview and details
@@ -196,8 +199,7 @@ export function CompareSection() {
                 ))}
               </tbody>
             </table>
-          </div>
-        </Reveal>
+        </div>
       </Container>
     </Section>
   );
