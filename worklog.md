@@ -792,3 +792,35 @@ Stage Summary:
 - Digital products store remains at /digital-products (untouched)
 - Host normalization middleware ensures dev-adity.com/* → www.dev-aditya.com/* (path-preserving)
 - All existing production hardening phases (2-49) remain intact
+
+---
+Task ID: 1 (templates-page)
+Agent: main-agent (Z.ai Code)
+Task: Add /templates showcase page to dev-aditya.com — strictly additive, zero changes to existing pages
+
+Work Log:
+- Cloned repo (github.com/witejackel-eng/dev-aditya-paperfolio @ 184c456) into /home/z/my-project, replacing the sandbox scaffold; installed deps with bun, regenerated Prisma client, started dev server on port 3000.
+- Verified ALL existing routes render correctly before any changes: /, /work, /about, /for-agencies, /contact, /capabilities, /process, /resources, /mentoring, /privacy, /terms, /accessibility, /work/ibs-infra, /digital-products — all 200, no console errors.
+- Captured REAL screenshots (desktop 1440x900 + mobile 390x844) of the six live template sites with agent-browser; optimized to JPEG with sharp (22-58KB each) into public/templates/. VLM-verified all six show fully-loaded heroes.
+- Created isolated /templates implementation:
+  - src/config/templates.ts — six product definitions (name/category/description/price/previewUrl/marketplaceUrl/screenshot paths) + MARKETPLACE_URL_PLACEHOLDER (null) + MARKETPLACE_PROFILE_URL (null). Marketplace "Get template" links render only when a real URL is configured.
+  - src/components/templates/templates-nav.tsx — route-local visual clone of global Navigation with Templates item added (Work/About/Templates/For Agencies/Contact + Let's talk).
+  - src/components/templates/templates-footer.tsx — route-local clone of global Footer (Explore column gains a Templates link).
+  - src/components/templates/browser-frame.tsx — shared browser-chrome wrapper for real screenshots (three dots + address pill, paperfolio treatment).
+  - src/components/templates/templates-hero.tsx — split hero: "Premium websites. / Ready to launch." (coral Highlight), supporting copy, Explore-templates anchor CTA, optional marketplace CTA, editorial collage (yellow/coral panels + Multiply & Meridian real screenshots + pills), metadata line "06 TEMPLATES · FRAMER · RESPONSIVE · CMS-READY".
+  - src/components/templates/template-card.tsx — mini-case-study cards: real screenshot + mobile overlay, 01-06 mono numbers, category micro-label, understated Featured pill (Multiply), description, meta line, price, Live-preview CTA (tracked), conditional Get-template CTA (tracked). Hover: lift + shadow-hard growth + screenshot scale 1.02.
+  - src/components/templates/templates-collection.tsx — 3x2 desktop / 2-col tablet / 1-col mobile grid, exact product order Multiply→Meridian→Perimeter→AXIOM→STRATA→Aldervane.
+  - src/components/templates/value-section.tsx — "More than a homepage." four numbered columns.
+  - src/components/templates/businesses-section.tsx — "Built for real businesses." typographic hairline grid (AI companies/SaaS teams/Agencies/Founders/Professional services with short notes).
+  - src/components/templates/creator-section.tsx — "Built by the same designer behind these websites." → /about link.
+  - src/components/templates/final-cta.tsx — "Need something completely custom?" → /contact.
+  - src/app/templates/layout.tsx + page.tsx + opengraph-image.tsx — route metadata (title/description/OG/canonical) + local chrome + composition.
+  - src/lib/templates-analytics.ts — isolated tracking: trackTemplateCta(template, cta) pushes templates_cta to window.dataLayer + dispatches templates:cta CustomEvent. Verified in browser: {template:"multiply", cta:"live_preview"}.
+- ONE existing file modified: src/components/site-shell.tsx — extended the established /digital-products escape-hatch to also exclude /templates (isTemplates check). Required because root layout wraps every route in SiteShell; this is the codebase's own pattern for route-scoped chrome. Proven zero-impact: pixel-diff of homepage before/after = 0 differing pixels; nav on /, /work, /contact still shows Work/About/For Agencies/Contact (no Templates).
+- QA: lint exit 0; no horizontal overflow at 390/768/1440 (scrollWidth==clientWidth); keyboard nav + skip link work; mobile hamburger shows all 5 items; anchor scroll works; all 6 live-preview links open correct URLs in new tabs with tracking; cards equal-height (530px) at tablet; VLM design review verdict: SHIP.
+
+Stage Summary:
+- /templates exists and looks native to dev-aditya.com (same tokens, type, borders, shadows, motion).
+- All existing pages verified unchanged (pixel-identical homepage, same nav/footer everywhere).
+- Marketplace URLs pending: set src/config/templates.ts MARKETPLACE_URL_PLACEHOLDER per product when supplied (Get-template buttons will appear automatically); MARKETPLACE_PROFILE_URL enables hero secondary CTA.
+- Sitemap intentionally untouched (strict additive-only scope). dev server running on port 3000; repo committed and pushed to origin/main.
