@@ -94,6 +94,9 @@ specification. Summary:
 | `/resources/portfolio-checklist` | Article | Migrated |
 | `/resources/ai-website-agency` | Article | Migrated |
 | `/resources/frontend-qa` | Article | Migrated |
+| `/templates` | Template collection (six products) | New |
+| `/templates/[slug]` | Six template detail pages | New |
+| `/api/templates/feed` | Collection JSON feed | New |
 | `/audit` | Audit funnel | **Maintenance page** (see below) |
 | `/audit/[auditId]` | Audit report viewer | **Maintenance page** |
 | `/privacy` | Privacy policy | Redesigned |
@@ -381,6 +384,74 @@ For production use a durable Postgres (Neon / Vercel Postgres) by setting
 - [ ] Sitemap + robots reachable after deploy
 - [ ] Search Console: submit `/sitemap.xml`, request indexing for
       `/digital-products` and active product pages
+
+---
+
+## Templates chapter (`/templates`)
+
+A showcase/discovery chapter for six premium website templates. Purchases
+happen on an external marketplace — this site only presents the products
+and routes visitors to the preview → marketplace → purchase flow.
+
+**Pages**
+
+- `/templates` — hero, 3×2 collection grid (Quick Look modal with
+  desktop/mobile live iframe preview, arrow-key navigation, shareable
+  `?preview={slug}` deep links), pricing strip, marquee, value columns,
+  comparison matrix, audience grid, buyer FAQ, licensing explainer,
+  creator section, custom-project CTA.
+- `/templates/[slug]` — six statically-generated detail pages: editorial
+  hero (real desktop + mobile captures), four-section scroll gallery,
+  load-on-demand live preview, what's-inside, sibling navigation.
+- Per-page SEO: unique metadata, `opengraph-image` (generated per
+  template via next/og), `ItemList`/`Product` JSON-LD, sitemap entries.
+
+**Configuration — one source of truth**
+
+All product data lives in `src/config/templates.ts` (name, category,
+description, audience, price, preview URL, marketplace URL, screenshot
+paths). The page, cards, compare table, pricing strip, detail pages,
+OG images, JSON-LD and the JSON feed all derive from it.
+
+**Marketplace URLs** are intentionally `null`
+(`MARKETPLACE_URL_PLACEHOLDER`) until real listings exist. "Get
+template" buttons, the feed's `marketplaceUrl` field and the hero
+secondary CTA (`MARKETPLACE_PROFILE_URL`) activate automatically once
+real URLs are set — nothing else needs changing.
+
+**JSON feed** — `GET /api/templates/feed`
+
+```json
+{
+  "version": "1",
+  "count": 6,
+  "templates": [
+    {
+      "slug": "multiply",
+      "name": "Multiply",
+      "category": "AI Automation",
+      "price": "$129",
+      "previewUrl": "https://…",
+      "detailUrl": "https://dev-aditya.com/templates/multiply",
+      "quickLookUrl": "https://dev-aditya.com/templates?preview=multiply",
+      "images": { "desktop": "…", "mobile": "…", "gallery": ["…", "…", "…", "…"] }
+    }
+  ]
+}
+```
+
+Built from the same config (never drifts); cached
+`public, max-age=3600, stale-while-revalidate=86400`. `marketplaceUrl`
+is omitted per product while unconfigured.
+
+**Analytics** — isolated to `/templates`
+(`src/lib/templates-analytics.ts`): `templates_cta` events
+(`live_preview` / `marketplace` / `quick_look`) pushed to
+`window.dataLayer` + a `templates:cta` CustomEvent.
+
+**Screenshots** — `public/templates/` (desktop + mobile per product)
+and `public/templates/gallery/` (four scroll captures per product),
+captured from the real live template sites.
 
 ---
 

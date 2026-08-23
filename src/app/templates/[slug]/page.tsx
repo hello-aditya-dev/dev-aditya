@@ -70,6 +70,7 @@ export async function generateMetadata({
 
   const title = `${template.name} — ${template.category} Framer Template | Aditya`;
   const canonical = `${SITE_URL}/templates/${template.slug}`;
+  const ogImage = `/templates/${template.slug}/opengraph-image`;
 
   return {
     title: { absolute: title },
@@ -84,10 +85,10 @@ export async function generateMetadata({
       type: "website",
       images: [
         {
-          url: `${SITE_URL}${template.screenshot.desktop}`,
+          url: ogImage,
           width: 1200,
-          height: 750,
-          alt: `${template.name} — ${template.category} website template preview`,
+          height: 630,
+          alt: `${template.name} — ${template.category} website template, ${template.price}`,
         },
       ],
     },
@@ -95,7 +96,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description: template.description,
-      images: [`${SITE_URL}${template.screenshot.desktop}`],
+      images: [ogImage],
     },
     robots: { index: true, follow: true },
   };

@@ -972,3 +972,25 @@ Stage Summary:
 - /templates now also serves machine-readable data (partner feed) and gives buyers an instant price overview without scrolling to the compare matrix.
 - Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts (feed + Get-template buttons pick them up automatically); optional MARKETPLACE_PROFILE_URL.
 - Next-phase candidates: opengraph-image for detail pages via next/og, embeddable collection widget page using the feed, README documentation of the feed endpoint, performance spot-check of /templates payload.
+
+---
+Task ID: 10 (og-images-readme-r8)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 8
+Task: QA, then per-template OG images (fixing the satori 500s) + README documentation
+
+Work Log:
+- QA sweep: all routes 200 / 0 errors, feed 200, homepage IDENTICAL. Then continued the round-8 OG-image work (file existed but 500'd).
+- BUG FIXED — per-template OG images (src/app/templates/[slug]/opengraph-image.tsx): three satori/next-og constraints resolved via systematic bisection (direct next/og probes with minimal repros):
+  1) `runtime = "edge"` + generateStaticParams conflict in Next 16 → removed edge runtime (unhandledRejection at startup).
+  2) satori rejects `display: "inline-flex"` → changed to flex.
+  3) ROOT CAUSE of remaining 500s: satori requires explicit display on any div with MULTIPLE children — `{num} / 06` and other expression+literal text children count as multiple nodes. Isolated with a two-line repro ({expr} / {expr} on a display-less div). Fixed by adding display:flex to every text div (num/06, price pill row, metadata, domain, name).
+  All six endpoints now 200; VLM verified both sample images render correctly (brand row, category dot, huge name, coral price pill, metadata, domain; no clipping).
+- Detail-page metadata now references /templates/[slug]/opengraph-image (og:image verified in rendered HTML; replaces raw screenshot as the social card).
+- README documentation: route inventory table gains /templates, /templates/[slug], /api/templates/feed rows; new "Templates chapter (/templates)" section documenting pages, the one-source-of-truth config, the marketplace-URL activation flow, the JSON feed contract (with example), analytics events and screenshot assets.
+- QA: og:image meta tag renders; detail pages 0 errors; homepage pixel-IDENTICAL; no h-scroll at 390; lint exit 0.
+
+Stage Summary:
+- Social sharing is now fully branded per product (six generated OG images, on-design with the collection OG).
+- README documents the whole templates chapter for future maintainers.
+- Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
+- Next-phase candidates: embeddable collection widget consuming the feed, performance spot-check, microcopy polish, optional Twitter-specific image variant.
