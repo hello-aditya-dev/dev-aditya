@@ -1,5 +1,6 @@
 import { TemplatesHero } from "@/components/templates/templates-hero";
 import { TemplatesCollection } from "@/components/templates/templates-collection";
+import { PricingStrip } from "@/components/templates/pricing-strip";
 import { TemplatesMarquee } from "@/components/templates/templates-marquee";
 import { TemplatesValueSection } from "@/components/templates/value-section";
 import { CompareSection } from "@/components/templates/compare-section";
@@ -21,7 +22,7 @@ import { TemplatesCustomCta } from "@/components/templates/final-cta";
  *
  *   1. Hero (editorial collage with real template screenshots)
  *   2. Template collection (3×2 grid, real previews + Quick Look modal,
- *      deep-linkable via ?preview=)
+ *      deep-linkable via ?preview=) — followed by the pricing strip
  *   3. Marquee divider (template names, editorial strip)
  *   4. More than a homepage (four concise value columns)
  *   5. Compare (side-by-side matrix of all six)
@@ -36,6 +37,7 @@ export default function TemplatesPage() {
     <>
       <TemplatesHero />
       <TemplatesCollection />
+      <PricingStrip />
       <TemplatesMarquee />
       <TemplatesValueSection />
       <CompareSection />

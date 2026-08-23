@@ -956,3 +956,19 @@ Stage Summary:
 - Quick Look modal is now fully a11y-correct: focus trap + restore + Escape + arrow navigation.
 - Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
 - Next-phase candidates: bundle/pricing strip summarizing all six prices, RSS/JSON feed of the collection for partners, microcopy polish pass, Lighthouse-style perf spot check.
+
+---
+Task ID: 9 (feed-pricing-r7)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 7
+Task: QA, then collection JSON feed + all-six pricing strip
+
+Work Log:
+- QA sweep: all routes 200 / 0 errors; gallery + tabs intact on detail pages. Stable → proceeded with the worklog's next-phase candidates (pricing strip + partner feed).
+- NEW FEATURE — Collection JSON feed (src/app/api/templates/feed/route.ts, GET /api/templates/feed): version/count/generated metadata + one entry per template (slug, name, category, description, audience, price, featured, previewUrl, detailUrl, quickLookUrl, marketplaceUrl [omitted while null — never faked], desktop/mobile/gallery image URLs). Built from templates.ts config so it can never drift from the page; cache headers public/max-age 3600 + SWR. Verified: 200 application/json, count 6, gallery arrays length 4, marketplaceUrl absent.
+- NEW FEATURE — Pricing strip (src/components/templates/pricing-strip.tsx) on /templates directly under the collection: white bordered card, header "06 TEMPLATES · ONE-TIME PRICES" + "Every license: one live website, yours to customize.", six hairline rows (mono number, name, category, price, hover arrow) linking to detail pages. No discounts/scarcity per the original brief. Positioned before the marquee. VLM verdict: clean, scannable, standard pricing-table pattern, consistent with the design system.
+- QA: feed verified; strip renders 6 rows + header; no horizontal scroll at 390; homepage pixel-IDENTICAL; lint exit 0; 0 console errors.
+
+Stage Summary:
+- /templates now also serves machine-readable data (partner feed) and gives buyers an instant price overview without scrolling to the compare matrix.
+- Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts (feed + Get-template buttons pick them up automatically); optional MARKETPLACE_PROFILE_URL.
+- Next-phase candidates: opengraph-image for detail pages via next/og, embeddable collection widget page using the feed, README documentation of the feed endpoint, performance spot-check of /templates payload.
