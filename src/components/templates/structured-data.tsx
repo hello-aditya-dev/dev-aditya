@@ -64,3 +64,38 @@ export function TemplatesStructuredData() {
     />
   );
 }
+
+/**
+ * TemplateProductJsonLd — single Product schema for a detail page.
+ * Built from the templates config so pricing/data stays in one place.
+ */
+export function TemplateProductJsonLd({
+  template,
+}: {
+  template: (typeof TEMPLATES)[number];
+}) {
+  const product = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${template.name} — ${template.category} Website Template`,
+    description: template.description,
+    category: template.category,
+    url: `${SITE_URL}/templates/${template.slug}`,
+    image: `${SITE_URL}${template.screenshot.desktop}`,
+    brand: { "@type": "Brand", name: "Aditya" },
+    offers: {
+      "@type": "Offer",
+      price: priceToNumber(template.price),
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: template.marketplaceUrl ?? template.previewUrl,
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(product) }}
+    />
+  );
+}

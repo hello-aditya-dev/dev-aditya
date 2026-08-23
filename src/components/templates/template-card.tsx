@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { BrowserFrame } from "@/components/templates/browser-frame";
 import { trackTemplateCta } from "@/lib/templates-analytics";
@@ -148,6 +149,19 @@ export function TemplateCard({
               Live preview
               <span aria-hidden="true">&nearr;</span>
             </a>
+
+            <Link
+              href={`/templates/${template.slug}`}
+              className="group/detail inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight text-ink transition-colors hover:text-coral"
+            >
+              <span className="link-underline">Details</span>
+              <span
+                aria-hidden="true"
+                className="inline-block transition-transform duration-200 group-hover/detail:translate-x-1"
+              >
+                &rarr;
+              </span>
+            </Link>
 
             {template.marketplaceUrl ? (
               <a

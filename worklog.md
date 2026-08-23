@@ -845,3 +845,26 @@ Stage Summary:
 - /templates now has: hero, 3×2 collection with Quick Look modal, marquee divider, value columns, businesses grid, buyer FAQ, creator section, custom CTA, local nav/footer, SEO metadata + OG image + ItemList JSON-LD, isolated analytics (live_preview/marketplace/quick_look).
 - Still pending (external input): real marketplace URLs (MARKETPLACE_URL_PLACEHOLDER per product in src/config/templates.ts) and optional marketplace profile URL for hero secondary CTA.
 - Next-phase candidates: individual template detail pages (route-scoped, reusing BrowserFrame/config), sitemap.ts addition for /templates (needs owner approval since sitemap is a shared file), template comparison table, testimonial/credibility strip once real quotes exist.
+
+---
+Task ID: 3 (templates-detail-pages-r2)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 2
+Task: QA /templates, then build individual template detail pages + sitemap integration
+
+Work Log:
+- QA pass first: all routes 200 / 0 page errors; homepage pixel-IDENTICAL to baseline; nav unchanged on / and /work; /templates 0 errors. State stable → proceeded with the worklog's top next-phase candidate (detail pages).
+- NEW ROUTE /templates/[slug] (src/app/templates/[slug]/page.tsx): server-rendered, generateStaticParams for the six slugs, generateMetadata per template (title "{Name} — {Category} Framer Template | Aditya", canonical, OG/Twitter using the real desktop screenshot as the social image), notFound() for unknown slugs (verified 404). Inherits the /templates layout automatically (TemplatesNav/Footer — correct chrome).
+  - Hero: breadcrumb (← Templates · {name}), "0X / CATEGORY · Template" eyebrow, huge name, description, $price + "Open live site ↗" coral CTA + conditional Get-template, Framer·Responsive·CMS-ready meta.
+  - Editorial composition: real desktop BrowserFrame with yellow backing panel + rotated real mobile screenshot (overlap tuned: -mt-8 on mobile / -mt-16 from sm; fixed after VLM flagged mobile clutter).
+  - "Try it here, live." on-page live preview (detail-live-preview.tsx, client): load-on-demand button (no implicit iframe transfer), Desktop/Mobile toggle (390px column), loading state, "Open in new tab ↗".
+  - "What's inside": six honest structural features (no invented page counts).
+  - Siblings strip (detail-siblings.tsx): other five templates as mini-cards linking to their detail pages + back-to-collection link.
+  - Product JSON-LD per detail page (TemplateProductJsonLd in structured-data.tsx) — verified present.
+- Collection cards now carry a "Details →" link (template-card.tsx) to the detail pages; flow tested (click → /templates/multiply).
+- Sitemap (src/app/sitemap.ts): additive templatesRoutes block — /templates (0.8) + six detail pages (0.7). Existing entries untouched; sitemap.xml verified to contain all seven URLs.
+- QA: all six detail pages 200; unknown slug 404; viewport overflow sweep OK at 390/768/1440 (strata); mobile composition VLM-approved after fix; siblings links verified; live-preview load + mobile toggle verified (390px); lint exit 0; homepage regression IDENTICAL.
+
+Stage Summary:
+- /templates is now a full chapter: collection + Quick Look modal + six detail pages with on-page live previews, honest what's-inside, sibling navigation, per-page SEO + Product JSON-LD, all marketplace-URL-ready.
+- Remaining external dependency: real marketplace URLs (per-product marketplaceUrl in src/config/templates.ts) — Get-template buttons appear automatically once set; also optional MARKETPLACE_PROFILE_URL for the hero secondary CTA.
+- Next-phase candidates: comparison table across the six, template licensing explainer page, OG image generation for detail pages (currently real screenshots — already good), 404 page styling scoped to templates (low priority).

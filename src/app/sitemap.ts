@@ -3,6 +3,7 @@ import { SITE_URL } from "@/config/site";
 import { PROJECTS } from "@/config/projects";
 import { RESOURCES } from "@/config/resources";
 import { digitalProducts, SITE_ORIGIN } from "@/config/digital-products";
+import { TEMPLATES } from "@/config/templates";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -62,5 +63,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  return [...paperfolio, ...storeRoutes];
+  // ── Templates showcase routes (additive: collection + six detail pages) ──
+  const templatesRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/templates`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+    ...TEMPLATES.map((t) => ({
+      url: `${SITE_URL}/templates/${t.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+  ];
+
+  return [...paperfolio, ...storeRoutes, ...templatesRoutes];
 }
