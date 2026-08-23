@@ -36,6 +36,8 @@ export interface TemplateProduct {
   category: string;
   /** One-sentence product description. */
   description: string;
+  /** Short "best fit" line used in the comparison matrix. */
+  audience: string;
   /** Display price, e.g. "$129". */
   price: string;
   /** Live preview URL (opens in a new tab). */
@@ -60,6 +62,7 @@ export const TEMPLATES: TemplateProduct[] = [
     category: "AI Automation",
     description:
       "A conversion-focused website system for AI automation agencies, AI consultants and implementation companies.",
+    audience: "AI agencies & consultants",
     price: "$129",
     previewUrl: "https://ai-automation-agency-template-eight.vercel.app/",
     marketplaceUrl: MARKETPLACE_URL_PLACEHOLDER,
@@ -76,6 +79,7 @@ export const TEMPLATES: TemplateProduct[] = [
     category: "B2B / Enterprise",
     description:
       "A premium enterprise SaaS website system built for complex products, operational software and B2B companies.",
+    audience: "B2B SaaS & platforms",
     price: "$149",
     previewUrl: "https://meridian-peach-chi.vercel.app/",
     marketplaceUrl: MARKETPLACE_URL_PLACEHOLDER,
@@ -91,6 +95,7 @@ export const TEMPLATES: TemplateProduct[] = [
     category: "Security / DevSecOps",
     description:
       "An enterprise-grade website system for cybersecurity, cloud security and DevSecOps companies.",
+    audience: "Security & infra teams",
     price: "$129",
     previewUrl: "https://perimeter-security.vercel.app/",
     marketplaceUrl: MARKETPLACE_URL_PLACEHOLDER,
@@ -106,6 +111,7 @@ export const TEMPLATES: TemplateProduct[] = [
     category: "Fintech / Infrastructure",
     description:
       "A refined fintech website system designed around financial products, data, trust and infrastructure.",
+    audience: "Fintech & data products",
     price: "$129",
     previewUrl: "https://axiom-fintech-template.vercel.app/",
     marketplaceUrl: MARKETPLACE_URL_PLACEHOLDER,
@@ -121,6 +127,7 @@ export const TEMPLATES: TemplateProduct[] = [
     category: "Architecture / Engineering",
     description:
       "An editorial website system for architecture studios, engineering firms and design-led practices.",
+    audience: "Studios & design practices",
     price: "$99",
     previewUrl: "https://strata-architecture-studio.vercel.app/",
     marketplaceUrl: MARKETPLACE_URL_PLACEHOLDER,
@@ -136,6 +143,7 @@ export const TEMPLATES: TemplateProduct[] = [
     category: "Legal / Professional Services",
     description:
       "A premium website system for modern law firms and professional services practices.",
+    audience: "Law firms & practices",
     price: "$99",
     previewUrl: "https://modern-law-firm-template.vercel.app/",
     marketplaceUrl: MARKETPLACE_URL_PLACEHOLDER,

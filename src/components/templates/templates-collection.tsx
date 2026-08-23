@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -19,11 +20,49 @@ import type { TemplateProduct } from "@/config/templates";
  *
  * Owns the Quick Look modal state: cards request a template preview via
  * onQuickLook and the live iframe modal renders once at this level.
+ *
+ * Deep links: /templates?preview={slug} opens the Quick Look modal on
+ * load (validated against the known slugs; unknown values ignored).
+ * The query param is removed from the URL once consumed so sharing the
+ * page afterwards shares the clean collection URL.
+ *
+ * A Suspense boundary (CollectionInner) wraps the useSearchParams
+ * consumer as required by Next.js App Router.
  */
 export function TemplatesCollection() {
+  return (
+    <React.Suspense
+      fallback={
+        <Section id="collection" className="border-t-1.5 border-ink bg-paper">
+          <Container>
+            <div className="h-96" aria-hidden="true" />
+          </Container>
+        </Section>
+      }
+    >
+      <CollectionInner />
+    </React.Suspense>
+  );
+}
+
+function CollectionInner() {
+  const searchParams = useSearchParams();
   const [quickLook, setQuickLook] = React.useState<TemplateProduct | null>(
     null,
   );
+
+  // Consume a ?preview= deep link once, on mount.
+  React.useEffect(() => {
+    const slug = searchParams.get("preview");
+    if (!slug) return;
+    const match = TEMPLATES.find((t) => t.slug === slug);
+    if (!match) return;
+    setQuickLook(match);
+    // Clean the URL without reloading.
+    const url = new URL(window.location.href);
+    url.searchParams.delete("preview");
+    window.history.replaceState(null, "", url.pathname);
+  }, [searchParams]);
 
   return (
     <Section id="collection" className="border-t-1.5 border-ink bg-paper">
