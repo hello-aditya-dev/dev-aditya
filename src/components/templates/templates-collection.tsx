@@ -1,10 +1,14 @@
+"use client";
+
 import * as React from "react";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionLabel } from "@/components/ui/section-label";
 import { StaggerGroup, StaggerItem } from "@/components/ui/reveal";
 import { TemplateCard } from "@/components/templates/template-card";
+import { PreviewModal } from "@/components/templates/preview-modal";
 import { TEMPLATES } from "@/config/templates";
+import type { TemplateProduct } from "@/config/templates";
 
 /**
  * TemplatesCollection — the six template products in a curated grid.
@@ -12,8 +16,15 @@ import { TEMPLATES } from "@/config/templates";
  * Desktop: 3 columns × 2 rows. Tablet: 2 columns. Mobile: 1 column.
  * No filters, no search, no tabs — with six hand-picked products the
  * collection should feel curated and intentional, not like a marketplace.
+ *
+ * Owns the Quick Look modal state: cards request a template preview via
+ * onQuickLook and the live iframe modal renders once at this level.
  */
 export function TemplatesCollection() {
+  const [quickLook, setQuickLook] = React.useState<TemplateProduct | null>(
+    null,
+  );
+
   return (
     <Section id="collection" className="border-t-1.5 border-ink bg-paper">
       <Container>
@@ -33,11 +44,17 @@ export function TemplatesCollection() {
         <StaggerGroup className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {TEMPLATES.map((template, i) => (
             <StaggerItem key={template.slug} className="h-full">
-              <TemplateCard template={template} index={i} />
+              <TemplateCard
+                template={template}
+                index={i}
+                onQuickLook={() => setQuickLook(template)}
+              />
             </StaggerItem>
           ))}
         </StaggerGroup>
       </Container>
+
+      <PreviewModal template={quickLook} onClose={() => setQuickLook(null)} />
     </Section>
   );
 }

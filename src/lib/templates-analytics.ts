@@ -11,7 +11,7 @@
  *      no tag manager is installed).
  */
 
-export type TemplateCtaType = "live_preview" | "marketplace";
+export type TemplateCtaType = "live_preview" | "marketplace" | "quick_look";
 
 export interface TemplateCtaPayload {
   /** Template identifier, e.g. "multiply". */

@@ -12,8 +12,9 @@ import { cn } from "@/lib/utils";
  *
  * Real screenshot in a paperfolio browser frame (with a small mobile
  * overlay), then number / category / featured marker, name, one-line
- * description, a restrained meta line and the price. Actions: live
- * preview (always) and marketplace (only once a real URL is configured).
+ * description, a restrained meta line and the price. Actions: quick look
+ * (in-page live preview modal), live preview (external, always) and
+ * marketplace (only once a real URL is configured).
  *
  * Hover behaviour follows the site's button language: the card lifts
  * slightly, its hard shadow grows, the screenshot scales ~1.02 and the
@@ -22,9 +23,11 @@ import { cn } from "@/lib/utils";
 export function TemplateCard({
   template,
   index,
+  onQuickLook,
 }: {
   template: TemplateProduct;
   index: number;
+  onQuickLook: () => void;
 }) {
   const num = String(index + 1).padStart(2, "0");
 
@@ -33,15 +36,12 @@ export function TemplateCard({
 
   return (
     <article className="group relative flex h-full flex-col rounded-2xl border-1.5 border-ink bg-white shadow-hard-sm transition-all duration-300 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard">
-      {/* Real live preview — the dominant visual */}
-      <a
-        href={template.previewUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onPreviewClick}
-        aria-label={`Open ${template.name} live preview in a new tab`}
-        className="block cursor-pointer focus-visible:outline-none"
-        tabIndex={-1}
+      {/* Real live preview — the dominant visual. Opens Quick Look in-page. */}
+      <button
+        type="button"
+        onClick={onQuickLook}
+        aria-label={`Quick look — preview ${template.name} live on this page`}
+        className="block w-full cursor-pointer focus-visible:outline-none"
       >
         <BrowserFrame
           src={template.screenshot.desktop}
@@ -66,8 +66,19 @@ export function TemplateCard({
               />
             </div>
           </div>
+
+          {/* Quick look hint pill — always visible, touch friendly */}
+          <span
+            className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1.5 rounded-full border-1.5 border-ink bg-white px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.15em] text-ink shadow-hard-sm transition-colors group-hover:bg-yellow"
+          >
+            <svg width="9" height="9" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <circle cx="5" cy="5" r="3.4" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M7.8 7.8L11 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+            Quick look
+          </span>
         </BrowserFrame>
-      </a>
+      </button>
 
       {/* Product metadata */}
       <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -109,7 +120,21 @@ export function TemplateCard({
             <span className="sr-only"> — one-time purchase price in USD</span>
           </p>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <button
+              type="button"
+              onClick={onQuickLook}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-lg border-1.5 border-ink bg-white px-3.5 py-2 text-xs font-bold tracking-tight text-ink",
+                "transition-all duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-sm active:translate-x-0 active:translate-y-0 active:shadow-none",
+              )}
+            >
+              Quick look
+              <span aria-hidden="true" className="text-ink-muted">
+                &nearr;
+              </span>
+            </button>
+
             <a
               href={template.previewUrl}
               target="_blank"

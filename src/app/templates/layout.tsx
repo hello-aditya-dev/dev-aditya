@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/config/site";
 import { TemplatesNav } from "@/components/templates/templates-nav";
 import { TemplatesFooter } from "@/components/templates/templates-footer";
+import { TemplatesStructuredData } from "@/components/templates/structured-data";
 
 /**
  * /templates — route layout.
@@ -56,6 +57,7 @@ export default function TemplatesLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
+      <TemplatesStructuredData />
       <TemplatesNav />
       <main id="main" className="flex-1">
         {children}

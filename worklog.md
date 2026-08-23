@@ -824,3 +824,24 @@ Stage Summary:
 - All existing pages verified unchanged (pixel-identical homepage, same nav/footer everywhere).
 - Marketplace URLs pending: set src/config/templates.ts MARKETPLACE_URL_PLACEHOLDER per product when supplied (Get-template buttons will appear automatically); MARKETPLACE_PROFILE_URL enables hero secondary CTA.
 - Sitemap intentionally untouched (strict additive-only scope). dev server running on port 3000; repo committed and pushed to origin/main.
+
+---
+Task ID: 2 (templates-enhancements-r1)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 1
+Task: QA the /templates page, then add features and styling details (strictly within /templates)
+
+Work Log:
+- QA pass first: all routes 200 with 0 page errors; homepage pixel-diff vs original baseline = 0 differing pixels (no regression); nav on /, /work, /contact still Work·About·For Agencies·Contact; no horizontal overflow at 390/768/1440; a11y audit clean (6 empty-alt images are the intentional decorative mobile overlays).
+- Verified iframe embedding of the Vercel template sites works (prerequisite for Quick Look).
+- NEW FEATURE — Quick Look modal (src/components/templates/preview-modal.tsx): opens a template's real live site in an in-page paperfolio browser frame. Desktop/Mobile toggle (wrapper narrows to 390px in mobile mode), loading state, "Open full preview ↗" external handoff, close via Escape/backdrop/X button, body scroll lock, focus restoration to trigger on close, tracks cta=quick_look (verified in dataLayer). Triggered by card screenshot click AND a new white "Quick look" button; always-visible "Quick look" hint pill on each screenshot (turns yellow on hover).
+- templates-collection.tsx became the client owner of modal state; template-card.tsx gained onQuickLook prop + button + hint pill.
+- NEW FEATURE — Buyer FAQ (src/components/templates/faq-section.tsx): "Before you buy." — six accordion rows (what's included, customization skills, CMS meaning, client-work licensing, mobile preview, outgrowing a template → custom CTA). Custom paperfolio accordion (mono numbers, plus→minus indicator, height-animated panel, aria-expanded/controls, reduced-motion safe), sticky left column on desktop.
+- NEW FEATURE — Marquee divider (src/components/templates/templates-marquee.tsx): dark ink strip between collection and value section scrolling the six names + "06 Templates · Framer · Responsive · CMS-Ready" in micro-label style with coral dots; uses existing CSS-only Marquee primitive; aria-hidden decorative.
+- NEW FEATURE — JSON-LD (src/components/templates/structured-data.tsx): schema.org ItemList of six Products with offers/prices built from templates config; rendered in templates layout. Verified present alongside the root Person schema.
+- Analytics type extended: TemplateCtaType now includes "quick_look".
+- QA of enhancements: modal open/toggle/escape/focus/lock all verified functionally; FAQ accordion expands (1 panel at a time verified); mobile modal screenshot VLM-approved; viewport overflow sweep clean; lint exit 0; VLM integration verdict: "Seamless Integration & High Fidelity".
+
+Stage Summary:
+- /templates now has: hero, 3×2 collection with Quick Look modal, marquee divider, value columns, businesses grid, buyer FAQ, creator section, custom CTA, local nav/footer, SEO metadata + OG image + ItemList JSON-LD, isolated analytics (live_preview/marketplace/quick_look).
+- Still pending (external input): real marketplace URLs (MARKETPLACE_URL_PLACEHOLDER per product in src/config/templates.ts) and optional marketplace profile URL for hero secondary CTA.
+- Next-phase candidates: individual template detail pages (route-scoped, reusing BrowserFrame/config), sitemap.ts addition for /templates (needs owner approval since sitemap is a shared file), template comparison table, testimonial/credibility strip once real quotes exist.
