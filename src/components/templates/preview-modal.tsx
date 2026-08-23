@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { trackTemplateCta } from "@/lib/templates-analytics";
-import type { TemplateProduct } from "@/config/templates";
+import { TEMPLATES, type TemplateProduct } from "@/config/templates";
 import { cn } from "@/lib/utils";
 
 /**
@@ -54,9 +54,12 @@ function useCopyFeedback() {
 export function PreviewModal({
   template,
   onClose,
+  onNavigate,
 }: {
   template: TemplateProduct | null;
   onClose: () => void;
+  /** Switch the modal to another template (collection wires prev/next). */
+  onNavigate: (next: TemplateProduct) => void;
 }) {
   const reduce = useReducedMotion();
   const [mode, setMode] = React.useState<PreviewMode>("desktop");
@@ -64,6 +67,11 @@ export function PreviewModal({
   const dialogRef = React.useRef<HTMLDivElement>(null);
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
   const { copied, copy } = useCopyFeedback();
+
+  // Prev/next siblings within the collection order.
+  const index = template ? TEMPLATES.findIndex((t) => t.slug === template.slug) : -1;
+  const prev = index > 0 ? TEMPLATES[index - 1] : null;
+  const next = index >= 0 && index < TEMPLATES.length - 1 ? TEMPLATES[index + 1] : null;
 
   // Reset view state + track when a different template opens.
   React.useEffect(() => {
@@ -73,11 +81,21 @@ export function PreviewModal({
     trackTemplateCta(template.slug, "quick_look");
   }, [template]);
 
-  // Escape closes; body scroll locked while open.
+  // Escape closes; ←/→ switch templates; body scroll locked while open.
   React.useEffect(() => {
     if (!template) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
+      // Arrow keys navigate between templates (only when nothing inside
+      // the preview (inputs/scroll areas) owns the keystroke).
+      if (e.key === "ArrowLeft" && prev) {
+        e.preventDefault();
+        onNavigate(prev);
+      }
+      if (e.key === "ArrowRight" && next) {
+        e.preventDefault();
+        onNavigate(next);
+      }
     };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
@@ -85,7 +103,7 @@ export function PreviewModal({
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [template, onClose]);
+  }, [template, onClose, prev, next, onNavigate]);
 
   // Focus the dialog on open; restore focus to the trigger on close.
   const restoreFocus = React.useRef<HTMLElement | null>(null);
@@ -289,14 +307,57 @@ export function PreviewModal({
               ) : null}
             </div>
 
-            {/* Footer */}
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t-1.5 border-ink bg-white px-4 py-3">
+            {/* Footer — navigation between templates + context */}
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t-1.5 border-ink bg-white px-4 py-3">
               <p className="text-xs text-ink-muted">
                 This is the live template — explore it directly.
               </p>
-              <p className="micro-label text-ink-muted">
-                Quick look · {template.name}
-              </p>
+
+              <div className="flex items-center gap-3">
+                <p className="micro-label hidden text-ink-muted sm:block">
+                  Quick look · {template.name}
+                </p>
+
+                {/* Prev/next — mirrors arrow-key navigation */}
+                <div
+                  className="flex items-center gap-1.5"
+                  role="group"
+                  aria-label="Browse templates"
+                >
+                  <button
+                    type="button"
+                    onClick={() => prev && onNavigate(prev)}
+                    disabled={!prev}
+                    aria-label={
+                      prev
+                        ? `Previous template — ${prev.name}`
+                        : "No previous template"
+                    }
+                    className="inline-flex h-8 items-center gap-1 rounded-lg border-1.5 border-ink bg-white px-2.5 text-xs font-bold tracking-tight text-ink transition-all enabled:hover:-translate-x-0.5 enabled:hover:shadow-hard-sm enabled:hover:bg-paper disabled:cursor-not-allowed disabled:opacity-30"
+                  >
+                    <span aria-hidden="true">&larr;</span>
+                    {prev ? (
+                      <span className="max-w-[7rem] truncate">{prev.name}</span>
+                    ) : null}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => next && onNavigate(next)}
+                    disabled={!next}
+                    aria-label={
+                      next
+                        ? `Next template — ${next.name}`
+                        : "No next template"
+                    }
+                    className="inline-flex h-8 items-center gap-1 rounded-lg border-1.5 border-ink bg-white px-2.5 text-xs font-bold tracking-tight text-ink transition-all enabled:hover:-translate-x-0.5 enabled:hover:shadow-hard-sm enabled:hover:bg-paper disabled:cursor-not-allowed disabled:opacity-30"
+                  >
+                    {next ? (
+                      <span className="max-w-[7rem] truncate">{next.name}</span>
+                    ) : null}
+                    <span aria-hidden="true">&rarr;</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>

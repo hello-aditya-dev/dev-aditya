@@ -921,3 +921,20 @@ Stage Summary:
 - /templates chapter now: hero, collection + Quick Look (deep-linkable + shareable), marquee, value columns, compare matrix (hardened scroll container), businesses grid, buyer FAQ, licensing explainer, creator section, custom CTA; six detail pages with on-page live previews; full SEO (per-page metadata, ItemList + Product JSON-LD, sitemap).
 - Remaining external dependency (unchanged): real marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
 - Note for future rounds: do NOT use documentElement.scrollWidth === clientWidth as the overflow test on /templates (compare-card containment produces a false positive); use window.scrollTo rejection or visual scrollbar presence instead.
+
+---
+Task ID: 7 (quicklook-navigation-r5)
+Agent: main-agent (Z.ai Code) — scheduled webDevReview round 5
+Task: QA, then keyboard/button navigation between templates inside Quick Look + detail-page sibling Quick Look
+
+Work Log:
+- QA first: all routes 200 with 5-item global nav, 0 errors; ?preview=strata deep link opens modal; homepage IDENTICAL to round-4 state.
+- NEW FEATURE — Template navigation inside Quick Look (preview-modal.tsx): ←/→ arrow keys switch to the previous/next template in collection order; modal footer gains prev/next buttons showing the sibling's name (paperfolio-styled, disabled+dimmed at the ends of the sequence, e.g. "No previous template" on Multiply). View state (mode/loading) resets on each switch; each open tracks quick_look. Verified: Multiply →(→) Meridian →(→) Perimeter →(←) Meridian; buttons reflect position; first/last templates disable the correct side; Escape still closes.
+- NEW FEATURE — Quick Look from detail pages (detail-siblings-wrapper.tsx): each sibling mini-card on a /templates/[slug] page now has a "Look" button (search-glass icon, yellow on hover) that opens the shared PreviewModal with full navigation — browse all six products without leaving the detail page. Card links still navigate to detail pages (button stopPropagation/preventDefault inside the anchor). Verified on /templates/aldervane: opened Multiply from the siblings strip, navigation works there too.
+- detail-siblings.tsx: gained onQuickLook prop (now requires it); page.tsx uses DetailSiblingsWithQuickLook wrapper (static grid stays server-rendered; only the modal shell is client).
+- QA: no page horizontal scroll at 390 (scrollTo rejection test per the round-4 worklog note); homepage pixel-IDENTICAL; lint exit 0; 0 console errors.
+
+Stage Summary:
+- Quick Look is now a full product browser: open from cards, screenshots, deep links, and detail-page siblings; navigate with arrows/buttons; share via copied link; all in-page.
+- Remaining external dependency (unchanged): marketplace URLs per product in src/config/templates.ts; optional MARKETPLACE_PROFILE_URL.
+- Next-phase candidates: template detail "gallery" section (multiple scroll-captured sections per site), a11y audit pass with tab-order focus trap inside modal, performance budget doc.

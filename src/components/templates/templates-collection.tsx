@@ -93,7 +93,11 @@ function CollectionInner() {
         </StaggerGroup>
       </Container>
 
-      <PreviewModal template={quickLook} onClose={() => setQuickLook(null)} />
+      <PreviewModal
+        template={quickLook}
+        onClose={() => setQuickLook(null)}
+        onNavigate={(next) => setQuickLook(next)}
+      />
     </Section>
   );
 }

@@ -10,11 +10,18 @@ import { TEMPLATES } from "@/config/templates";
 /**
  * DetailSiblings — "More templates." strip on a detail page.
  *
- * The other five products as compact editorial mini-cards linking to
- * their detail pages — the same hairline-grid rhythm as the businesses
- * section, keeping visitors inside the collection.
+ * The other five products as compact editorial mini-cards: each links
+ * to its detail page and offers a live Quick Look (in-page preview
+ * modal) so visitors can browse every product without leaving the
+ * current page.
  */
-export function DetailSiblings({ currentSlug }: { currentSlug: string }) {
+export function DetailSiblings({
+  currentSlug,
+  onQuickLook,
+}: {
+  currentSlug: string;
+  onQuickLook: (template: (typeof TEMPLATES)[number]) => void;
+}) {
   const siblings = TEMPLATES.filter((t) => t.slug !== currentSlug);
 
   return (
@@ -71,15 +78,32 @@ export function DetailSiblings({ currentSlug }: { currentSlug: string }) {
                   <p className="mt-1.5 text-base font-extrabold leading-tight tracking-tight text-ink">
                     {t.name}
                   </p>
-                  <p className="mt-auto pt-3 text-sm font-bold tracking-tight text-ink">
-                    {t.price}
-                    <span
-                      aria-hidden="true"
-                      className="ml-1.5 inline-block text-coral transition-transform duration-200 group-hover:translate-x-1"
+                  <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+                    <p className="text-sm font-bold tracking-tight text-ink">
+                      {t.price}
+                      <span
+                        aria-hidden="true"
+                        className="ml-1 inline-block text-coral transition-transform duration-200 group-hover:translate-x-1"
+                      >
+                        &rarr;
+                      </span>
+                    </p>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onQuickLook(t);
+                      }}
+                      aria-label={`Quick look — preview ${t.name} live on this page`}
+                      className="relative z-10 inline-flex items-center gap-1 rounded-lg border-1.5 border-ink bg-white px-2.5 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-ink transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-sm hover:bg-yellow"
                     >
-                      &rarr;
-                    </span>
-                  </p>
+                      <svg width="9" height="9" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <circle cx="5" cy="5" r="3.4" stroke="currentColor" strokeWidth="1.6" />
+                        <path d="M7.8 7.8L11 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                      </svg>
+                      Look
+                    </button>
+                  </div>
                 </div>
               </Link>
             ))}

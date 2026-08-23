@@ -8,7 +8,7 @@ import { Section } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { BrowserFrame } from "@/components/templates/browser-frame";
 import { DetailLivePreview } from "@/components/templates/detail-live-preview";
-import { DetailSiblings } from "@/components/templates/detail-siblings";
+import { DetailSiblingsWithQuickLook } from "@/components/templates/detail-siblings-wrapper";
 import { TemplateProductJsonLd } from "@/components/templates/structured-data";
 import { TEMPLATES } from "@/config/templates";
 import { SITE_URL } from "@/config/site";
@@ -286,8 +286,8 @@ export default async function TemplateDetailPage({
         </Container>
       </Section>
 
-      {/* Siblings */}
-      <DetailSiblings currentSlug={template.slug} />
+      {/* Siblings — with in-page Quick Look */}
+      <DetailSiblingsWithQuickLook currentSlug={template.slug} />
     </>
   );
 }
