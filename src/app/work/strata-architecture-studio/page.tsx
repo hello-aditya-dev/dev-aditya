@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { CaseStudyContent, caseStudyBreadcrumb } from "@/components/case-study-content";
 import { getProject } from "@/config/projects";
 
-const slug = "device-destination";
+const slug = "strata-architecture-studio";
 const project = getProject(slug);
 
 export const metadata: Metadata = {
-  title: project ? `${project.name} — ${project.industry.split("·")[0].trim()} case study` : "Device Destination",
-  description: project?.outcomeHeadline ?? "Device Destination case study",
+  title: project ? `${project.name} — ${project.industry.split("·")[0].trim()} case study` : "Strata Architecture Studio",
+  description: project?.outcomeHeadline ?? "Strata Architecture Studio case study",
   alternates: { canonical: `/work/${slug}` },
   openGraph: project
     ? {

@@ -59,9 +59,8 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.15, ease }}
               className="mt-6 max-w-xl text-base leading-relaxed text-ink-muted sm:text-lg"
             >
-              Corporate websites, ecommerce platforms and digital products shaped around
-              the result your business needs, then engineered to work properly after
-              launch.
+              Corporate websites, ecommerce and digital products built around what
+              the business needs people to understand, trust and do.
             </motion.p>
 
             <motion.p
@@ -80,7 +79,7 @@ export function HeroSection() {
               className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
             >
               <Button href="/work" variant="primary" size="lg">
-                See what changed
+                See the work
               </Button>
               <Button href="/contact" variant="secondary" size="lg">
                 Bring me the messy version

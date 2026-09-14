@@ -14,6 +14,7 @@ export type Accent = "coral" | "blue" | "yellow" | "violet";
 const ACCENTS: Record<Project["slug"], Accent> = {
   "bharat-electrosafe": "coral",
   "ibs-infra": "coral",
+  "strata-architecture-studio": "yellow",
   "device-destination": "yellow",
   cloudsun: "violet",
   "saffron-steam-experience": "coral",

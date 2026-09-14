@@ -26,9 +26,9 @@ export function AgencyTeaserSection() {
                 <Highlight variant="coral">permanent hire</Highlight>?
               </p>
               <p className="mt-3 text-base leading-relaxed text-ink-muted">
-                White-label frontend, built in your stack and your design
-                system, under your brand. For overflow, last-mile delivery and
-                fixed-scope sprints.
+                I work behind your brand, in your stack and against your design
+                system. Useful when the work is signed off but your team needs
+                another pair of hands to get it shipped properly.
               </p>
             </div>
             <a

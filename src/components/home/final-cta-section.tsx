@@ -31,11 +31,11 @@ export function FinalCTASection() {
             <div className="relative max-w-2xl">
               <p className="micro-label text-ink-muted">Start a project</p>
               <h2 className="mt-4 text-[clamp(1.875rem,4.5vw,3.25rem)] font-extrabold leading-[1.08] tracking-tight">
-                Have a <Highlight variant="coral">project</Highlight> in mind?
+                Have something the <Highlight variant="coral">website</Highlight> needs to explain better?
               </h2>
               <p className="mt-5 text-base leading-relaxed text-ink-muted sm:text-lg">
-                Send a few honest sentences about what the business needs the
-                website to do better. No perfect brief required.
+                Send a few honest sentences about the business, what is not
+                working and what needs to change. No polished brief required.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">

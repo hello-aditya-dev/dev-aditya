@@ -37,8 +37,7 @@ export function WorkContent() {
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-muted sm:text-lg">
             Each project below is real. Open the live website to see the work,
-            or read the short case study for the problem, what changed and the
-            result.
+            or read the case study for the problem, what changed and the result.
           </p>
         </Container>
       </Section>

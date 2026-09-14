@@ -22,10 +22,10 @@ export function AboutSection() {
               I&rsquo;m Aditya, an independent designer and developer based in Delhi.
             </p>
             <p className="mt-4 text-base leading-relaxed text-ink-muted sm:text-lg">
-              I work across business websites, ecommerce and digital products —
-              handling the process from structure and visual direction through
-              development and deployment. Selected availability, so each project
-              gets the attention it needs.
+              I work across business websites, ecommerce and digital products.
+              I help turn unclear requirements and dense information into a
+              structure that makes sense, then design and build the frontend
+              that ships. You work directly with the person doing the work.
             </p>
             <a
               href="/about"

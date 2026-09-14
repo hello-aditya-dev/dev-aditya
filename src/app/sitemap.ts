@@ -3,12 +3,14 @@ import { SITE_URL } from "@/config/site";
 import { PROJECTS } from "@/config/projects";
 import { RESOURCES } from "@/config/resources";
 import { digitalProducts, SITE_ORIGIN } from "@/config/digital-products";
-import { TEMPLATES } from "@/config/templates";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   // ── Paperfolio static routes ──
+  // Note: /templates is intentionally omitted — the showcase is currently
+  // unlinked from the public site. The route, components and data remain in
+  // the repo for when it goes live again. Do not advertise it in sitemap.
   const staticRoutes: { route: string; priority: number }[] = [
     { route: "", priority: 1 },
     { route: "/work", priority: 0.9 },
@@ -63,21 +65,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // ── Templates showcase routes (additive: collection + six detail pages) ──
-  const templatesRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${SITE_URL}/templates`,
-      lastModified: now,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    },
-    ...TEMPLATES.map((t) => ({
-      url: `${SITE_URL}/templates/${t.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    })),
-  ];
-
-  return [...paperfolio, ...storeRoutes, ...templatesRoutes];
+  return [...paperfolio, ...storeRoutes];
 }

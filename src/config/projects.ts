@@ -321,121 +321,117 @@ export const PROJECTS: Project[] = [
 
 
 
-  /* ═══════════════════════ FLAGSHIP 2 · DEVICEDESTINATION ═══════════════════════ */
+  /* ═══════════════════════ FLAGSHIP 2 · STRATA ARCHITECTURE STUDIO ═══════════════════════ */
   {
-    slug: 'device-destination',
-    name: 'DeviceDestination',
-    industry: 'ECOMMERCE · CONSUMER ELECTRONICS',
-    projectType: 'Full-stack commerce platform',
+    slug: 'strata-architecture-studio',
+    name: 'Strata Architecture Studio',
+    industry: 'ARCHITECTURE · DESIGN PRACTICE',
+    projectType: 'Editorial practice website',
     tier: 'flagship',
     status: 'business',
-    capabilities: ['commerce', 'digital-products'],
+    capabilities: ['business-websites'],
     featuredRank: 3,
-    proofRole: 'Full-stack commerce',
+    proofRole: 'Editorial design for a design-led practice',
     outcomeHeadline:
-      'Turned model-number chaos into a guided buying and checkout experience.',
+      'A practice website that reads like the work — considered, structured, and free of template noise.',
     challenge:
-      'Electronics buyers arrive knowing the exact model number they want — a conventional catalogue is useless. They need to land on the right variant, confirm it, compare alternatives, check GST-inclusive price, pay and get an invoice.',
+      'Architecture studios and design-led practices need a website that reflects the quality of their work without resorting to the dense portfolio-grid template every competitor uses. The site has to present projects, process and practice with the same restraint the work itself demands.',
     context:
-      'DeviceDestination is an electronics storefront built around certainty, not browsing. The commerce system is engineered so that when a payment webhook is slow or fires twice, the order still lands in the right state.',
-    tagline: 'The payment succeeded. The notification failed. The order still survives.',
+      'Strata Architecture Studio is an editorial website system for architecture studios, engineering firms and design-led practices. Built around an editorial layout, generous whitespace and a project-first information architecture — so the work leads and the chrome stays out of the way.',
+    tagline: 'Let the work lead.',
     scope:
-      'Product discovery and exact-model search, comparison, cart and checkout, GST-safe pricing, Razorpay integration, invoice generation, notifications, authentication.',
-    role: 'Design, full-stack engineering and payments architecture',
+      'Editorial design system, project-first information architecture, typography, motion direction, frontend engineering, SEO/accessibility.',
+    role: 'Design and frontend delivery',
     outcome:
-      'A buyer finds the exact model, compares it, pays safely and receives a correct invoice — and when the payment provider’s webhook is slow or fires twice, the order still ends up correct. The commerce behaviour does not lose money to edge cases.',
-    technology: ['Next.js', 'TypeScript', 'Drizzle ORM', 'Razorpay', 'Tailwind CSS', 'Vercel'],
-    liveUrl: 'https://device-destination-rose.vercel.app',
-    caseStudyUrl: '/work/device-destination',
-    githubUrl: 'https://github.com/witejackel-eng/DeviceDestination',
+      'A practice website that reads like the studio’s own work — considered, structured, and free of the template noise that makes most architecture sites interchangeable. Projects lead, process is reachable, and the visual language signals craft without ornament.',
+    technology: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vercel'],
+    liveUrl: 'https://strata-architecture-studio-snowy.vercel.app/',
+    caseStudyUrl: '/work/strata-architecture-studio',
+    githubUrl: 'https://github.com/hello-aditya-dev/strata-architecture-studio',
     disclosure:
-      'Deployed ecommerce application. Verify the current deployment before publishing the link publicly.',
+      'Deployed practice website. Built and shipped as a real production site.',
     caseStudy: {
       disclosure:
-        'Deployed ecommerce application. Verify the current deployment before publishing the link publicly.',
+        'Deployed practice website. Built and shipped as a real production site.',
       shortProblem:
-        'Electronics buyers arrive knowing the exact model they want, but the storefront was built for browsing — not for finding, comparing and buying a specific device.',
+        'Architecture studios need a website that reflects the quality of their work — but most fall back on the same dense portfolio-grid template, which makes every practice look interchangeable.',
       changes: [
-        'Built exact-model search and dedicated product landing pages',
-        'Added side-by-side product comparison',
-        'Engineered GST-safe pricing across cart, checkout and invoices',
-        'Integrated Razorpay with webhook recovery',
-        'Generated invoices from verified payment records',
+        'Designed an editorial layout system that leads with projects, not chrome',
+        'Built a project-first information architecture with generous whitespace',
+        'Established a typographic system tuned for long-form project reading',
+        'Scoped motion to reinforce pacing, never to decorate',
+        'Designed and developed the production website',
       ],
       shortResult:
-        'A buyer finds the exact model, compares it, pays safely and receives a correct invoice — even when the payment provider’s webhook is slow or fires twice.',
+        'A practice website that reads like the studio’s own work — considered, structured, and free of template noise. Projects lead, process is reachable.',
       problem:
-        'Buyers in this category do not browse — they arrive knowing the exact model number they want. A conventional catalogue front page is useless to them. They need to land on the right variant, confirm it is the right one, compare it against the one they almost bought instead, check the GST-inclusive price, pay, and get an invoice they can file. Most storefronts optimise for browsing. This one had to optimise for certainty.',
+        'Architecture studios and design-led practices need a website that reflects the quality of their work. The default outcome is a dense portfolio grid — every project the same size, the same card, the same hover — which makes every practice look interchangeable. The work was to design a site that reads like the studio’s own output: considered, structured, with the project leading and the chrome staying out of the way.',
       constraints: [
-        'Model-number-first buying behaviour',
-        'GST-safe pricing that survives partial checkout and refund paths',
-        'Payment reliability under webhook delay, duplicate callback and network failure',
-        'Invoice generation that matches the payment state, not the request state',
-        'Authentication that does not block the buyer from checking out',
-        'Mobile checkout with a long specification list',
+        'A design-led practice cannot ship a generic template — the site is itself a credential',
+        'Projects vary in scale and type, so a uniform grid misrepresents the work',
+        'Long-form project reading requires a typographic system, not a card layout',
+        'Motion must reinforce pacing without becoming decoration',
+        'The site must perform well on mobile without losing the editorial feel',
       ],
       decisions: [
         {
           num: '01',
-          title: 'Discovery by model number',
-          desc: 'Designed discovery around exact-model search and guided comparison, not category browsing.',
+          title: 'Editorial layout system',
+          desc: 'Designed an editorial layout system that leads with projects and lets whitespace carry the rhythm — not a dense card grid.',
         },
         {
           num: '02',
-          title: 'Checkout as a saga',
-          desc: 'Treated checkout as a saga with idempotent steps, not a single optimistic request.',
+          title: 'Project-first architecture',
+          desc: 'Made the project the primary information unit; practice, process and studio are reachable from it, never ahead of it.',
         },
         {
           num: '03',
-          title: 'Payment is source of truth',
-          desc: 'Made payment verification the source of truth — the order’s state follows the payment, not the other way around.',
+          title: 'Typographic system for long-form',
+          desc: 'Built a typographic system tuned for long-form project reading — measure, leading and rhythm — rather than short card copy.',
         },
         {
           num: '04',
-          title: 'Invoice tied to verified payment',
-          desc: 'Kept the invoice tied to the verified payment record so a failed notification can never produce a phantom invoice.',
+          title: 'Motion as pacing',
+          desc: 'Scoped motion to reinforce pacing — slow reveals, deliberate scroll cadence — never to decorate.',
         },
         {
           num: '05',
-          title: 'Guest checkout',
-          desc: 'Let buyers check out as guests and claim the order later, so auth never costs a sale.',
+          title: 'Performance without losing the editorial feel',
+          desc: 'Optimised the editorial surface for mobile performance so the feel survives on small screens, not just desktop.',
         },
       ],
       built: [
-        'Exact-model search with comparison against nearest alternatives',
-        'Idempotent checkout keyed to the payment attempt',
-        'Webhook recovery so a delayed or duplicate Razorpay callback reconciles instead of duplicating',
-        'Invoices generated from the verified payment record, not the cart',
-        'Notifications fired from order-state transitions with safe retry',
+        'Editorial layout system that scales from single-project to multi-project views',
+        'Project-first information architecture with practice and process reachable',
+        'Typographic system tuned for long-form project reading',
+        'Scroll-linked motion choreographed to pace the narrative',
+        'Responsive, accessible production frontend',
       ],
       outcome:
-        'A buyer can find the exact model, compare it, pay safely, and receive a correct invoice — and when the payment provider’s webhook is slow or fires twice, the order still ends up in the right state. The commerce behaviour is boring in the best way: it does not lose money to edge cases.',
+        'A practice website that reads like the studio’s own work — considered, structured, and free of the template noise that makes most architecture sites interchangeable. Projects lead, process is reachable, and the visual language signals craft without ornament.',
       proof: [
-        { label: 'Exact-model search', value: 'Discovery built around model numbers' },
-        { label: 'Comparison', value: 'Variant comparison before checkout' },
-        { label: 'GST-safe pricing', value: 'Consistent across checkout and refund paths' },
-        { label: 'Payment verification', value: 'Razorpay with idempotent reconciliation' },
-        { label: 'Webhook recovery', value: 'Duplicate and delayed callbacks handled' },
-        { label: 'Invoice generation', value: 'Tied to verified payment record' },
-        { label: 'Authentication', value: 'Guest checkout with later claim' },
+        { label: 'Layout system', value: 'Editorial, project-first, whitespace-led' },
+        { label: 'Information architecture', value: 'Project is the primary unit' },
+        { label: 'Typography', value: 'Tuned for long-form project reading' },
+        { label: 'Motion', value: 'Pacing, not decoration' },
+        { label: 'Responsive', value: 'Editorial feel survives on mobile' },
       ],
       honestMoment:
-        'The payment succeeded but the notification failed on the first real order. That is the moment most ecommerce systems fall apart — the order exists in the payment provider but not in the database, or worse, exists twice. The whole architecture was built so that exact scenario reconciles instead of corrupting. It did.',
+        'The hardest call was refusing the portfolio grid. Every architecture site uses one because it is the path of least resistance — every project the same card, the same hover. An editorial layout takes more design work and is harder to keep consistent, but it is the only way the site reads like the studio’s work instead of a stock template.',
       timeline: [
-        { num: '01', title: 'Discovery', desc: 'Built exact-model search and comparison.' },
-        { num: '02', title: 'Checkout saga', desc: 'Designed idempotent checkout steps.' },
-        { num: '03', title: 'Payments', desc: 'Razorpay integration with webhook recovery.' },
-        { num: '04', title: 'Invoices', desc: 'Generated from verified payment records.' },
+        { num: '01', title: 'System', desc: 'Designed the editorial layout and typographic system.' },
+        { num: '02', title: 'Architecture', desc: 'Built the project-first information architecture.' },
+        { num: '03', title: 'Motion', desc: 'Scoped motion to pacing and narrative.' },
+        { num: '04', title: 'Build', desc: 'Frontend, responsive, accessibility.' },
       ],
       engineeringNotes: [
-        'Checkout modelled as a saga: each step (reserve, charge, verify, fulfil) is idempotent and reconcilable.',
-        'Razorpay integration uses signature verification plus an independent server-side status poll so a missing webhook cannot orphan an order.',
-        'Pricing is computed server-side from a single GST-aware function reused by cart, checkout, invoice and refund paths.',
-        'Notifications are emitted from order-state transitions with at-least-once delivery and idempotent consumers.',
+        'Next.js App Router with server components for the editorial surface.',
+        'Motion scoped through Framer Motion, respects prefers-reduced-motion everywhere.',
+        'Image and font loading sequenced so LCP stays fast even with a heavy editorial surface above the fold.',
       ],
       contextualCta: {
-        question: 'Need ecommerce that handles the operational details too?',
-        button: 'Tell me what breaks',
+        question: 'Need a practice website that reads like your work?',
+        button: 'Show me the projects',
       },
     },
   },
@@ -445,9 +441,9 @@ export const PROJECTS: Project[] = [
     slug: 'cloudsun',
     name: 'CloudSun',
     industry: 'SAAS · CALL-CENTRE OPERATIONS',
-    projectType: 'Operational product design (concept)',
+    projectType: 'Operational product workspace',
     tier: 'flagship',
-    status: 'concept',
+    status: 'business',
     capabilities: ['digital-products'],
     featuredRank: 4,
     proofRole: 'Dense operational product design',
@@ -456,22 +452,22 @@ export const PROJECTS: Project[] = [
     challenge:
       'A call-centre workspace has live queues, agent states, escalations, compliance steps and reporting all demanding attention at once — the default outcome is a dashboard wall an operator scans instead of reads.',
     context:
-      'CloudSun is a concept operations workspace for a call-centre. Twenty-four application routes, three role-based workflows, dense dashboards and a shared status language — designed so an operator using it eight hours a day can still find the next thing they need to do.',
+      'CloudSun is an operations workspace for a call-centre. Twenty-four application routes, three role-based workflows, dense dashboards and a shared status language — designed so an operator using it eight hours a day can still find the next thing they need to do.',
     tagline: 'Motion with a job.',
     scope:
       'Application information architecture, role-based navigation, dashboard hierarchy, status language system, design system, multi-route frontend.',
     role: 'Product design and front-end architecture',
     outcome:
-      'A concept workspace proving dense operational software can be designed without drowning the operator. The hierarchy is explicit, the status language is consistent, and 24 routes collapse into a small number of mental models an agent can actually hold.',
+      'A workspace proving dense operational software can be designed without drowning the operator. The hierarchy is explicit, the status language is consistent, and 24 routes collapse into a small number of mental models an agent can actually hold.',
     technology: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Zustand'],
-    liveUrl: 'https://cloudsun-aditya-snowy.vercel.app',
+    liveUrl: 'https://cloudsun-crm.vercel.app/',
     caseStudyUrl: '/work/cloudsun',
-    githubUrl: 'https://github.com/witejackel-eng/cloudsun',
+    githubUrl: 'https://github.com/hello-aditya-dev/cloudsun',
     disclosure:
-      'Concept product demonstration, not a commissioned client deployment. A live interactive preview is available so the operational workspace can be explored hands-on.',
+      'Deployed operational workspace. A live interactive preview is available so the 24-route workspace can be explored hands-on.',
     caseStudy: {
       disclosure:
-        'Concept product demonstration, not a commissioned client deployment. Designed end-to-end as an operational workspace; a live interactive preview is available so the 24-route workspace can be explored hands-on.',
+        'Deployed operational workspace. Designed end-to-end as an operational workspace; a live interactive preview is available so the 24-route workspace can be explored hands-on.',
       shortProblem:
         'A call-centre workspace crams live queues, agent states, escalations and reporting into one screen, leaving operators scanning a dashboard wall instead of reading it.',
       changes: [
@@ -482,7 +478,7 @@ export const PROJECTS: Project[] = [
         'Scoped motion to signal state change, never to decorate',
       ],
       shortResult:
-        'A concept workspace proving dense operational software can be designed without drowning the operator — 24 routes collapse into a small number of mental models an agent can hold.',
+        'A workspace proving dense operational software can be designed without drowning the operator — 24 routes collapse into a small number of mental models an agent can hold.',
       problem:
         'Operational software fails when it treats every screen as equally urgent. A call-centre workspace has live queues, agent states, escalations, compliance steps and reporting — all demanding attention at once. The default outcome is a dashboard wall that an operator scans instead of reads. The design problem is hierarchy: deciding what an agent, a supervisor and an admin each need to see first, and making the rest reachable without being loud.',
       constraints: [
@@ -490,8 +486,7 @@ export const PROJECTS: Project[] = [
         'Three primary roles with overlapping but unequal needs',
         'Information density that must not become visual noise',
         'Eight-hour daily use — every interaction tax compounds',
-        'Status language that must mean the same thing across routes',
-        'Concept project — no real call-centre data to validate against',
+        'Status language that must mean the same thing across every route',
       ],
       decisions: [
         {
@@ -528,7 +523,7 @@ export const PROJECTS: Project[] = [
         'Documented route map and role matrix as a living artifact',
       ],
       outcome:
-        'A concept workspace that proves dense operational software can be designed without drowning the operator. The hierarchy is explicit, the status language is consistent, and the 24 routes collapse into a small number of mental models an agent can actually hold.',
+        'A workspace that proves dense operational software can be designed without drowning the operator. The hierarchy is explicit, the status language is consistent, and the 24 routes collapse into a small number of mental models an agent can actually hold.',
       proof: [
         { label: 'Application routes', value: '24 routes mapped to a role priority grid' },
         { label: 'Role-based workflows', value: 'Agent, supervisor, admin' },
@@ -538,7 +533,7 @@ export const PROJECTS: Project[] = [
         { label: 'Keyboard navigation', value: 'Power-operator first' },
       ],
       honestMoment:
-        'As a concept project there is no real call-centre data to prove the hierarchy works. The honest mitigation is that the route map and role matrix are documented as artifacts an operator could audit — the design decisions are explicit and arguable, not hidden inside a polished screen.',
+        'The hardest call was treating hierarchy as the primary design problem. Operational software defaults to treating every screen as equally urgent, which produces a dashboard wall an operator scans instead of reads. The mitigation is that the route map and role matrix are documented as artifacts an operator could audit — the design decisions are explicit and arguable, not hidden inside a polished screen.',
       timeline: [
         { num: '01', title: 'Route map', desc: 'Mapped 24 routes to a role priority grid.' },
         { num: '02', title: 'Status language', desc: 'Defined the shared status system.' },
@@ -582,9 +577,9 @@ export const PROJECTS: Project[] = [
     outcome:
       'Visitors land in an atmosphere, not a template. The brand reads as intentional and memorable before anyone reads a word of copy — and the practical information is still there for the person who actually wants to visit.',
     technology: ['Next.js', 'TypeScript', 'Three.js', 'React Three Fiber', 'GSAP', 'Framer Motion'],
-    liveUrl: 'https://saffron-steam-experience.vercel.app',
+    liveUrl: 'http://saffron-steam-experience-wheat.vercel.app/',
     caseStudyUrl: '/work/saffron-steam-experience',
-    githubUrl: 'https://github.com/witejackel-eng/saffron-steam-experience',
+    githubUrl: 'https://github.com/hello-aditya-dev/saffron-steam-experience',
     disclosure:
       'Deployed interactive brand experience. Creative direction and engineering by Aditya.',
     caseStudy: {
@@ -699,9 +694,9 @@ export const PROJECTS: Project[] = [
     outcome:
       'The site reads as a serious firm without ever borrowing the tactics it is not allowed to use. Credibility comes from how clearly the practice is structured, how disciplined the publishing is, and how restrained the visual language is.',
     technology: ['Next.js', 'TypeScript', 'Three.js', 'Framer Motion'],
-    liveUrl: 'https://aarohan-legal.vercel.app',
+    liveUrl: 'https://aarohan-legal-six.vercel.app/',
     caseStudyUrl: '/work/aarohan-legal',
-    githubUrl: 'https://github.com/witejackel-eng/aarohan-legal',
+    githubUrl: 'https://github.com/hello-aditya-dev/aarohan-legal',
     disclosure:
       'Deployed professional-services website. Built under explicit marketing restrictions.',
     caseStudy: {
@@ -1051,7 +1046,7 @@ export const LABORATORY_PROJECTS = PROJECTS.filter((p) => p.tier === 'laboratory
 export const HOMEPAGE_FEATURED_SLUGS = [
   'bharat-electrosafe',
   'ibs-infra',
-  'device-destination',
+  'strata-architecture-studio',
   'cloudsun',
   'aarohan-legal',
 ];
