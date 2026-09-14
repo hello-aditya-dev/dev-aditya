@@ -100,13 +100,15 @@ export function WorkContent() {
                             No live preview
                           </span>
                         )}
-                        <Link
-                          href={project.caseStudyUrl}
-                          className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight text-ink transition-colors hover:text-coral"
-                        >
-                          Case study
-                          <span aria-hidden="true">&rarr;</span>
-                        </Link>
+                        {project.caseStudyUrl && (
+                          <Link
+                            href={project.caseStudyUrl}
+                            className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight text-ink transition-colors hover:text-coral"
+                          >
+                            Case study
+                            <span aria-hidden="true">&rarr;</span>
+                          </Link>
+                        )}
                       </div>
                     </div>
 
@@ -157,7 +159,10 @@ export function WorkContent() {
             </div>
 
             <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {LABORATORY_PROJECTS.map((project) => (
+              {LABORATORY_PROJECTS.filter(
+                (p): p is typeof p & { caseStudyUrl: string } =>
+                  p.caseStudyUrl !== null,
+              ).map((project) => (
                 <Link
                   key={project.slug}
                   href={project.caseStudyUrl}

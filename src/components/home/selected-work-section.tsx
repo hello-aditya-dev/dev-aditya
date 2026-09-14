@@ -35,7 +35,7 @@ export function SelectedWorkSection() {
           <div>
             <SectionLabel accent="coral">Selected work</SectionLabel>
             <h2 className="mt-4 max-w-2xl text-[clamp(1.875rem,4vw,3rem)] font-extrabold leading-[1.1] tracking-tight">
-              Four projects. Real businesses, live websites.
+              Five projects. Real businesses, live websites.
             </h2>
           </div>
           <Link
@@ -106,13 +106,15 @@ export function SelectedWorkSection() {
                           No live preview
                         </span>
                       )}
-                      <Link
-                        href={project.caseStudyUrl}
-                        className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight text-ink transition-colors hover:text-coral"
-                      >
-                        Case study
-                        <span aria-hidden="true">&rarr;</span>
-                      </Link>
+                      {project.caseStudyUrl && (
+                        <Link
+                          href={project.caseStudyUrl}
+                          className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight text-ink transition-colors hover:text-coral"
+                        >
+                          Case study
+                          <span aria-hidden="true">&rarr;</span>
+                        </Link>
+                      )}
                     </div>
                   </div>
 

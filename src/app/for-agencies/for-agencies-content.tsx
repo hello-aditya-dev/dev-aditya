@@ -336,15 +336,17 @@ export function ForAgenciesContent() {
                       {project.challenge}
                     </p>
                     <div className="mt-5 flex items-center gap-4">
-                      <Link
-                        href={project.caseStudyUrl}
-                        className="text-sm font-semibold tracking-tight text-ink transition-colors hover:text-coral"
-                      >
-                        Case study
-                        <span className="ml-1.5 inline-block" aria-hidden="true">
-                          &rarr;
-                        </span>
-                      </Link>
+                      {project.caseStudyUrl && (
+                        <Link
+                          href={project.caseStudyUrl}
+                          className="text-sm font-semibold tracking-tight text-ink transition-colors hover:text-coral"
+                        >
+                          Case study
+                          <span className="ml-1.5 inline-block" aria-hidden="true">
+                            &rarr;
+                          </span>
+                        </Link>
+                      )}
                       {project.liveUrl ? (
                         <a
                           href={project.liveUrl}

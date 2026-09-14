@@ -12,6 +12,7 @@ import type { Project } from "@/config/projects";
 export type Accent = "coral" | "blue" | "yellow" | "violet";
 
 const ACCENTS: Record<Project["slug"], Accent> = {
+  "bharat-electrosafe": "coral",
   "ibs-infra": "coral",
   "device-destination": "yellow",
   cloudsun: "violet",

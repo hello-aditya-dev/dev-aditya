@@ -24,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/audit", priority: 0.5 },
   ];
 
-  const projectRoutes = PROJECTS.map((p) => ({
+  const projectRoutes = PROJECTS.filter((p) => p.caseStudyUrl).map((p) => ({
     route: p.caseStudyUrl,
     priority: 0.7,
   }));

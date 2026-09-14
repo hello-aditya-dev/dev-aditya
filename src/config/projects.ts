@@ -105,13 +105,102 @@ export interface Project {
   /** Full case-study content. */
   caseStudy: CaseStudyData;
   liveUrl: string;
-  caseStudyUrl: string;
+  /** Null when no case-study page exists yet (e.g. Bharat Electrosafe).
+   *  Components that render a Case Study link must check truthiness first. */
+  caseStudyUrl: string | null;
   githubUrl: string;
   /** Legacy field — honest disclosure also lives inside caseStudy. */
   disclosure: string;
 }
 
 export const PROJECTS: Project[] = [
+  /* ══════════════════════════ FLAGSHIP 0 · BHARAT ELECTROSAFE ══════════════════════════ */
+  {
+    slug: 'bharat-electrosafe',
+    name: 'Bharat Electrosafe',
+    industry: 'INDUSTRIAL / B2B',
+    projectType: 'Industrial B2B catalogue website',
+    tier: 'flagship',
+    status: 'business',
+    capabilities: ['business-websites'],
+    featuredRank: 1,
+    proofRole: 'Industrial B2B catalogue architecture',
+    outcomeHeadline:
+      'A large technical industrial catalogue, made easier to understand without losing the detail serious buyers need.',
+    challenge:
+      'An industrial manufacturer with products spanning electrical safety, waterproofing, flooring and infrastructure protection needed a website that could make a large technical catalogue easier to understand without losing the standards, certifications and detail serious buyers need.',
+    context:
+      'Bharat Electrosafe manufactures and supplies industrial products across electrical insulating mats, waterproofing solutions, PVC flooring and related infrastructure protection systems. The catalogue spans standards, testing and certification information, industrial applications and technical specifications — material a serious industrial buyer needs to evaluate before requesting a quote.',
+    tagline: 'Make the technical catalogue make sense.',
+    scope:
+      'Information architecture, content structure, visual direction, frontend engineering, SEO/accessibility.',
+    role: 'Design and frontend delivery',
+    outcome:
+      'A website that lets an industrial buyer understand the product range, find the relevant standards and certifications, and reach the enquiry path — without the catalogue collapsing into a flat list.',
+    technology: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Vercel'],
+    liveUrl: 'https://bharatelectrosafe.com/',
+    caseStudyUrl: null,
+    githubUrl: '',
+    disclosure:
+      'Live production site. Built and deployed as a real business website.',
+    caseStudy: {
+      disclosure:
+        'Live production site. Built and deployed as a real business website.',
+      shortProblem:
+        'An industrial manufacturer with a large technical catalogue needed a website that made the range easier to understand without losing the standards, certifications and detail serious buyers need.',
+      changes: [
+        'Structured the catalogue around product categories and applications',
+        'Made standards, testing and certification information findable',
+        'Built clear enquiry paths for quotes and product information',
+        'Designed and developed the production website',
+      ],
+      shortResult:
+        'A website where an industrial buyer can understand the product range, find the relevant standards and certifications, and reach the enquiry path.',
+      problem:
+        'An industrial manufacturer with products spanning electrical safety, waterproofing, flooring and infrastructure protection needed a website that could make a large technical catalogue easier to understand without losing the standards, certifications and detail serious buyers need.',
+      constraints: [
+        'Large product catalogue across multiple industrial categories',
+        'Standards, testing and certification information that buyers need to evaluate',
+        'Technical specifications that must remain accurate and findable',
+        'Industrial B2B audience researching before enquiry',
+      ],
+      decisions: [
+        { num: '01', title: 'Category-first architecture', desc: 'Organised the catalogue around product categories so buyers land on the relevant range quickly.' },
+        { num: '02', title: 'Standards visibility', desc: 'Surfaced standards, testing and certification information alongside products rather than burying it.' },
+        { num: '03', title: 'Enquiry paths', desc: 'Built clear enquiry paths so a buyer can request a quote or product information without friction.' },
+      ],
+      built: [
+        'Category-structured catalogue navigation',
+        'Standards and certification information presented with products',
+        'Enquiry and quote paths',
+        'Responsive, accessible production frontend',
+      ],
+      outcome:
+        'A website that lets an industrial buyer understand the product range, find the relevant standards and certifications, and reach the enquiry path — without the catalogue collapsing into a flat list.',
+      proof: [
+        { label: 'Product range', value: 'Electrical insulating mats, waterproofing, PVC flooring, infrastructure protection' },
+        { label: 'Catalogue structure', value: 'Category-first navigation' },
+        { label: 'Standards', value: 'Testing and certification information surfaced with products' },
+        { label: 'Enquiry', value: 'Quote and product information paths' },
+      ],
+      honestMoment:
+        'The challenge with an industrial catalogue is resisting the pressure to flatten everything into a product list. Serious buyers need the standards and certification detail to evaluate a product — the structure has to keep that information close, not push it into a buried spec sheet.',
+      timeline: [
+        { num: '01', title: 'Catalogue', desc: 'Mapped the product range, standards and applications.' },
+        { num: '02', title: 'Structure', desc: 'Designed the category-first catalogue architecture.' },
+        { num: '03', title: 'Build', desc: 'Frontend, enquiry paths, standards presentation.' },
+      ],
+      engineeringNotes: [
+        'Next.js App Router with server components for the catalogue surface.',
+        'Structured data for products and organisation for search visibility.',
+      ],
+      contextualCta: {
+        question: 'Have a technical catalogue that is hard to navigate?',
+        button: 'Send me the catalogue',
+      },
+    },
+  },
+
   /* ══════════════════════════ FLAGSHIP 1 · IBS INFRA ══════════════════════════ */
   {
     slug: 'ibs-infra',
@@ -121,7 +210,7 @@ export const PROJECTS: Project[] = [
     tier: 'flagship',
     status: 'business',
     capabilities: ['business-websites'],
-    featuredRank: 1,
+    featuredRank: 2,
     proofRole: 'Complex B2B information architecture',
     outcomeHeadline:
       'From a sprawling technology catalogue to one coherent sales system.',
@@ -241,7 +330,7 @@ export const PROJECTS: Project[] = [
     tier: 'flagship',
     status: 'business',
     capabilities: ['commerce', 'digital-products'],
-    featuredRank: 2,
+    featuredRank: 3,
     proofRole: 'Full-stack commerce',
     outcomeHeadline:
       'Turned model-number chaos into a guided buying and checkout experience.',
@@ -360,7 +449,7 @@ export const PROJECTS: Project[] = [
     tier: 'flagship',
     status: 'concept',
     capabilities: ['digital-products'],
-    featuredRank: 3,
+    featuredRank: 4,
     proofRole: 'Dense operational product design',
     outcomeHeadline:
       'Designed a 24-route operations workspace without losing the operator.',
@@ -478,7 +567,7 @@ export const PROJECTS: Project[] = [
     tier: 'flagship',
     status: 'business',
     capabilities: ['creative-technology', 'business-websites'],
-    featuredRank: 4,
+    featuredRank: 5,
     proofRole: 'Art direction and creative technology',
     outcomeHeadline:
       'Used motion and WebGL to sell the atmosphere before the first cup was poured.',
@@ -595,7 +684,7 @@ export const PROJECTS: Project[] = [
     tier: 'flagship',
     status: 'business',
     capabilities: ['business-websites'],
-    featuredRank: 5,
+    featuredRank: 6,
     proofRole: 'Editorial restraint and compliance thinking',
     outcomeHeadline:
       'Built credibility when conventional marketing tactics were not available.',
@@ -713,7 +802,7 @@ export const PROJECTS: Project[] = [
     tier: 'laboratory',
     status: 'experiment',
     capabilities: ['business-websites', 'creative-technology'],
-    featuredRank: 6,
+    featuredRank: 7,
     proofRole: 'Luxury editorial presentation',
     outcomeHeadline: 'Luxury property discovery without the portal aesthetic.',
     challenge:
@@ -789,7 +878,7 @@ export const PROJECTS: Project[] = [
     tier: 'laboratory',
     status: 'experiment',
     capabilities: ['digital-products'],
-    featuredRank: 7,
+    featuredRank: 8,
     proofRole: 'Data-heavy decision-support UX',
     outcomeHeadline: 'A pricing spreadsheet that grew up and learned interface design.',
     challenge:
@@ -866,7 +955,7 @@ export const PROJECTS: Project[] = [
     tier: 'laboratory',
     status: 'experiment',
     capabilities: ['creative-technology'],
-    featuredRank: 8,
+    featuredRank: 9,
     proofRole: 'Generative interaction systems',
     outcomeHeadline:
       'Generative systems, procedural sound and mathematics as interaction.',
@@ -949,7 +1038,7 @@ export const LABORATORY_PROJECTS = PROJECTS.filter((p) => p.tier === 'laboratory
 );
 
 /**
- * The four strongest projects shown on the homepage Selected Work section.
+ * The five strongest projects shown on the homepage Selected Work section.
  *
  * Curated by hand (not derived from featuredRank) so the homepage always
  * shows the most commercially credible, visually strongest work — real
@@ -960,6 +1049,7 @@ export const LABORATORY_PROJECTS = PROJECTS.filter((p) => p.tier === 'laboratory
  * product design.
  */
 export const HOMEPAGE_FEATURED_SLUGS = [
+  'bharat-electrosafe',
   'ibs-infra',
   'device-destination',
   'cloudsun',

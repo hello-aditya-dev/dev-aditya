@@ -112,7 +112,7 @@ export default function Page() {
                           ))}
                         </ul>
 
-                        {example && (
+                        {example && example.caseStudyUrl && (
                           <div className="mt-6 border-t border-ink/15 pt-5">
                             <p className="micro-label text-ink-muted">Example project</p>
                             <a
