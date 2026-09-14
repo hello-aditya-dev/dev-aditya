@@ -3,13 +3,10 @@ import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionLabel } from "@/components/ui/section-label";
-import { Badge } from "@/components/ui/badge";
 import { ProjectFrame } from "@/components/ui/project-frame";
 import { Reveal } from "@/components/ui/reveal";
 import {
   FLAGSHIP_PROJECTS,
-  LABORATORY_PROJECTS,
-  STATUS_LABELS,
 } from "@/config/projects";
 import { projectAccent, ACCENT_HEX } from "@/config/project-accents";
 import { cn } from "@/lib/utils";
@@ -18,9 +15,9 @@ import { cn } from "@/lib/utils";
  * WorkContent — /work page.
  *
  * An expanded version of Selected Work: every flagship project as a large
- * editorial entry, followed by a visually secondary "Experiments" section
- * for laboratory projects. No filter system — with only a few strong
- * projects, filters add noise without adding value.
+ * editorial entry. No filter system and no experiments section — with only
+ * a few strong projects, filters and secondary tiers add noise without
+ * adding value.
  *
  * Each flagship entry mirrors the homepage card structure: number, name,
  * category, large visual, one sentence, VIEW LIVE SITE primary, CASE STUDY
@@ -139,67 +136,6 @@ export function WorkContent() {
           </div>
         </Container>
       </Section>
-
-      {/* Experiments — visually secondary */}
-      {LABORATORY_PROJECTS.length > 0 && (
-        <Section id="lab" className="border-t-1.5 border-ink bg-white">
-          <Container>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <SectionLabel accent="yellow">Experiments</SectionLabel>
-                <h2 className="mt-4 max-w-2xl text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold leading-[1.1] tracking-tight">
-                  Smaller experiments, kept honest.
-                </h2>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink-muted">
-                  Self-initiated projects built to learn. Clearly marked as
-                  experiments, not client work.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {LABORATORY_PROJECTS.filter(
-                (p): p is typeof p & { caseStudyUrl: string } =>
-                  p.caseStudyUrl !== null,
-              ).map((project) => (
-                <Link
-                  key={project.slug}
-                  href={project.caseStudyUrl}
-                  className="group flex h-full flex-col overflow-hidden rounded-2xl border-1.5 border-ink/30 bg-paper p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink hover:shadow-hard-sm"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <Badge variant="yellow">
-                      {STATUS_LABELS[project.status]}
-                    </Badge>
-                    <span className="font-mono text-xs font-bold tracking-widest text-ink-muted">
-                      LAB
-                    </span>
-                  </div>
-                  <div className="mt-4">
-                    <ProjectFrame
-                      slug={project.slug}
-                      name={project.name}
-                      industry={project.industry}
-                      accent={projectAccent(project.slug)}
-                      size="md"
-                    />
-                  </div>
-                  <h3 className="mt-4 text-lg font-bold leading-tight tracking-tight">
-                    {project.name}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
-                    {project.outcomeHeadline}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold tracking-tight text-ink transition-colors group-hover:text-coral">
-                    Read case study
-                    <span aria-hidden="true">&rarr;</span>
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </Container>
-        </Section>
-      )}
     </>
   );
 }
